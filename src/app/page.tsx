@@ -1,0 +1,207 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { ProjectCard } from "@/components/project-card"
+import { ProjectForm } from "@/components/project-form"
+import { ProjectEditForm } from "@/components/project-edit-form"
+import { Search, Plus, Upload } from "lucide-react"
+import { AuthForm } from "@/components/auth/auth-form"
+import { supabase } from "@/lib/supabase"
+import { Toaster, toast } from "sonner"
+import { useAuth } from "@/hooks/useAuth"
+import { Session } from '@supabase/supabase-js'
+
+interface Project {
+  id: string
+  title: string
+  type: string
+  status: "en-progreso" | "completado"
+  progress: number
+  documentsCount: number
+  lastUpdate: string
+}
+
+export default function HomePage() {
+  const router = useRouter()
+  const [projectsList, setProjectsList] = useState<Project[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [showProjectForm, setShowProjectForm] = useState(false)
+  const [showProjectDetails, setShowProjectDetails] = useState(false)
+  const [currentProject, setCurrentProject] = useState<any>(null)
+
+  const { session, loading, isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      if (!session?.user?.id) return
+      
+      try {
+        const { data: projects, error } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .order('created_at', { ascending: false })
+
+        if (error) {
+          toast.error('Error loading projects')
+          console.error('Error:', error)
+          return
+        }
+
+        setProjectsList(projects.map(project => ({
+          id: project.id,
+          title: project.title,
+          type: project.type,
+          status: project.status as "en-progreso" | "completado",
+          progress: project.progress,
+          documentsCount: project.documents_count,
+          lastUpdate: new Date(project.updated_at || project.created_at).toLocaleDateString()
+        })))
+      } catch (error) {
+        toast.error('Error loading projects')
+        console.error('Error:', error)
+      }
+    }
+
+    if (session?.user?.id) {
+      fetchProjects()
+    }
+  }, [session?.user?.id])
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      const fileExt = file.name.split('.').pop()
+      const filePath = `${session?.user?.id}/${Math.random()}.${fileExt}`
+
+      const { error } = await supabase.storage
+        .from('user_files')
+        .upload(filePath, file)
+
+      if (error) throw error
+      toast.success('File uploaded successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <AuthForm />
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-background p-8">
+      <Toaster position="top-right" />
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Proyectos</h1>
+            <p className="text-muted-foreground">
+              Gestiona tus proyectos formativos y su documentación
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 cursor-pointer">
+              <Upload className="h-5 w-5" />
+              Upload File
+              <input 
+                type="file"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+            </label>
+            <button 
+              onClick={() => setShowProjectForm(true)}
+              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+            >
+              <Plus className="h-5 w-5" />
+              Nuevo Proyecto
+            </button>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Buscar proyectos..."
+              className="w-full rounded-lg border bg-white px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {projectsList.length === 0 ? (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              No projects found. Create your first project by clicking "Nuevo Proyecto".
+            </div>
+          ) : (
+            projectsList.map((project) => (
+            <ProjectCard 
+              key={project.title} 
+              {...project}
+              onClick={() => {
+                setCurrentProject(project);
+                setShowProjectDetails(true);
+                localStorage.setItem('currentProject', JSON.stringify(project));
+              }}
+            />
+            ))
+          )}
+        </div>
+      </div>
+
+      {showProjectForm && (
+        <ProjectForm
+          onClose={() => setShowProjectForm(false)}
+          onSuccess={(project: any) => {
+            toast.success("Proyecto creado exitosamente");
+            router.push('/projects');
+          }}
+        />
+      )}
+
+      {showProjectDetails && currentProject && (
+        <ProjectEditForm
+          project={currentProject}
+          onClose={() => {
+            setShowProjectDetails(false);
+            setCurrentProject(null);
+            localStorage.removeItem('currentProject');
+          }}
+          onUpdate={(updatedProject: Project) => {
+            setProjectsList(projectsList.map(p => 
+              p.id === updatedProject.id ? updatedProject : p
+            ));
+            setCurrentProject(updatedProject);
+            localStorage.setItem('currentProject', JSON.stringify(updatedProject));
+          }}
+          onDelete={(deletedId: string) => {
+            setProjectsList(projectsList.filter(p => p.id !== deletedId));
+            setShowProjectDetails(false);
+            setCurrentProject(null);
+            localStorage.removeItem('currentProject');
+          }}
+        />
+      )}
+    </div>
+  )
+}
