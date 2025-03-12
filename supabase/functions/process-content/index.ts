@@ -1,5 +1,6 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { OpenAI } from 'jsr:openai@4'
+import { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

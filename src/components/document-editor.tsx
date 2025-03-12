@@ -17,9 +17,10 @@ export function DocumentEditor({ projectId, documentId, initialContent = '', onS
     aiLoading,
     handleSave,
     handleReuseContent,
-    handleAIOperation
+    handleAIOperation,
+    handleMarkComplete,
+    isComplete
   } = useEditor({ projectId, documentId, onSave })
-
 
   return (
     <div className="flex flex-col gap-4">
