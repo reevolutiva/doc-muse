@@ -3,6 +3,7 @@
 import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import EtherpadEmbed from "./EtherpadEmbed";
 
 interface LivePreviewProps {
   content: string
@@ -47,18 +48,7 @@ export function LivePreview({ content, config }: LivePreviewProps) {
 
   return (
     <div className="h-full">
-      <Editor
-        onInit={() => {}}
-        initialValue={processedContent}
-        init={{
-          height: '100%',
-          menubar: false,
-          toolbar: false,
-          plugins: [],
-          readonly: true,
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
-      />
+      <EtherpadEmbed/>
     </div>
   )
 }
