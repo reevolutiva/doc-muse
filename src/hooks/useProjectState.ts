@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Session } from '@supabase/supabase-js'
-import { Project, mapDatabaseProjectToProject } from '@/lib/utils'
+import { useSupabaseQuery } from '@/lib/hooks/useSupabase'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
+import { Project, DatabaseProject, mapDatabaseProjectToProject, mapDatabaseProjectsToProjects } from '@/lib/utils'
 
 interface ProjectState {
   loading: boolean
@@ -31,30 +32,43 @@ export function useProjectState() {
     currentProject: null
   }))
 
+  const { data: dbProjects, loading, error } = useSupabaseQuery<DatabaseProject[]>(
+    async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
+          throw new Error('No authenticated session')
+        }
+
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .order('created_at', { ascending: false })
+        
+        if (error) throw error
+        return { data, error }
+      } catch (err) {
+        console.error('Error fetching projects:', err)
+        throw err
+      }
+    },
+    [state.session]
+  )
+
+  useEffect(() => {
+    if (dbProjects) {
+      setState(current => ({
+        ...current,
+        projects: dbProjects.map(mapDatabaseProjectToProject),
+        loading: false
+      }))
+    }
+  }, [dbProjects])
+
   const updateState = useCallback((updates: Partial<ProjectState>) => {
     setState(current => ({ ...current, ...updates }))
   }, [])
-
-  const fetchProjects = useCallback(async () => {
-    if (!state.session) return
-
-    try {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        toast.error(error.message)
-        return
-      }
-
-      updateState({ projects: data?.map(mapDatabaseProjectToProject) || [] })
-    } catch (error: any) {
-      toast.error('Error fetching projects')
-      console.error('Fetch error:', error)
-    }
-  }, [state.session])
 
   const loadStoredProject = useCallback(() => {
     if (typeof window === 'undefined') return
@@ -74,10 +88,31 @@ export function useProjectState() {
     }
   }, [updateState])
 
+  const fetchProjects = useCallback(async () => {
+    if (!state.session) return
+
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      updateState({ 
+        projects: data?.map(mapDatabaseProjectToProject) || [],
+        loading: false
+      })
+    } catch (error: any) {
+      console.error('Error fetching projects:', error)
+      toast.error('Failed to load projects')
+    }
+  }, [state.session, updateState])
+
   return {
     state,
     updateState,
-    fetchProjects,
-    loadStoredProject
+    loadStoredProject,
+    fetchProjects
   }
 }

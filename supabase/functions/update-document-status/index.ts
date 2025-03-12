@@ -1,10 +1,6 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { RequestWithAuth, EdgeFunctionResponse, DocumentCompletionRequest } from '../_shared/types'
-
-const corsHeaders: Record<string, string> = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { corsHeaders } from '../_shared/cors.js'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {

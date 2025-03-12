@@ -13,6 +13,7 @@ export type DocumentChunk = {
   content: string;
   embedding: number[];
 }
+
 export interface RequestWithAuth extends Request {
   headers: Headers & {
     get(name: "authorization"): string | null;
@@ -42,4 +43,14 @@ export interface DocumentGenerationRequest {
 export interface DocumentCompletionRequest {
   documentId: string
   completed: boolean
+}
+
+// Deno types
+declare global {
+  const Deno: {
+    env: {
+      get(key: string): string | undefined;
+    };
+    serve(handler: (req: Request) => Promise<Response>): void;
+  }
 }

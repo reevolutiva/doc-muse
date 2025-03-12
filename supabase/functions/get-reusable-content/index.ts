@@ -1,10 +1,11 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { OpenAI } from 'jsr:openai@4'
 import { RequestWithAuth, EdgeFunctionResponse, ContentReuseRequest } from '../_shared/types'
+import { corsHeaders } from '../_shared/cors.js'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+interface AIResponse {
+  message?: string;
+  error?: string;
 }
 
 Deno.serve(async (req) => {

@@ -1,17 +1,14 @@
 "use client"
 
-import { useEffect, useCallback } from "react"
+import { useEffect } from "react"
+import { Session } from '@supabase/supabase-js'
+import { supabase } from "@/lib/supabase"
 import { useProjectState } from "@/hooks/useProjectState"
-import { ProjectCard } from "@/components/project-card"
-import { Search, Plus } from "lucide-react"
-import { DocumentManager } from "@/components/document-manager"
 import { AuthForm } from "@/components/auth/auth-form"
 import { ProjectForm } from "@/components/project-form"
 import { ProjectEditForm } from "@/components/project-edit-form"
-import { supabase } from "@/lib/supabase"
-import { Toaster, toast } from "sonner"
-import { Session } from '@supabase/supabase-js'
-import { Project, mapDatabaseProjectToProject } from "@/lib/utils"
+import { ProjectListContainer } from "@/components/project-list/project-list-container"
+import { Toaster } from "sonner"
 
 export default function ProjectsPage() {
   const { state, updateState, fetchProjects, loadStoredProject } = useProjectState()
@@ -31,7 +28,7 @@ export default function ProjectsPage() {
 
     initAuth()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: Session) => {
       updateState({ session })
     })
 
@@ -88,73 +85,28 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background">
       <Toaster position="top-right" />
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Projects</h1>
-            <p className="text-muted-foreground">
-              Manage your training projects and documentation
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <DocumentManager 
-              projectId={state.currentProject?.id} 
-              onDocumentChange={(count) => {
-                if (state.currentProject) {
-                  updateState({
-                    currentProject: {
-                      ...state.currentProject,
-                      documentsCount: count
-                    }
-                  })
-                }
-              }}
-            />
-            <button 
-              onClick={() => updateState({ showProjectForm: true })}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-            >
-              <Plus className="h-5 w-5" />
-              New Project
-            </button>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search projects..."
-              className="w-full rounded-lg border bg-white px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={state.searchQuery}
-              onChange={(e) => updateState({ searchQuery: e.target.value })}
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {state.projects
-            .filter(project => 
-              project.title.toLowerCase().includes(state.searchQuery.toLowerCase())
-            )
-            .map((project) => (
-              <ProjectCard 
-                key={project.id}
-                {...project}
-                onClick={() => {
-                  updateState({
-                    currentProject: project,
-                    showProjectDetails: true
-                  })
-                  localStorage.setItem('currentProject', JSON.stringify(project))
-                }}
-              />
-            ))
-          }
-        </div>
+      
+      <div className={`transition-all duration-300 ${
+        state.showProjectDetails ? 'opacity-0 pointer-events-none h-0 overflow-hidden' : 'opacity-100 p-8'
+      }`}>
+        <ProjectListContainer
+          projects={state.projects.filter(project => 
+            project.title.toLowerCase().includes(state.searchQuery.toLowerCase())
+          )}
+          searchQuery={state.searchQuery}
+          session={state.session}
+          onSearchChange={(query) => updateState({ searchQuery: query })}
+          onNewProject={() => updateState({ showProjectForm: true })}
+          onProjectSelect={(project) => {
+            updateState({
+              currentProject: project,
+              showProjectDetails: true
+            })
+            localStorage.setItem('currentProject', JSON.stringify(project))
+          }}
+        />
       </div>
 
       {state.showProjectForm && (
@@ -169,35 +121,39 @@ export default function ProjectsPage() {
         />
       )}
 
-      {state.showProjectDetails && state.currentProject && (
-        <ProjectEditForm
-          project={state.currentProject}
-          onClose={() => {
-            updateState({
-              showProjectDetails: false,
-              currentProject: null
-            })
-            localStorage.removeItem('currentProject')
-          }}
-          onUpdate={(updatedProject) => {
-            updateState({
-              projects: state.projects.map(p => 
-                p.id === updatedProject.id ? updatedProject : p
-              ),
-              currentProject: updatedProject
-            })
-            localStorage.setItem('currentProject', JSON.stringify(updatedProject))
-          }}
-          onDelete={(deletedId) => {
-            updateState({
-              projects: state.projects.filter(p => p.id !== deletedId),
-              showProjectDetails: false,
-              currentProject: null
-            })
-            localStorage.removeItem('currentProject')
-          }}
-        />
-      )}
+      <div className={`transition-all duration-300 ${
+        state.showProjectDetails ? 'opacity-100' : 'opacity-0 pointer-events-none h-0 overflow-hidden'
+      }`}>
+        {state.showProjectDetails && state.currentProject && (
+          <ProjectEditForm
+            project={state.currentProject}
+            onClose={() => {
+              updateState({
+                showProjectDetails: false,
+                currentProject: null
+              })
+              localStorage.removeItem('currentProject')
+            }}
+            onUpdate={(updatedProject) => {
+              updateState({
+                projects: state.projects.map(p => 
+                  p.id === updatedProject.id ? updatedProject : p
+                ),
+                currentProject: updatedProject
+              })
+              localStorage.setItem('currentProject', JSON.stringify(updatedProject))
+            }}
+            onDelete={(deletedId) => {
+              updateState({
+                projects: state.projects.filter(p => p.id !== deletedId),
+                showProjectDetails: false,
+                currentProject: null
+              })
+              localStorage.removeItem('currentProject')
+            }}
+          />
+        )}
+      </div>
     </div>
   )
 }

@@ -29,6 +29,25 @@ export default function HomePage() {
   const [showProjectForm, setShowProjectForm] = useState(false)
   const [showProjectDetails, setShowProjectDetails] = useState(false)
   const [currentProject, setCurrentProject] = useState<any>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  const handleProjectSelect = (project: any) => {
+    setIsTransitioning(true)
+    setCurrentProject(project)
+    setShowProjectDetails(true)
+    localStorage.setItem('currentProject', JSON.stringify(project))
+    setTimeout(() => setIsTransitioning(false), 300)
+  }
+
+  const handleProjectClose = () => {
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setShowProjectDetails(false)
+      setCurrentProject(null)
+      localStorage.removeItem('currentProject')
+      setIsTransitioning(false)
+    }, 300)
+  }
 
   const { session, loading, isAuthenticated } = useAuth()
 
@@ -105,37 +124,41 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background">
       <Toaster position="top-right" />
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Proyectos</h1>
-            <p className="text-muted-foreground">
-              Gestiona tus proyectos formativos y su documentación
-            </p>
+      
+      <div className={`transition-all duration-300 ${
+        showProjectDetails ? 'opacity-0 pointer-events-none h-0 overflow-hidden' : 'opacity-100 p-8'
+      }`}>
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Projects</h1>
+              <p className="text-muted-foreground">
+                Manage your training projects and documentation
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 cursor-pointer">
+                <Upload className="h-5 w-5" />
+                Upload File
+                <input 
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </label>
+              <button 
+                onClick={() => setShowProjectForm(true)}
+                className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+              >
+                <Plus className="h-5 w-5" />
+                New Project
+              </button>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <label className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 cursor-pointer">
-              <Upload className="h-5 w-5" />
-              Upload File
-              <input 
-                type="file"
-                className="hidden"
-                onChange={handleFileUpload}
-              />
-            </label>
-            <button 
-              onClick={() => setShowProjectForm(true)}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-            >
-              <Plus className="h-5 w-5" />
-              Nuevo Proyecto
-            </button>
-          </div>
-        </div>
 
-        <div className="mb-8">
+          <div className="mb-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -158,50 +181,52 @@ export default function HomePage() {
             <ProjectCard 
               key={project.title} 
               {...project}
-              onClick={() => {
-                setCurrentProject(project);
-                setShowProjectDetails(true);
-                localStorage.setItem('currentProject', JSON.stringify(project));
-              }}
+              onClick={() => handleProjectSelect(project)}
             />
             ))
           )}
+        </div>
         </div>
       </div>
 
       {showProjectForm && (
         <ProjectForm
           onClose={() => setShowProjectForm(false)}
-          onSuccess={(project: any) => {
-            toast.success("Proyecto creado exitosamente");
-            router.push('/projects');
+          onSuccess={(project) => {
+            setProjectsList([project, ...projectsList])
+            setShowProjectForm(false)
+            toast.success("Project created successfully")
           }}
         />
       )}
 
-      {showProjectDetails && currentProject && (
-        <ProjectEditForm
-          project={currentProject}
-          onClose={() => {
-            setShowProjectDetails(false);
-            setCurrentProject(null);
-            localStorage.removeItem('currentProject');
-          }}
-          onUpdate={(updatedProject: Project) => {
-            setProjectsList(projectsList.map(p => 
-              p.id === updatedProject.id ? updatedProject : p
-            ));
-            setCurrentProject(updatedProject);
-            localStorage.setItem('currentProject', JSON.stringify(updatedProject));
-          }}
-          onDelete={(deletedId: string) => {
-            setProjectsList(projectsList.filter(p => p.id !== deletedId));
-            setShowProjectDetails(false);
-            setCurrentProject(null);
-            localStorage.removeItem('currentProject');
-          }}
-        />
-      )}
+      <div className={`transition-all duration-300 ${
+        showProjectDetails ? 'opacity-100' : 'opacity-0 pointer-events-none h-0 overflow-hidden'
+      }`}>
+        {showProjectDetails && currentProject && !isTransitioning && (
+          <ProjectEditForm
+            project={currentProject}
+            onClose={() => {
+              setShowProjectDetails(false)
+              setCurrentProject(null)
+              localStorage.removeItem('currentProject')
+            }}
+            onUpdate={(updatedProject) => {
+              setProjectsList(projectsList.map(p => 
+                p.id === updatedProject.id ? updatedProject : p
+              ))
+              setCurrentProject(updatedProject)
+              localStorage.setItem('currentProject', JSON.stringify(updatedProject))
+            }}
+            onDelete={(deletedId) => {
+              setProjectsList(projectsList.filter(p => p.id !== deletedId))
+              setShowProjectDetails(false)
+              setCurrentProject(null)
+              localStorage.removeItem('currentProject')
+            }}
+          />
+        )}
+      </div>
     </div>
   )
 }
