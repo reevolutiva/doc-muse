@@ -1,12 +1,15 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
-import { serve } from 'https://deno.land/std@0.208.0/http/server.ts'
+import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
 
 const corsHeaders: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+  'Access-Control-Max-Age': '86400',
 }
 
 serve(async (req: Request) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -30,10 +33,18 @@ serve(async (req: Request) => {
       throw new Error('Failed to get user information')
     }
 
-    const { projectId, templateId, title, description } = await req.json()
+    // Parse JSON body with error handling
+    let requestBody;
+    try {
+      requestBody = await req.json();
+    } catch (e) {
+      throw new Error('Invalid request body: ' + e.message);
+    }
+
+    const { projectId, templateId, title, description } = requestBody;
 
     if (!projectId || !templateId) {
-      throw new Error('Missing required fields')
+      throw new Error('Missing required fields: projectId and templateId are required')
     }
 
     // Get project details to verify ownership and template
@@ -44,7 +55,7 @@ serve(async (req: Request) => {
       .single()
 
     if (projectError) throw new Error('Project not found')
-    if (project.user_id !== user.id) throw new Error('Unauthorized')
+    if (project.user_id !== user.id) throw new Error('Unauthorized: you do not own this project')
 
     // Check if template is associated with project
     const { data: templateAssoc, error: templateError } = await supabase
@@ -102,7 +113,7 @@ serve(async (req: Request) => {
       .select()
       .single()
 
-    if (versionError) throw new Error('Failed to create document version')
+    if (versionError) throw new Error('Failed to create document version: ' + versionError.message)
 
     // Initialize completion status
     const { error: completionError } = await supabase
@@ -114,7 +125,7 @@ serve(async (req: Request) => {
         created_by: user.id
       })
 
-    if (completionError) throw new Error('Failed to initialize completion status')
+    if (completionError) throw new Error('Failed to initialize completion status: ' + completionError.message)
 
     // Update project documents count
     const { error: updateError } = await supabase.rpc('increment_documents_count', {
@@ -123,6 +134,7 @@ serve(async (req: Request) => {
 
     if (updateError) {
       console.error('Failed to update documents count:', updateError)
+      // Don't throw here, continue with the success response
     }
 
     return new Response(
@@ -131,11 +143,16 @@ serve(async (req: Request) => {
         data: version,
         documentId 
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200  // Explicitly set 200 status
+      }
     )
 
   } catch (error) {
     console.error('Error in create-document function:', error)
+    
+    // Always return with CORS headers, even in error cases
     return new Response(
       JSON.stringify({
         success: false,

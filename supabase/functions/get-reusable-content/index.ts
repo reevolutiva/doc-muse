@@ -1,6 +1,6 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.39.3'
-import { OpenAI } from 'npm:openai@4.24.1'
-import type { RequestWithAuth, EdgeFunctionResponse, ContentReuseRequest } from '../_shared/types'
+import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { OpenAI } from 'jsr:openai@4'
+import { RequestWithAuth, EdgeFunctionResponse, ContentReuseRequest } from '../_shared/types'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

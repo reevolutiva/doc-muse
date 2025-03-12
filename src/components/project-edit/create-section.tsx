@@ -6,11 +6,13 @@ import { toast } from "sonner"
 import { 
   FileText, Share2, BookOpen, GraduationCap, Route, Layout, 
   Book, ClipboardList, Lightbulb, Presentation, BarChart, 
-  ClipboardCheck, Video, type LucideIcon 
+  ClipboardCheck, Video, Plus, type LucideIcon 
 } from "lucide-react"
 import { useDocumentGeneration } from "@/lib/hooks/useDocumentGeneration"
 import { DocumentTemplate } from "@/lib/types/document"
 import { supabase } from "@/lib/supabase"
+import { DocumentConfigPanel } from "@/components/document-config/document-config-panel"
+import { Editor } from '@tinymce/tinymce-react'
 
 interface CreateSectionProps {
   projectId: string
@@ -161,7 +163,10 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   const { isGenerating, generateDocument } = useDocumentGeneration()
 
   const handleCreate = async (template: DocumentTemplate) => {
-    if (!template.available) return
+    if (!template.available) {
+      toast.error('This template is not available yet')
+      return
+    }
 
     try {
       const { data: { session } } = await supabase.auth.getSession()
@@ -170,36 +175,60 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
         return
       }
 
-      toast.loading('Creating document...')
+      // Set selected template to open config panel
+      setSelectedTemplate(template)
 
-      const { data, error } = await supabase.functions.invoke('create-document', {
-        body: {
-          projectId,
-          templateId: template.id,
-          title: `${template.title} - ${projectTitle}`,
-          description: template.description
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      })
-
-      if (error) throw error
-      if (!data.success) throw new Error(data.error)
-
-      toast.dismiss()
-      toast.success('Document created successfully')
-
-      // Redirect to document editor
-      if (data.documentId) {
-        router.push(`/documents/${data.documentId}`)
-      }
     } catch (error: any) {
-      toast.dismiss()
-      console.error('Error creating document:', error)
-      toast.error(error.message || 'Failed to create document')
+      console.error('Error selecting template:', error)
+      toast.error(error.message || 'Failed to select template')
     }
   }
+
+  const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null)
+
+  const handleTemplateSelect = (template: DocumentTemplate) => {
+    setSelectedTemplate(template)
+  }
+
+  const handleConfigSave = () => {
+    setSelectedTemplate(null)
+    toast.success('Document created successfully')
+  }
+
+  if (selectedTemplate) {
+    return (
+      <div className="flex h-[calc(100vh-12rem)]">
+        <div className="w-96">
+          <DocumentConfigPanel
+            templateId={selectedTemplate.id}
+            projectId={projectId}
+            onConfigSave={handleConfigSave}
+          />
+        </div>
+        <div className="flex-1 p-6">
+          <Editor
+            onInit={() => {}}
+            initialValue=""
+            init={{
+              height: '100%',
+              menubar: true,
+              plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+              ],
+              toolbar: 'undo redo | blocks | ' +
+                'bold italic forecolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="py-6">
       <h2 className="text-xl font-semibold mb-2">Required Docs</h2>
@@ -236,10 +265,20 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
               </p>
               {type.available ? (
                 <button 
-                  className="mt-4 w-full text-sm text-blue-600 font-medium py-2 border border-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="mt-4 w-full text-sm text-white font-medium py-2 bg-blue-600 hover:bg-blue-700 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
                   disabled={isGenerating}
                 >
-                  {isGenerating ? 'Generando...' : '+ Crear'}
+                  {isGenerating ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Generando...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-2">
+                      <Plus className="w-4 h-4" />
+                      <span>Crear</span>
+                    </div>
+                  )}
                 </button>
               ) : (
                 <div className="mt-4 w-full text-sm text-gray-400 font-medium py-2 text-center">

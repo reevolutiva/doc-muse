@@ -130,6 +130,7 @@ export type Database = {
       }
       document_templates: {
         Row: {
+          config: Json | null
           content: string
           created_at: string | null
           description: string | null
@@ -139,6 +140,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          config?: Json | null
           content: string
           created_at?: string | null
           description?: string | null
@@ -148,6 +150,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          config?: Json | null
           content?: string
           created_at?: string | null
           description?: string | null
@@ -168,6 +171,7 @@ export type Database = {
       }
       document_versions: {
         Row: {
+          config: Json | null
           content: string
           created_at: string | null
           created_by: string
@@ -178,6 +182,7 @@ export type Database = {
           version_number: number
         }
         Insert: {
+          config?: Json | null
           content: string
           created_at?: string | null
           created_by: string
@@ -188,6 +193,7 @@ export type Database = {
           version_number: number
         }
         Update: {
+          config?: Json | null
           content?: string
           created_at?: string | null
           created_by?: string

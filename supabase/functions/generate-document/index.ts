@@ -1,7 +1,6 @@
-/// <reference lib="deno.ns" />
-import { serve } from "https://deno.land/std@0.208.0/http/server.ts"
-import { createClient } from "npm:@supabase/supabase-js@2.39.3"
-import OpenAI from "npm:openai@4.24.1"
+import { createClient } from 'jsr:@supabase/supabase-js@2'
+import OpenAI from 'jsr:openai@4'
+import { RequestWithAuth, EdgeFunctionResponse, DocumentGenerationRequest } from '../_shared/types'
 
 interface GenerateDocumentRequest {
   type: string
