@@ -76,8 +76,8 @@ export function useEditor({ projectId, documentId, onSave }: UseEditorOptions) {
         }
       })
 
-      if (error) throw error
-      if (!data.success) throw new Error(data.error)
+      if (error) throw new Error(error.message || 'Unknown error')
+      if (!data?.success) throw new Error(data?.error || 'Unknown error')
 
       const content = data.content
       editorRef.current.insertContent(content)

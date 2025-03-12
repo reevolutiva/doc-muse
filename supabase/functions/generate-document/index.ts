@@ -1,6 +1,7 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
-import OpenAI from 'jsr:openai@4'
+import { OpenAI } from 'jsr:openai@4'
 import { RequestWithAuth, EdgeFunctionResponse, DocumentGenerationRequest } from '../_shared/types'
+import { corsHeaders } from '../_shared/cors.js'
 
 interface GenerateDocumentRequest {
   type: string

@@ -11,7 +11,7 @@ interface ProjectCardProps {
   documentsCount: number
   lastUpdate: string
   status: "en-progreso" | "completado"
-  onClick?: () => void
+  onClick?: (project: ProjectCardProps) => void
 }
 
 export function ProjectCard({
@@ -24,7 +24,17 @@ export function ProjectCard({
   onClick
 }: ProjectCardProps) {
   return (
-    <Card className="cursor-pointer" onClick={onClick}>
+    <Card 
+      className="cursor-pointer transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]" 
+      onClick={() => onClick?.({
+        title,
+        type,
+        progress,
+        documentsCount,
+        lastUpdate,
+        status
+      })}
+    >
       <div className="flex flex-col gap-4">
         <div className="flex items-start justify-between">
           <div>
