@@ -40,8 +40,10 @@ export default function HomePage() {
         const { data: projects, error } = await supabase
           .from('projects')
           .select('*')
-          .eq('user_id', session.user.id)
+          //.eq('user_id', session.user.id)
           .order('created_at', { ascending: false })
+
+        console.log('Projects:', projects)
 
         if (error) {
           toast.error('Error loading projects')
