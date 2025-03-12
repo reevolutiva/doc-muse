@@ -22,6 +22,13 @@ interface CreateSectionProps {
 
 const documentTypes: DocumentTemplate[] = [
   {
+    id: 'elearning',
+    title: 'Publicación academia en linea',
+    description: 'Crea contenido para plataformas de aprendizaje en línea',
+    icon: FileText,
+    available: true
+  },
+  {
     id: 'blog',
     title: 'Publicación para Blog',
     description: 'Genera contenido en formato de artículo para blogs corporativos o personales',
@@ -163,6 +170,7 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   const { isGenerating, generateDocument } = useDocumentGeneration()
 
   const handleCreate = async (template: DocumentTemplate) => {
+
     if (!template.available) {
       toast.error('This template is not available yet')
       return
@@ -174,6 +182,8 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
         toast.error('Please log in to create documents')
         return
       }
+
+      console.log( "template: ", template );
 
       // Set selected template to open config panel
       setSelectedTemplate(template)

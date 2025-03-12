@@ -5,6 +5,8 @@ import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { LivePreview } from "./live-preview"
+import { appendPadText } from "./config/etherpad"
+import { EtherpadIdStorage } from "@/lib/localStorage"
 
 interface Field {
   type: string
@@ -44,7 +46,7 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
         const { data, error } = await supabase
           .from('document_templates')
           .select('title, description, config')
-          .eq('id', templateId)
+          .eq('title', templateId)
           .single()
 
         if (error) throw error
@@ -90,6 +92,14 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
   }
 
   const handleSubmit = async () => {
+
+    
+    const etherpadIdStorage = new EtherpadIdStorage();
+    const storedPadId = etherpadIdStorage.getPadId();
+
+
+    await appendPadText(storedPadId, 'Hello World! from side');
+    /*
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
@@ -116,6 +126,8 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
       console.error('Error saving config:', error)
       toast.error('Failed to save configuration')
     }
+
+    */
   }
 
   if (loading) {
@@ -209,7 +221,7 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
       </div>
       </div>
       
-      {/* Live Preview Panel */}
+      {/* Live Preview Panel 
       <div className="flex flex-col w-1/2 bg-white">
         <div className="p-6 border-b">
           <h2 className="text-xl font-semibold mb-2">Live Preview</h2>
@@ -221,7 +233,9 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
             config={formValues} 
           />
         </div>
+
       </div>
+      */}
     </div>
   )
 }
