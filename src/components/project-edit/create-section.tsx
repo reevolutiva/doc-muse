@@ -188,6 +188,8 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   }
 
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null)
+  
+  /*
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -201,6 +203,8 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
       // You can trigger auto-save here if needed
     }
   })
+
+  */
 
   const handleTemplateSelect = (template: DocumentTemplate) => {
     setSelectedTemplate(template)
