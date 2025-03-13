@@ -1,18 +1,23 @@
 "use client"
 
-import { Editor } from '@tinymce/tinymce-react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import { StarterKit } from '@tiptap/starter-kit'
 import { Save, Sparkles, Loader2, Wand2, Key, PenTool, CheckCircle, Circle } from 'lucide-react'
 import { Tooltip } from 'react-tooltip'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { AIToolbar } from './editor/ai-toolbar'
+<<<<<<< HEAD
 import { useEditor } from '@/lib/hooks/useEditor'
 import type { EditorProps, EditorRef } from '@/lib/types/editor'
 import EtherpadEmbed from './document-config/EtherpadEmbed'
+=======
+import { useEditor as useDocumentEditor } from '@/lib/hooks/useEditor'
+import type { EditorProps } from '@/lib/types/editor'
+>>>>>>> main
 
 export function DocumentEditor({ projectId, documentId, initialContent = '', onSave }: EditorProps) {
   const {
-    editorRef,
     loading,
     reuseLoading,
     aiLoading,
@@ -21,7 +26,21 @@ export function DocumentEditor({ projectId, documentId, initialContent = '', onS
     handleAIOperation,
     handleMarkComplete,
     isComplete
-  } = useEditor({ projectId, documentId, onSave })
+  } = useDocumentEditor({ projectId, documentId, onSave })
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: initialContent,
+    onUpdate: ({ editor }) => {
+      // Store content in editor state
+      const content = editor.getHTML()
+      // You can trigger auto-save here if needed
+    }
+  })
+
+  if (!editor) {
+    return null
+  }
 
   return (
     <div className="flex flex-col gap-4">

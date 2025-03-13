@@ -188,6 +188,19 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   }
 
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null)
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      CustomMention,
+      CustomStyles
+    ],
+    content: '',
+    onUpdate: ({ editor }) => {
+      // Store content in editor state
+      const content = editor.getHTML()
+      // You can trigger auto-save here if needed
+    }
+  })
 
   const handleTemplateSelect = (template: DocumentTemplate) => {
     setSelectedTemplate(template)
@@ -216,13 +229,14 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   }
 
   return (
-    <div className="py-6">
-      <h2 className="text-xl font-semibold mb-2">Required Docs</h2>
-      <p className="text-muted-foreground mb-8">
-        Selecciona el tipo de contenido que deseas generar
-      </p>
+    <>
+      <div className="py-6">
+        <h2 className="text-xl font-semibold mb-2">Required Docs</h2>
+        <p className="text-muted-foreground mb-8">
+          Selecciona el tipo de contenido que deseas generar
+        </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {documentTypes.filter(type => 
           !templateId || availableDocTypes.includes(type.id)
         ).map((type) => {
@@ -274,7 +288,8 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
             </div>
           )
         })}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

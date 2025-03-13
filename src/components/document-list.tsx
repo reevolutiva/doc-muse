@@ -3,10 +3,7 @@
 import { FileText, Trash2, Edit2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-interface Document {
-  name: string
-  id: string
-}
+import type { Document } from '@/lib/types/document'
 
 interface DocumentListProps {
   documents: Document[]
@@ -47,7 +44,7 @@ export function DocumentList({ documents, isLoading, onDelete }: DocumentListPro
             <button
               onClick={() => {
                 localStorage.setItem('currentDocumentId', doc.id)
-                router.push('/documents')
+                router.push('/documents/view')
               }}
               className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               title="Edit document"

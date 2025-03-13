@@ -1,11 +1,5 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS'
-}
+import { createClient, serve, corsHeaders } from '../_shared/imports'
+import type { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {

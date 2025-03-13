@@ -1,52 +1,56 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { Document, DocumentListOptions, DocumentFile } from '@/lib/types/document'
 import { extractDisplayName } from '@/lib/utils/document'
+import { useSupabaseQuery } from '@/lib/hooks/useSupabase'
 
 export function useDocumentList({ projectId, onCountChange }: DocumentListOptions) {
+  const { data: files, loading, error } = useSupabaseQuery<DocumentFile[]>(
+    async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
+          throw new Error('Authentication required')
+        }
+        if (!projectId) {
+          throw new Error('Project ID is required')
+        }
+        
+        const { data, error } = await supabase.storage
+          .from('project_documents')
+          .list(`${session.user.id}/${projectId}`)
+
+        if (error) throw error
+        return { data, error: null }
+      } catch (err: any) {
+        console.error('Error fetching documents:', err)
+        throw new Error(err.message || 'Failed to fetch documents')
+      }
+    },
+    [projectId]
+  )
+
   const [documents, setDocuments] = useState<Document[]>([])
-  const [isLoading, setIsLoading] = useState(false)
 
-  const fetchDocuments = useCallback(async () => {
-    if (!projectId) return
-
-    setIsLoading(true)
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
-
-      const { data: files, error } = await supabase.storage
-        .from('project_documents')
-        .list(`${session.user.id}/${projectId}`)
-
-      if (error && error.message !== 'The resource was not found') {
-        throw error
-      }
-
-      const docs = (files || [])
-        .filter(file => !file.name.endsWith('/'))
-        .map(file => {
-          // Extract the original filename after the UUID prefix
-          const fullName = file.name.split('/').pop() || file.name;
-          const displayName = fullName.includes('-') ? fullName.split('-').slice(1).join('-') : fullName;
-          return {
-            name: displayName,
-            id: file.name
-          };
-        })
-
-      setDocuments(docs)
-    } catch (error: any) {
-      if (error.message !== 'The resource was not found') {
-        toast.error(`Error loading documents: ${error.message || 'Unknown error'}`)
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }, [projectId])
+  useEffect(() => {
+    if (!files) return
+    
+    const docs = files
+      .filter((file: DocumentFile) => !file.name.endsWith('/'))
+      .map((file: DocumentFile) => {
+        const fullName = file.name.split('/').pop() || file.name
+        return {
+          name: fullName.includes('-') ? 
+            fullName.split('-').slice(1).join('-') : 
+            fullName,
+          id: file.name
+        }
+      })
+    setDocuments(docs)
+  }, [files])
 
   const deleteDocument = useCallback(async (docId: string) => {
     if (!projectId) return
@@ -77,8 +81,6 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
   }, [projectId, onCountChange])
 
   useEffect(() => {
-    fetchDocuments()
-
     const channel = supabase.channel('storage_db_changes')
       .on(
         'postgres_changes',
@@ -88,18 +90,29 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
           table: 'objects',
           filter: `bucket_id=eq.project_documents`
         },
-        fetchDocuments
+        () => {
+          // Refresh documents list on changes
+          if (files) {
+            const docs = files
+              .filter((file: DocumentFile) => !file.name.endsWith('/'))
+              .map((file: DocumentFile) => ({
+                name: extractDisplayName(file),
+                id: file.name
+              }))
+            setDocuments(docs)
+          }
+        }
       )
       .subscribe()
 
     return () => {
       channel.unsubscribe()
     }
-  }, [fetchDocuments])
+  }, [files])
 
   return {
     documents,
-    isLoading,
+    isLoading: loading,
     deleteDocument,
     addDocument: (doc: Document) => {
       setDocuments(prev => {
