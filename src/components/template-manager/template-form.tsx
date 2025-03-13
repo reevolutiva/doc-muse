@@ -2,15 +2,25 @@
 
 import { X } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
+import { toast } from 'sonner'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { useTemplateForm } from '@/lib/hooks/useTemplateForm'
 import type { TemplateFormProps } from '@/lib/types/template'
 
 export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFormProps) {
-  const { form, loading, updateForm, handleSubmit } = useTemplateForm({
+  const { form, loading, errors, updateForm, handleSubmit, validateForm } = useTemplateForm({
     initialData,
-    onSave,
+    onSave: async (formData) => {
+      try {
+        await onSave(formData);
+        toast.success('Template created successfully');
+        onClose();
+      } catch (error) {
+        console.error('Error saving template:', error);
+        toast.error('Failed to create template');
+      }
+    },
     onClose
   })
 
@@ -20,14 +30,15 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
     onUpdate: ({ editor }) => {
       updateForm({ 
         content: {
-          ...form.content,
+          time: Date.now(),
           blocks: [{
             blockId: crypto.randomUUID(),
             type: 'paragraph',
             data: { text: editor.getHTML() },
             description: '',
             system: ''
-          }]
+          }],
+          version: '1.0.0'
         }
       })
     }
@@ -59,9 +70,14 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
               type="text"
               value={form.title}
               onChange={(e) => updateForm({ title: e.target.value })}
-              className="w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-shadow"
+              className={`w-full rounded-lg border shadow-sm px-4 py-3 transition-shadow ${
+                errors.title ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+              }`}
               placeholder="Enter a descriptive title"
             />
+            {errors.title && (
+              <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+            )}
           </div>
 
           <div>
