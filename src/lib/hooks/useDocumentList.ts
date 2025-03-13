@@ -8,37 +8,48 @@ import { extractDisplayName } from '@/lib/utils/document'
 import { useSupabaseQuery } from '@/lib/hooks/useSupabase'
 
 export function useDocumentList({ projectId, onCountChange }: DocumentListOptions) {
-  const [documents, setDocuments] = useState<Document[]>([])
-  const { data: files, loading: isLoading } = useSupabaseQuery<DocumentFile[]>(
+  const { data: files, loading, error } = useSupabaseQuery<DocumentFile[]>(
     async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session || !projectId) {
-        return { data: null, error: new Error('No session or project ID') }
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
+          throw new Error('Authentication required')
+        }
+        if (!projectId) {
+          throw new Error('Project ID is required')
+        }
+        
+        const { data, error } = await supabase.storage
+          .from('project_documents')
+          .list(`${session.user.id}/${projectId}`)
+
+        if (error) throw error
+        return { data, error: null }
+      } catch (err: any) {
+        console.error('Error fetching documents:', err)
+        throw new Error(err.message || 'Failed to fetch documents')
       }
-      
-      return supabase.storage
-        .from('project_documents')
-        .list(`${session.user.id}/${projectId}`)
     },
     [projectId]
   )
 
+  const [documents, setDocuments] = useState<Document[]>([])
+
   useEffect(() => {
-    if (files) {
-      const docs = (files || [])
-        .filter((file: DocumentFile) => !file.name.endsWith('/'))
-        .map((file: DocumentFile) => {
-          const fullName = file.name.split('/').pop() || file.name
-          const displayName = fullName.includes('-') ? 
+    if (!files) return
+    
+    const docs = files
+      .filter((file: DocumentFile) => !file.name.endsWith('/'))
+      .map((file: DocumentFile) => {
+        const fullName = file.name.split('/').pop() || file.name
+        return {
+          name: fullName.includes('-') ? 
             fullName.split('-').slice(1).join('-') : 
-            fullName
-          return {
-            name: displayName,
-            id: file.name
-          }
-        })
-      setDocuments(docs)
-    }
+            fullName,
+          id: file.name
+        }
+      })
+    setDocuments(docs)
   }, [files])
 
   const deleteDocument = useCallback(async (docId: string) => {
@@ -58,7 +69,7 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
       if (error) throw error
 
       setDocuments(prev => {
-        const updated = prev.filter((doc: Document) => doc.id !== docId)
+        const updated = prev.filter(doc => doc.id !== docId)
         onCountChange?.(updated.length)
         return updated
       })
@@ -101,7 +112,7 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
 
   return {
     documents,
-    isLoading,
+    isLoading: loading,
     deleteDocument,
     addDocument: (doc: Document) => {
       setDocuments(prev => {

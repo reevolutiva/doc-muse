@@ -1,12 +1,20 @@
 import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
+import { Navbar } from "@/components/navigation/navbar";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={GeistSans.variable}>
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        <main className="pt-16">
+          {children}
+        </main>
+        <Toaster position="top-right" />
+      </body>
     </html>
   );
 }

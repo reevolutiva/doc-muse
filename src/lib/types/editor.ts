@@ -1,22 +1,14 @@
-import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react'
+import { Editor } from '@tiptap/react'
 
-export interface EditorRef extends TinyMCEEditor {
+export interface EditorRef {
   getContent: () => string
   setContent: (content: string) => void
   insertContent: (content: string) => void
-  selection: {
-    setContent: (content: string) => void
-  } | null
 }
 
 export interface EditorProps {
   projectId: string
   documentId: string
   initialContent?: string
-  onSave?: () => void
-}
-
-export interface EditorInitProps {
-  evt: any
-  editor: EditorRef
+  onSave?: (content?: string) => void
 }

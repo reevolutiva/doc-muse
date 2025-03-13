@@ -131,7 +131,7 @@ export type Database = {
       document_templates: {
         Row: {
           config: Json | null
-          content: string
+          content: Json
           created_at: string | null
           description: string | null
           id: string
@@ -141,7 +141,7 @@ export type Database = {
         }
         Insert: {
           config?: Json | null
-          content: string
+          content: Json
           created_at?: string | null
           description?: string | null
           id?: string
@@ -151,7 +151,7 @@ export type Database = {
         }
         Update: {
           config?: Json | null
-          content?: string
+          content?: Json
           created_at?: string | null
           description?: string | null
           id?: string

@@ -1,7 +1,5 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { OpenAI } from 'jsr:openai@4'
-import { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
-import { corsHeaders } from '../_shared/cors.js'
+import { createClient, serve, OpenAI, corsHeaders } from '../_shared/imports'
+import type { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
 
 interface AIRequest {
   content: string;

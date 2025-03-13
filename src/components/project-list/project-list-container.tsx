@@ -24,24 +24,6 @@ export function ProjectListContainer({
   onNewProject,
   onProjectSelect
 }: ProjectListContainerProps) {
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    try {
-      const fileExt = file.name.split('.').pop()
-      const filePath = `${session?.user?.id}/${Math.random()}.${fileExt}`
-
-      const { error } = await supabase.storage
-        .from('user_files')
-        .upload(filePath, file)
-
-      if (error) throw error
-      toast.success('File uploaded successfully!')
-    } catch (error: any) {
-      toast.error(error.message)
-    }
-  }
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -52,16 +34,7 @@ export function ProjectListContainer({
             Manage your training projects and documentation
           </p>
         </div>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 cursor-pointer">
-            <Upload className="h-5 w-5" />
-            Upload File
-            <input 
-              type="file"
-              className="hidden"
-              onChange={handleFileUpload}
-            />
-          </label>
+        <div className="flex justify-end">
           <button 
             onClick={onNewProject}
             className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
