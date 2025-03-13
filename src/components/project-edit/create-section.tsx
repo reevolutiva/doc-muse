@@ -22,13 +22,6 @@ interface CreateSectionProps {
 
 const documentTypes: DocumentTemplate[] = [
   {
-    id: 'elearning',
-    title: 'Publicación academia en linea',
-    description: 'Crea contenido para plataformas de aprendizaje en línea',
-    icon: FileText,
-    available: true
-  },
-  {
     id: 'blog',
     title: 'Publicación para Blog',
     description: 'Genera contenido en formato de artículo para blogs corporativos o personales',
