@@ -22,7 +22,7 @@ interface CreateSectionProps {
 
 const documentTypes: DocumentTemplate[] = [
   {
-    id: 'blog',
+    id: 'Blog',
     title: 'Publicación para Blog',
     description: 'Genera contenido en formato de artículo para blogs corporativos o personales',
     icon: FileText,
