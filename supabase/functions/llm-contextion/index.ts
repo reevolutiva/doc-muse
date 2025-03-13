@@ -11,6 +11,10 @@ import corsHeaders from './cors.ts'
 
 Deno.serve(async (req) => {
 
+  if (req.method === 'OPTIONS') {
+    return new Response('OK', { headers: corsHeaders })
+  }
+
   const { template, task } = await req.json()
 
   const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
@@ -29,15 +33,12 @@ Deno.serve(async (req) => {
     const { blocks } = content
 
     const document = await generateDocument( "wp", 210 , blocks, title, description )
-
     salida = document
   }
 
-  return new Response(
-    JSON.stringify(salida),
-    { headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200 
-    },
-  )
+  return new Response(JSON.stringify(salida), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  })
 })
 

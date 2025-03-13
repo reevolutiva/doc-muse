@@ -5,7 +5,7 @@ import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { LivePreview } from "./live-preview"
-import { appendPadText } from "./config/etherpad"
+import { appendPadText, setPadText } from "./config/etherpad"
 import { EtherpadIdStorage } from "@/lib/localStorage"
 
 interface Field {
@@ -109,14 +109,8 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
       body: body ,
       method: 'POST'
     })
-    
 
-    const document = "";
-
-    console.log( data );
-
-
-    //await appendPadText(storedPadId, document );
+    await appendPadText(storedPadId, data );
 
   }
 
