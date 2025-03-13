@@ -97,37 +97,27 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
     const etherpadIdStorage = new EtherpadIdStorage();
     const storedPadId = etherpadIdStorage.getPadId();
 
-
-    await appendPadText(storedPadId, 'Hello World! from side');
-    /*
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        toast.error('Please log in to save configuration')
-        return
-      }
-
-      const { error } = await supabase.functions.invoke('save-document-config', {
-        body: {
-          projectId,
-          templateId,
-          config: formValues
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      })
-
-      if (error) throw error
-
-      toast.success('Configuration saved successfully')
-      onConfigSave(formValues)
-    } catch (error: any) {
-      console.error('Error saving config:', error)
-      toast.error('Failed to save configuration')
+    const body = {
+      "template": {
+        "key": "title",
+        "value": "Blog"
+      },
+      "task": "doc-gen"
     }
 
-    */
+    const { data, error } = await supabase.functions.invoke('llm-contextion', {
+      body: body ,
+      method: 'POST'
+    })
+    
+
+    const document = "";
+
+    console.log( data );
+
+
+    //await appendPadText(storedPadId, document );
+
   }
 
   if (loading) {
