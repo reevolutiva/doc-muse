@@ -29,3 +29,7 @@ export function mapDatabaseProjectToProject(dbProject: DatabaseProject): Project
     lastUpdate: dbProject.updated_at ?? new Date().toISOString()
   }
 }
+
+export function mapDatabaseProjectsToProjects(dbProjects: DatabaseProject[]): Project[] {
+  return dbProjects.map(mapDatabaseProjectToProject)
+}

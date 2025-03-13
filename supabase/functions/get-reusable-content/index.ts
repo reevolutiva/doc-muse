@@ -1,13 +1,11 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { OpenAI } from 'jsr:openai@4'
-import { RequestWithAuth, EdgeFunctionResponse, ContentReuseRequest } from '../_shared/types'
+import { createClient, serve, OpenAI, corsHeaders } from '../_shared/imports'
+import type { RequestWithAuth, EdgeFunctionResponse, ContentReuseRequest } from '../_shared/types'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+interface AIResponse {
+  message?: string;
+  error?: string;
 }
-
-Deno.serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -47,7 +45,7 @@ Deno.serve(async (req) => {
     if (versionsError) throw versionsError
 
     // Combine all content for analysis
-    const allContent = versions?.map(v => v.content).join('\n\n') || ''
+    const allContent = versions?.map((v: { content: string }) => v.content).join('\n\n') || ''
 
     // Use OpenAI to find relevant content
     const completion = await openai.chat.completions.create({
@@ -83,7 +81,7 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message 
+        error: error instanceof Error ? error.message : String(error)
       }),
       { 
         headers: { 

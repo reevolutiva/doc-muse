@@ -6,14 +6,24 @@ import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
 import * as Dialog from '@radix-ui/react-dialog'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
-import { Editor } from '@tinymce/tinymce-react'
+import { TemplateForm } from "./template-manager/template-form"
+import { useTemplateOperations } from "@/lib/hooks/useTemplateOperations"
 
 interface Template {
   id: string
   title: string
   description: string | null
   content: string
+  config?: Record<string, unknown>
+  categories?: string[]
   created_at: string
+  updated_at: string
+}
+
+interface PaginationState {
+  page: number
+  limit: number
+  total: number
 }
 
 interface TemplateManagerProps {
@@ -25,6 +35,13 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
   const [templates, setTemplates] = useState<Template[]>([])
   const [showDialog, setShowDialog] = useState(false)
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [pagination, setPagination] = useState<PaginationState>({
+    page: 1,
+    limit: 10,
+    total: 0
+  })
+  const [loading, setLoading] = useState(true)
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null)
   const [showVersions, setShowVersions] = useState<string | null>(null)
   const [versions, setVersions] = useState<Array<{
@@ -48,15 +65,7 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
       console.error('Restore error:', error)
     }
   }
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    content: ""
-  })
-
-  const updateForm = (updates: Partial<typeof form>) => {
-    setForm(current => ({ ...current, ...updates }))
-  }
+  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -67,7 +76,11 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
           .order('created_at', { ascending: false })
 
         if (error) throw error
-        setTemplates(data || [])
+        setTemplates((data || []).map(template => ({
+          ...template,
+          content: typeof template.content === 'string' ? template.content : JSON.stringify(template.content),
+          config: template.config as Record<string, unknown> || {}
+        })))
       } catch (error: any) {
         toast.error("Error loading templates")
         console.error("Error:", error.message)
@@ -126,9 +139,23 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
   }, [])
 
 
-  const handleSave = async () => {
+  const handleSave = async (formData: { 
+    title: string; 
+    description: string; 
+    content: {
+      time: number;
+      blocks: Array<{
+        blockId: string;
+        type: string;
+        data: Record<string, any>;
+        description?: string;
+        system?: string;
+      }>;
+      version: string;
+    }
+  }) => {
     try {
-      if (!form.title.trim() || !form.content.trim()) {
+      if (!formData.title.trim()) {
         toast.error("Title and content are required")
         return
       }
@@ -140,9 +167,9 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
         const { error } = await supabase
           .from('document_templates')
           .update({
-            title: form.title,
-            description: form.description,
-            content: form.content,
+            title: formData.title,
+            description: formData.description,
+            content: formData.content,
             updated_at: new Date().toISOString()
           })
           .eq('id', editingTemplate.id)
@@ -153,9 +180,9 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
         const { error } = await supabase
           .from('document_templates')
           .insert([{
-            title: form.title,
-            description: form.description,
-            content: form.content,
+            title: formData.title,
+            description: formData.description,
+            content: formData.content,
             user_id: session.user.id
           }])
 
@@ -165,11 +192,6 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
 
       setShowDialog(false)
       setEditingTemplate(null)
-      setForm({
-        title: "",
-        description: "",
-        content: ""
-      })
     } catch (error: any) {
       toast.error("Error saving template")
       console.error("Error:", error.message)
@@ -202,81 +224,13 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
         </Dialog.Trigger>
 
         <Dialog.Portal>
-          <Dialog.Overlay asChild>
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-          </Dialog.Overlay>
-          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-white rounded-lg shadow-xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <Dialog.Title className="text-xl font-semibold">
-                {editingTemplate ? "Edit Template" : "Create Template"}
-              </Dialog.Title>
-              <Dialog.Close className="text-gray-500 hover:text-gray-700">
-                <X className="w-5 h-5" />
-              </Dialog.Close>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => updateForm({ title: e.target.value })}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="Enter template title"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description (optional)
-                </label>
-                <input
-                  type="text"
-                  value={form.description}
-                  onChange={(e) => updateForm({ description: e.target.value })}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="Enter template description"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Content
-                </label>
-                <div className="border rounded-md">
-                  <Editor
-                    apiKey="no-api-key"
-                    value={form.content}
-                    onEditorChange={(newContent: string) => updateForm({ content: newContent })}
-                    init={{
-                      height: 400,
-                      menubar: false,
-                      plugins: [
-                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                        'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                      ],
-                      toolbar: 'undo redo | blocks | ' +
-                        'bold italic forecolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
-                      content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }'
-                    }}
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={handleSave}
-                className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-              >
-                {editingTemplate ? "Update Template" : "Create Template"}
-              </button>
-            </div>
-          </Dialog.Content>
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <TemplateForm
+            onClose={() => setShowDialog(false)}
+            onSave={handleSave}
+            initialData={editingTemplate ?? undefined}
+            mode={editingTemplate ? 'edit' : 'create'}
+          />
         </Dialog.Portal>
       </Dialog.Root>
 
@@ -312,11 +266,6 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
                 <button
                   onClick={() => {
                     setEditingTemplate(template)
-                    setForm({
-                      title: template.title,
-                      description: template.description || "",
-                      content: template.content
-                    })
                     setShowDialog(true)
                   }}
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -381,12 +330,27 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
 
             <div className="prose max-w-none">
               {previewTemplate && (
-                <div 
-                  dangerouslySetInnerHTML={{ 
-                    __html: previewTemplate.content
-                  }} 
-                  className="rich-text-preview"
-                />
+                <div className="prose max-w-none">
+                  {previewTemplate && (
+                    <div>
+                      {JSON.parse(previewTemplate.content).blocks.map((block: any) => (
+                        <div key={block.blockId} className="mb-4">
+                          <div dangerouslySetInnerHTML={{ __html: block.data.text }} />
+                          {block.description && (
+                            <div className="text-sm text-gray-500 mt-2">
+                              Description: {block.description}
+                            </div>
+                          )}
+                          {block.system && (
+                            <div className="text-sm text-blue-500 mt-1">
+                              AI Prompt: {block.system}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </Dialog.Content>

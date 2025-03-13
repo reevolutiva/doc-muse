@@ -1,10 +1,5 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { RequestWithAuth, EdgeFunctionResponse, DocumentCompletionRequest } from '../_shared/types'
-
-const corsHeaders: Record<string, string> = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { createClient, serve, corsHeaders } from '../_shared/imports'
+import type { RequestWithAuth, EdgeFunctionResponse, DocumentCompletionRequest } from '../_shared/types'
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -39,7 +34,7 @@ serve(async (req: Request) => {
         id,
         project_id,
         origin_template_id,
-        projects!inner (
+        projects:project_id (
           user_id,
           project_template_id
         )
@@ -48,7 +43,7 @@ serve(async (req: Request) => {
       .single()
 
     if (docError) throw new Error('Document not found')
-    if (!doc.projects?.user_id || doc.projects.user_id !== user.id) throw new Error('Unauthorized')
+    if (!doc.projects || doc.projects.user_id !== user.id) throw new Error('Unauthorized')
 
     // Update completion status
     const { error: updateError } = await supabase

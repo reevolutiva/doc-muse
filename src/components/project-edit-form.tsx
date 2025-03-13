@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X } from "lucide-react"
+import { ArrowLeft, Save, X } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
@@ -28,6 +28,7 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
     showDeleteDialog: false,
     activeTab: 'Project Data'
   })
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,7 +38,7 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
       return
     }
 
-    setFormState(prev => ({ ...prev, loading: true }))
+    setLoading(true)
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
@@ -79,7 +80,7 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
       toast.error(`Error updating project: ${error.message}`)
       console.error("Error:", error)
     } finally {
-      setFormState(prev => ({ ...prev, loading: false }))
+      setLoading(false)
     }
   }
 
@@ -112,35 +113,51 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-8 py-6">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Edit Project</h1>
-            <p className="text-muted-foreground">
-              Update project details and manage documents
-            </p>
+    <div className="min-h-screen bg-background animate-in slide-in-from-right duration-300">
+      {/* Top Navigation Bar */}
+      <div className="sticky top-0 z-10 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex h-16 items-center justify-between px-8">
+            <div className="flex items-center gap-8">
+              <button
+                onClick={onClose}
+                className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Projects
+              </button>
+              <h1 className="text-lg font-semibold">{project.title}</h1>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+              >
+                <Save className="h-4 w-4" />
+                Save Changes
+              </button>
+            </div>
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
-          >
-            Close
-          </button>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-8 py-6">
 
         <div className="w-full">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          <div className="mb-8">
+            <nav className="flex space-x-1 rounded-lg bg-gray-100 p-1" aria-label="Tabs">
               {['Project Data', 'Document Knowledge Base', 'Create'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setFormState(prev => ({ ...prev, activeTab: tab }))}
                   className={`
-                    whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium
+                    flex-1 whitespace-nowrap rounded-md px-3 py-2.5 text-sm font-medium transition-all
                     ${formState.activeTab === tab 
-                      ? 'border-blue-500 text-blue-600' 
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:bg-white/50 hover:text-gray-900'}
                   `}
                 >
                   {tab}
@@ -149,7 +166,7 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
             </nav>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-4 space-y-6">
             {formState.activeTab === 'Project Data' && (
               <div className="max-w-2xl">
                 <ProjectFormSection
