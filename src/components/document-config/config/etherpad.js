@@ -48,11 +48,13 @@ export const setPadText = async (padID, text) => {
 export const appendPadText = async (padID, text, blankSpace = 'enter') => {
 
   try {
+
     const blankSpaceMap = { "enter": "\r", "space": " ", "doubleEnter": "\n" };
 
     const currentText = await getPadText(padID);
     const newText = currentText + blankSpaceMap[blankSpace] +  text;
 
+    console.log("currentText");
     console.log(currentText);
 
     const salida = await setPadText(padID, newText);    
