@@ -30,8 +30,7 @@ export function TemplateTest() {
               },
               description: "Guía y recomendaciones para realizar la entrevista de manera efectiva.",
               system: "Describe el propósito de la entrevista y las recomendaciones para el entrevistador."
-            },
-            // ... rest of the blocks as provided in the example
+            }
           ],
           version: "1.0.0"
         }

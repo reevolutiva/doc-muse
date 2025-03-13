@@ -401,6 +401,19 @@ export type Database = {
             }
             Returns: unknown
           }
+      get_table_info: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          table_catalog: string
+          table_schema: string
+          table_name: string
+          column_name: string
+          data_type: string
+          is_nullable: string
+          column_default: string
+          is_identity: string
+        }[]
+      }
       halfvec_avg: {
         Args: {
           "": number[]

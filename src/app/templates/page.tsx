@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Star, StarHalf, Filter, ChevronDown, Heart, Loader2 } from "lucide-react"
+import { Search, Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
 import { useInView } from 'react-intersection-observer'
 import { Listbox } from '@headlessui/react'
 import { toast, Toaster } from "sonner"
@@ -31,6 +32,7 @@ export default function TemplatesPage() {
   const [hasMore, setHasMore] = useState(true)
   const [quickViewTemplate, setQuickViewTemplate] = useState(null)
   const [favorites, setFavorites] = useState(new Set())
+  const [showDialog, setShowDialog] = useState(false)
 
   const { ref, inView } = useInView({
     threshold: 0
@@ -90,11 +92,20 @@ export default function TemplatesPage() {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Templates</h1>
-          <p className="text-muted-foreground">
-            Discover and manage professional learning templates
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Templates</h1>
+            <p className="text-muted-foreground">
+              Discover and manage professional learning templates
+            </p>
+          </div>
+          <button
+            onClick={() => setShowDialog(true)}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Create Template
+          </button>
         </div>
 
         {/* Search and Filters */}

@@ -21,17 +21,41 @@ export function useTemplateForm({ initialData, onSave, onClose }: UseTemplateFor
     }
   })
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<{
+    title?: string;
+    description?: string;
+    content?: string;
+  }>({});
 
   const updateForm = (updates: Partial<TemplateFormData>) => {
-    setForm(current => ({ ...current, ...updates }))
+    setForm(current => ({ ...current, ...updates }));
+    // Clear errors when user starts typing
+    if (updates.title) setErrors(prev => ({ ...prev, title: undefined }));
+    if (updates.description) setErrors(prev => ({ ...prev, description: undefined }));
+    if (updates.content) setErrors(prev => ({ ...prev, content: undefined }));
+  }
+
+  const validateForm = () => {
+    const newErrors: typeof errors = {};
+    
+    if (!form.title?.trim()) {
+      newErrors.title = "Title is required";
+    } else if (form.title.length < 3) {
+      newErrors.title = "Title must be at least 3 characters";
+    }
+
+    if (typeof form.content === 'string' && !form.content.trim()) {
+      newErrors.content = "Content is required";
+    } else if (typeof form.content === 'object' && (!form.content.blocks || form.content.blocks.length === 0)) {
+      newErrors.content = "Content is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }
 
   const handleSubmit = async () => {
-    if (!form.title.trim()) {
-      toast.error("Title is required")
-      return
-    }
 
     setLoading(true)
     try {
@@ -48,7 +72,9 @@ export function useTemplateForm({ initialData, onSave, onClose }: UseTemplateFor
   return {
     form,
     loading,
+    errors,
     updateForm,
-    handleSubmit
+    handleSubmit,
+    validateForm
   }
 }
