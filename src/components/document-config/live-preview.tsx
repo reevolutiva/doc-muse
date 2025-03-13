@@ -1,6 +1,7 @@
 "use client"
 
-import { Editor } from '@tinymce/tinymce-react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import { StarterKit } from '@tiptap/starter-kit'
 import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 
@@ -13,20 +14,27 @@ export function LivePreview({ content, config }: LivePreviewProps) {
   const [processedContent, setProcessedContent] = useState(content)
   const [loading, setLoading] = useState(false)
 
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: processedContent,
+    editable: false
+  })
+
   useEffect(() => {
-    // Process content with config values
     const processContent = () => {
       setLoading(true)
       try {
         let newContent = content
 
-        // Replace config placeholders with actual values
         Object.entries(config).forEach(([key, value]) => {
           const placeholder = `{{${key}}}`
           newContent = newContent.replace(new RegExp(placeholder, 'g'), String(value))
         })
 
         setProcessedContent(newContent)
+        if (editor) {
+          editor.commands.setContent(newContent)
+        }
       } catch (error) {
         console.error('Error processing content:', error)
       } finally {
@@ -35,7 +43,7 @@ export function LivePreview({ content, config }: LivePreviewProps) {
     }
 
     processContent()
-  }, [content, config])
+  }, [content, config, editor])
 
   if (loading) {
     return (
@@ -46,19 +54,8 @@ export function LivePreview({ content, config }: LivePreviewProps) {
   }
 
   return (
-    <div className="h-full">
-      <Editor
-        onInit={() => {}}
-        initialValue={processedContent}
-        init={{
-          height: '100%',
-          menubar: false,
-          toolbar: false,
-          plugins: [],
-          readonly: true,
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
-      />
+    <div className="h-full prose max-w-none">
+      <EditorContent editor={editor} />
     </div>
   )
 }

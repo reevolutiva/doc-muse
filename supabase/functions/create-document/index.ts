@@ -1,7 +1,5 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { createClient, serve, corsHeaders } from '../_shared/imports'
 import { RequestWithAuth, EdgeFunctionResponse } from '../_shared/types'
-import { corsHeaders } from '../_shared/cors.js'
-
 serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -32,7 +30,7 @@ serve(async (req: Request) => {
     try {
       requestBody = await req.json();
     } catch (e) {
-      throw new Error('Invalid request body: ' + e.message);
+      throw new Error('Invalid request body: ' + (e instanceof Error ? e.message : String(e)));
     }
 
     const { projectId, templateId, title, description } = requestBody;
@@ -67,7 +65,7 @@ serve(async (req: Request) => {
         .from('project_template_doc_templates')
         .select(`
           document_template_id,
-          document_completion!inner (
+          document_completion:document_template_id (
             completed
           )
         `)
@@ -75,7 +73,7 @@ serve(async (req: Request) => {
         .eq('sequence_order', templateAssoc.sequence_order - 1)
         .single()
 
-      if (prevError || !prevDoc?.document_completion?.completed) {
+      if (prevError || !prevDoc?.document_completion?.[0]?.completed) {
         throw new Error('Previous document must be completed first')
       }
     }

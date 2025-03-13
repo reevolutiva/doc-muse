@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectForm } from "@/components/project-form"
 import { ProjectEditForm } from "@/components/project-edit-form"
-import { Search, Plus, Upload } from "lucide-react"
+import { Search, Plus } from "lucide-react"
 import { AuthForm } from "@/components/auth/auth-form"
 import { supabase } from "@/lib/supabase"
 import { Toaster, toast } from "sonner"
@@ -28,7 +28,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [showProjectForm, setShowProjectForm] = useState(false)
   const [showProjectDetails, setShowProjectDetails] = useState(false)
-  const [currentProject, setCurrentProject] = useState<any>(null)
+  const [currentProject, setCurrentProject] = useState<Project | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   const handleProjectSelect = (project: any) => {
@@ -88,24 +88,6 @@ export default function HomePage() {
     }
   }, [session?.user?.id])
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    try {
-      const fileExt = file.name.split('.').pop()
-      const filePath = `${session?.user?.id}/${Math.random()}.${fileExt}`
-
-      const { error } = await supabase.storage
-        .from('user_files')
-        .upload(filePath, file)
-
-      if (error) throw error
-      toast.success('File uploaded successfully!')
-    } catch (error: any) {
-      toast.error(error.message)
-    }
-  }
 
   if (loading) {
     return (
@@ -139,15 +121,6 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex gap-4">
-              <label className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 cursor-pointer">
-                <Upload className="h-5 w-5" />
-                Upload File
-                <input 
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileUpload}
-                />
-              </label>
               <button 
                 onClick={() => setShowProjectForm(true)}
                 className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"

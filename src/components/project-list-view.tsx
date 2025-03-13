@@ -22,6 +22,7 @@ export function ProjectListView({
   onNewProject,
   onProjectSelect
 }: ProjectListViewProps) {
+
   return (
     <div className="mx-auto max-w-7xl p-8">
       <div className="mb-8 flex items-center justify-between">
@@ -59,18 +60,13 @@ export function ProjectListView({
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects
-          .filter(project => 
-            project.title.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-          .map((project) => (
-            <ProjectCard 
-              key={project.id}
-              {...project}
-              onClick={() => onProjectSelect(project)}
-            />
-          ))
-        }
+        {projects.map((project) => (
+          <ProjectCard 
+            key={project.id}
+            {...project}
+            onClick={() => onProjectSelect(project)}
+          />
+        ))}
       </div>
     </div>
   )

@@ -17,10 +17,24 @@ interface DocumentManagerProps {
 }
 
 export function DocumentManager({ projectId, onDocumentChange }: DocumentManagerProps) {
-  const [showDialog, setShowDialog] = useState(false)
-  const [showTemplates, setShowTemplates] = useState(false)
-  const [showVersions, setShowVersions] = useState<string | null>(null)
-  const [versions, setVersions] = useState<any[]>([])
+  interface TemplateState {
+    showDialog: boolean
+    showTemplates: boolean
+    showVersions: string | null
+    versions: Array<{
+      id: string
+      version_number: number
+      created_at: string
+      content: string
+    }>
+  }
+
+  const [state, setState] = useState<TemplateState>({
+    showDialog: false,
+    showTemplates: false,
+    showVersions: null,
+    versions: []
+  })
   
   const { uploadProgress, uploadFile } = useDocumentUpload({ 
     projectId, 
@@ -50,9 +64,16 @@ export function DocumentManager({ projectId, onDocumentChange }: DocumentManager
   }, [uploadFile, addDocument]);
 
 
+  if (!projectId) {
+    return null
+  }
+
   return (
     <div>
-      <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
+      <Dialog.Root 
+        open={state.showDialog} 
+        onOpenChange={(open) => setState(prev => ({ ...prev, showDialog: open }))}
+      >
       <Dialog.Trigger asChild>
         <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
           <FileText className="w-4 h-4" />
@@ -74,15 +95,15 @@ export function DocumentManager({ projectId, onDocumentChange }: DocumentManager
                 <div className="flex items-center gap-4 mt-2">
                   <button
                     type="button"
-                    onClick={() => setShowTemplates(false)}
-                    className={`text-sm font-medium ${!showTemplates ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    onClick={() => setState(prev => ({ ...prev, showTemplates: false }))}
+                    className={`text-sm font-medium ${!state.showTemplates ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
                   >
                     Documents
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowTemplates(true)}
-                    className={`text-sm font-medium ${showTemplates ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    onClick={() => setState(prev => ({ ...prev, showTemplates: true }))}
+                    className={`text-sm font-medium ${state.showTemplates ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
                   >
                     Templates
                   </button>
@@ -96,7 +117,7 @@ export function DocumentManager({ projectId, onDocumentChange }: DocumentManager
             </div>
 
             <div className="space-y-4">
-              {!showTemplates ? (
+              {!state.showTemplates ? (
                 <>
                   <label className="flex items-center gap-2 justify-center w-full p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                     <Upload className="w-5 h-5 text-blue-600" />
@@ -132,7 +153,7 @@ export function DocumentManager({ projectId, onDocumentChange }: DocumentManager
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setShowVersions(doc.id);
+                                setState(prev => ({ ...prev, showVersions: doc.id }));
                               }}
                               className="text-blue-600 hover:text-blue-700"
                             >
@@ -164,7 +185,7 @@ export function DocumentManager({ projectId, onDocumentChange }: DocumentManager
                   </div>
                 </>
               ) : (
-                <TemplatesList projectId={projectId} onSuccess={() => setShowTemplates(false)} />
+                <TemplatesList projectId={projectId} onSuccess={() => setState(prev => ({ ...prev, showTemplates: false }))} />
               )}
             </div>
           </div>

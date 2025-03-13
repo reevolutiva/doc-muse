@@ -1,17 +1,17 @@
 "use client"
 
-import { Editor } from '@tinymce/tinymce-react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import { StarterKit } from '@tiptap/starter-kit'
 import { Save, Sparkles, Loader2, Wand2, Key, PenTool, CheckCircle, Circle } from 'lucide-react'
 import { Tooltip } from 'react-tooltip'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { AIToolbar } from './editor/ai-toolbar'
-import { useEditor } from '@/lib/hooks/useEditor'
-import type { EditorProps, EditorRef } from '@/lib/types/editor'
+import { useEditor as useDocumentEditor } from '@/lib/hooks/useEditor'
+import type { EditorProps } from '@/lib/types/editor'
 
 export function DocumentEditor({ projectId, documentId, initialContent = '', onSave }: EditorProps) {
   const {
-    editorRef,
     loading,
     reuseLoading,
     aiLoading,
@@ -20,7 +20,21 @@ export function DocumentEditor({ projectId, documentId, initialContent = '', onS
     handleAIOperation,
     handleMarkComplete,
     isComplete
-  } = useEditor({ projectId, documentId, onSave })
+  } = useDocumentEditor({ projectId, documentId, onSave })
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: initialContent,
+    onUpdate: ({ editor }) => {
+      // Store content in editor state
+      const content = editor.getHTML()
+      // You can trigger auto-save here if needed
+    }
+  })
+
+  if (!editor) {
+    return null
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -125,26 +139,7 @@ export function DocumentEditor({ projectId, documentId, initialContent = '', onS
         <Tooltip id="style-tooltip" />
       </div>
 
-      <Editor
-        onInit={({ editor }: { editor: EditorRef }) => {
-          editorRef.current = editor
-        }}
-        initialValue={initialContent}
-        init={{
-          height: 500,
-          menubar: true,
-          plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-          ],
-          toolbar: 'undo redo | blocks | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
-      />
+      <EditorContent editor={editor} className="prose max-w-none min-h-[500px] border rounded-lg p-4" />
     </div>
   )
 }

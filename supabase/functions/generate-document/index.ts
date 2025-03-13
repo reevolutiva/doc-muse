@@ -1,8 +1,7 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { OpenAI } from 'jsr:openai@4'
-import { RequestWithAuth, EdgeFunctionResponse, DocumentGenerationRequest } from '../_shared/types'
-import { corsHeaders } from '../_shared/cors.js'
+import { createClient, serve, OpenAI } from '../_shared/imports'
+import type { RequestWithAuth, EdgeFunctionResponse, DocumentGenerationRequest } from '../_shared/types'
 
+// Local types
 interface GenerateDocumentRequest {
   type: string
   projectId: string
@@ -27,21 +26,23 @@ const corsHeaders = {
 }
 
 // Initialize clients
-const supabaseClient = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false
-    }
-  }
-)
+import { getEnvVar } from '../_shared/env'
 
-const openai = new OpenAI({ 
-  apiKey: Deno.env.get('OPENAI_API_KEY') ?? ''
+// Initialize environment variables
+const supabaseUrl = getEnvVar('SUPABASE_URL')
+const serviceRoleKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY')
+const openaiKey = getEnvVar('OPENAI_API_KEY')
+
+// Initialize clients
+const supabaseClient = createClient(supabaseUrl, serviceRoleKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false
+  }
 })
+
+const openai = new OpenAI({ apiKey: openaiKey })
 
 // Helper functions
 async function authenticateUser(authHeader: string | null) {
