@@ -42,6 +42,12 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
           ...formData,
           content: editorContent
         });
+
+        //TODO: Sincronizar con Supabase
+
+        console.log( 'formData', formData );
+        console.log( 'editorContent', editorContent );
+
         toast.success('Template saved successfully');
         onClose();
       } catch (error) {
@@ -53,6 +59,7 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
   })
 
   const handleEditorChange = (content: BlockEditorContent) => {
+    console.log('content', content);
     setEditorContent(content);
     setValue('content', content);
   }
@@ -88,11 +95,16 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
           </Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value="edit" className="outline-none">
-          <form onSubmit={hookHandleSubmit((data) => updateForm({
-            title: data.title,
-            description: data.description ?? null,
-            content: editorContent
-          }))} className="space-y-8">
+          <form onSubmit={hookHandleSubmit((data) => {
+
+            console.log('data', data);
+
+            updateForm({
+              title: data.title,
+              description: data.description ?? null,
+              content: editorContent
+            })
+          })} className="space-y-8">
             <div className="grid grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
@@ -177,11 +189,13 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
               <p className="text-sm text-gray-500 mb-4">
                 Create blocks of content with AI prompts to automatically generate content
               </p>
-              <div className="border rounded-lg">
-                <BlockEditor 
+              <div className="border rounded-lg">                 
+      
+                  <BlockEditor 
                   initialContent={editorContent}
                   onChange={handleEditorChange}
                 />
+                
               </div>
             </div>
 
