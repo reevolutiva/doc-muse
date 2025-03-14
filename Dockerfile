@@ -32,7 +32,7 @@ COPY --from=builder /app/.next/ ./.next/
 COPY --from=builder /app/public/ ./public/
 
 # Install production dependencies
-RUN npm install -g pnpm && pnpm install --prod --frozen-lockfile
+RUN npm install -g pnpm && pnpm install --prod --no-frozen-lockfile
 
 EXPOSE 3000
 
