@@ -13,6 +13,8 @@ services:
       - ./backend/:/app/
 
     entrypoint: python /app/run_core.py
+    # Path: backend
+    # backend/llama-run.sh -f deploy.py 
 
   frontend:
     container_name: kimfe-frontend
