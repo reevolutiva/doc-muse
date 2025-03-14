@@ -2,14 +2,13 @@
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useBlockEditor } from '@/lib/hooks/useBlockEditor'
 import { BlockError } from './block-error'
 import { BlockList } from './block-list'
 import { EditorToolbar } from './editor-toolbar'
 import { BlockSettings } from './block-settings'
 import type { BlockEditorProps, Block } from './types'
-
 
 export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
   const {
@@ -35,12 +34,27 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
 
   useEffect(() => {
     if (editor && selectedBlock) {
+      console.log( "entra al if");
       editor.commands.setContent(selectedBlock.data.text || '')
     }
+    console.log("selectedBlock" ,selectedBlock );
+    console.log("editor" ,selectedBlock.data.text );
   }, [selectedBlock, editor])
 
   if (!editor) {
     return null
+  }
+
+  const handleBlockSelectWrapper = (block: Block) => {
+    handleBlockSelect(block)
+    editor.commands.setContent(block.data.text || '')
+    editor.commands.focus()
+  }
+
+  const handleNewBlockWrapper = () => {
+    handleNewBlock()
+    editor.commands.setContent('')
+    editor.commands.focus()
   }
 
   return (
@@ -48,29 +62,19 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
       <BlockList
         blocks={blocks}
         selectedBlock={selectedBlock}
-        onBlockSelect={(block) => {
-          handleBlockSelect(block)
-          editor.commands.setContent(block.data.text || '')
-          editor.commands.focus()
-        }}
-        onNewBlock={() => {
-          handleNewBlock()
-          editor.commands.setContent('')
-          editor.commands.focus()
-        }}
+        onBlockSelect={handleBlockSelectWrapper}
+        onNewBlock={handleNewBlockWrapper}
       />
 
       <div className="flex-1 space-y-4">
+
         <EditorToolbar editor={editor} />
 
         <div className="prose max-w-none min-h-[300px] border rounded-lg">
           {!editor?.getHTML() ? (
             <BlockError />
           ) : (
-            <EditorContent 
-              editor={editor}
-              className="p-4"
-            />
+            <EditorContent editor={editor} />
           )}
         </div>
 
