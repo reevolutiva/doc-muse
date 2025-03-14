@@ -84,7 +84,7 @@ export default function TemplatesPage() {
     toast.success('Template favorites updated')
   }
 
-  const handleSaveTemplate = async (formData) => {
+  const handleSaveTemplate = async (formData: { title: string; description: string; content: any }) => {
     try {
       const { data, error } = await supabase
         .from('document_templates')
@@ -92,14 +92,16 @@ export default function TemplatesPage() {
           title: formData.title,
           description: formData.description,
           content: formData.content,
-          type: selectedCategories.includes('all') ? 'elearning' : selectedCategories[0]
+          user_id: 'your_user_id', // Replace 'your_user_id' with the actual user ID
+          // type: selectedCategories.includes('all') ? 'elearning' : selectedCategories[0]
         })
         .select()
 
       if (error) throw error
 
       setTemplates(prev => [data[0], ...prev])
-      return data
+      // No need to return data as the function should return void
+      return
     } catch (error) {
       console.error('Error saving template:', error)
       throw error
@@ -113,6 +115,9 @@ export default function TemplatesPage() {
 
   return (
     <div className="min-h-screen bg-background p-8">
+      <div style={{backgroundColor: '#f0f0f0', padding: '10px', marginBottom: '20px', textAlign: 'center'}}>
+        Real-time changes are visible on the Templates page.
+      </div>
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex items-center justify-between">
           <div>

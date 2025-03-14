@@ -28,26 +28,33 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
         }
       })
     ],
-    content: selectedBlock?.data.text || '',
+    content: selectedBlock?.data?.text || '',
     onUpdate: ({ editor }) => handleEditorUpdate(editor)
   })
 
   useEffect(() => {
-    if (editor && selectedBlock) {
-      console.log( "entra al if");
-      editor.commands.setContent(selectedBlock.data.text || '')
+    if (!editor) return;
+    if (!selectedBlock || !selectedBlock.data) {
+      console.warn('BlockEditor effect: selectedBlock or selectedBlock.data is null');
+      return;
     }
-    console.log("selectedBlock" ,selectedBlock );
-    console.log("editor" ,selectedBlock.data.text );
+    console.log('BlockEditor effect: selectedBlock:', selectedBlock);
+    const text = selectedBlock.data.text || '';
+    editor.commands.setContent(text);
   }, [selectedBlock, editor])
 
   if (!editor) {
-    return null
+    return <div>Loading editor...</div>
+  }
+
+  // Ensure that selectedBlock is available before rendering
+  if (!selectedBlock) {
+    return <div>Loading block...</div>
   }
 
   const handleBlockSelectWrapper = (block: Block) => {
     handleBlockSelect(block)
-    editor.commands.setContent(block.data.text || '')
+    editor.commands.setContent(block.data?.text || '')
     editor.commands.focus()
   }
 
@@ -71,11 +78,7 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
         <EditorToolbar editor={editor} />
 
         <div className="prose max-w-none min-h-[300px] border rounded-lg">
-          {!editor?.getHTML() ? (
-            <BlockError />
-          ) : (
-            <EditorContent editor={editor} />
-          )}
+          <EditorContent editor={editor} />
         </div>
 
         {selectedBlock && (

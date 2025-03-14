@@ -10,66 +10,72 @@ interface UseBlockEditorProps {
   onChange: (content: BlockEditorContent) => void
 }
 
-export function useBlockEditor({ initialContent, onChange }: UseBlockEditorProps) {
-  const [selectedBlock, setSelectedBlock] = useState<Block | null>(null)
-  const [blocks, setBlocks] = useState<Block[]>([])
+// Initialize blocks immediately so that selectedBlock is not null on first render
+const createEmptyBlock = (): Block => ({
+  blockId: uuidv4(),
+  type: 'paragraph',
+  data: { text: '' },
+  description: '',
+  system: ''
+});
 
+export function useBlockEditor({ initialContent, onChange }: UseBlockEditorProps) {
+  const initialBlocks = (initialContent?.blocks && initialContent.blocks.length > 0)
+    ? initialContent.blocks
+    : [createEmptyBlock()];
+
+  const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
+  const [selectedBlock, setSelectedBlock] = useState<Block | null>(initialBlocks[0]);
+
+  // Update state from initialContent only if selectedBlock is not set
   useEffect(() => {
-    if (initialContent?.blocks) {
-      setBlocks(initialContent.blocks)
-      if (initialContent.blocks.length > 0) {
-        setSelectedBlock(initialContent.blocks[0])
-      }
+    if (!selectedBlock && initialContent?.blocks && initialContent.blocks.length > 0) {
+      setBlocks(initialContent.blocks);
+      setSelectedBlock(initialContent.blocks[0]);
     }
-  }, [initialContent])
+  }, [initialContent, selectedBlock]);
 
   const handleEditorUpdate = (editor: Editor) => {
-    if (!selectedBlock) return
+    if (!selectedBlock) return;
 
     const updatedBlock = {
       ...selectedBlock,
       data: {
         text: editor.getHTML()
       }
-    }
+    };
 
     setBlocks(prevBlocks => {
       const newBlocks = selectedBlock.blockId 
         ? prevBlocks.map(b => b.blockId === selectedBlock.blockId ? updatedBlock : b)
-        : [...prevBlocks, updatedBlock]
+        : [...prevBlocks, updatedBlock];
 
       onChange({
         time: new Date().toISOString(),
         blocks: newBlocks,
         version: '1.0.0'
-      })
+      });
 
-      return newBlocks
-    })
-  }
+      return newBlocks;
+    });
+  };
 
   const handleBlockSelect = (block: Block) => {
-    setSelectedBlock(block)
-  }
+    setSelectedBlock(block);
+  };
 
   const handleNewBlock = () => {
-    const newBlock = {
-      blockId: uuidv4(),
-      type: 'paragraph',
-      data: { text: '' },
-      description: '',
-      system: ''
-    }
-    setBlocks(prev => [...prev, newBlock])
-    setSelectedBlock(newBlock)
-  }
+    const newBlock = createEmptyBlock();
+    setBlocks(prev => [...prev, newBlock]);
+    setSelectedBlock(newBlock);
+  };
 
   const handleBlockUpdate = (updatedBlock: Block) => {
-    setSelectedBlock(updatedBlock)
+    setSelectedBlock(updatedBlock);
     setBlocks(prev => 
       prev.map(b => b.blockId === updatedBlock.blockId ? updatedBlock : b)
-    )
-  }
+    );
+  };
 
   return {
     blocks,
@@ -78,5 +84,5 @@ export function useBlockEditor({ initialContent, onChange }: UseBlockEditorProps
     handleBlockSelect,
     handleNewBlock,
     handleBlockUpdate
-  }
+  };
 }
