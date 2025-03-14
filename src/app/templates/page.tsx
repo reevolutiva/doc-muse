@@ -1,11 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Star, StarHalf, Filter, ChevronDown, Heart, Loader2 } from "lucide-react"
+import { Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
 import { useInView } from 'react-intersection-observer'
 import { Listbox } from '@headlessui/react'
 import { toast, Toaster } from "sonner"
 import { supabase } from "@/lib/supabase"
+import { TemplateForm } from "@/components/template-manager/template-form"
+import * as Dialog from '@radix-ui/react-dialog'
 
 const sortOptions = [
   { id: 'popular', name: 'Most Popular' },
@@ -22,7 +25,8 @@ const categories = [
 ]
 
 export default function TemplatesPage() {
-  const [searchQuery, setSearchQuery] = useState("")
+  // Removed search functionality
+
   const [selectedCategories, setSelectedCategories] = useState(['all'])
   const [sortBy, setSortBy] = useState(sortOptions[0])
   const [templates, setTemplates] = useState([])
@@ -31,6 +35,7 @@ export default function TemplatesPage() {
   const [hasMore, setHasMore] = useState(true)
   const [quickViewTemplate, setQuickViewTemplate] = useState(null)
   const [favorites, setFavorites] = useState(new Set())
+  const [showDialog, setShowDialog] = useState(false)
 
   const { ref, inView } = useInView({
     threshold: 0
@@ -79,37 +84,73 @@ export default function TemplatesPage() {
     toast.success('Template favorites updated')
   }
 
+  const handleSaveTemplate = async (formData) => {
+    try {
+      const { data, error } = await supabase
+        .from('document_templates')
+        .insert({
+          title: formData.title,
+          description: formData.description,
+          content: formData.content,
+          type: selectedCategories.includes('all') ? 'elearning' : selectedCategories[0]
+        })
+        .select()
+
+      if (error) throw error
+
+      setTemplates(prev => [data[0], ...prev])
+      return data
+    } catch (error) {
+      console.error('Error saving template:', error)
+      throw error
+    }
+  }
+
   const filteredTemplates = templates.filter(template => {
-    const matchesSearch = template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         template.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategories.includes('all') || 
-                          selectedCategories.includes(template.type)
-    return matchesSearch && matchesCategory
+    const matchesCategory = selectedCategories.includes('all') || selectedCategories.includes(template.type)
+    return matchesCategory
   })
 
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Templates</h1>
-          <p className="text-muted-foreground">
-            Discover and manage professional learning templates
-          </p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="flex gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search templates..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Templates</h1>
+            <p className="text-muted-foreground">
+              Discover and manage professional learning templates
+            </p>
           </div>
-
+          <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
+            <Dialog.Trigger asChild>
+              <button
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Create Template
+              </button>
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <TemplateForm 
+                onClose={() => setShowDialog(false)} 
+                onSave={handleSaveTemplate}
+                initialData={{
+                  title: '',
+                  description: '',
+                  content: {
+                    time: Date.now(),
+                    blocks: [],
+                    version: '1.0.0'
+                  }
+                }}
+                mode="create"
+              />
+            </Dialog.Portal>
+          </Dialog.Root>
+        </div>
+        {/* Removed Search input - only kept sort options */}
+        <div className="flex gap-4 mb-8">
+          {/* Removed search bar as it hinders user experience */}
           <Listbox value={sortBy} onChange={setSortBy}>
             <div className="relative w-48">
               <Listbox.Button className="w-full flex items-center justify-between px-4 py-2 border rounded-lg bg-white">

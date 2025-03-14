@@ -58,7 +58,9 @@ export function TemplatesList({ projectId, onSuccess }: TemplatesListProps) {
       description: item.document_templates.description,
       content: item.document_templates.content,
       is_required: item.is_required,
-      sequence_order: item.sequence_order
+      sequence_order: item.sequence_order,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }))
   }, [templateData])
 
