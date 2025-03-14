@@ -32,7 +32,7 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
   const [showFormDialog, setShowFormDialog] = useState(false)
 
   return (
-    <div>
+    <div className="relative">
       <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
         <Dialog.Trigger asChild>
           <div className="flex items-center gap-4">
@@ -64,7 +64,7 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
         </Dialog.Trigger>
 
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
           <TemplateForm
             onClose={() => setShowDialog(false)}
             onSave={handleSaveTemplate}
@@ -99,11 +99,13 @@ export function TemplateManager({ onSelect, mode = "manage" }: TemplateManagerPr
       {showFormDialog && (
         <Dialog.Root open={showFormDialog} onOpenChange={setShowFormDialog}>
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-            <DatabaseFormGenerator
-              onClose={() => setShowFormDialog(false)}
-              onSave={handleSaveTemplate}
-            />
+            <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <DatabaseFormGenerator
+                onClose={() => setShowFormDialog(false)}
+                onSave={handleSaveTemplate}
+              />
+            </div>
           </Dialog.Portal>
         </Dialog.Root>
       )}
