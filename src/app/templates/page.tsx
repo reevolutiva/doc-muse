@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus } from "lucide-react"
+import { Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useInView } from 'react-intersection-observer'
 import { Listbox } from '@headlessui/react'
@@ -25,7 +25,8 @@ const categories = [
 ]
 
 export default function TemplatesPage() {
-  const [searchQuery, setSearchQuery] = useState("")
+  // Removed search functionality
+
   const [selectedCategories, setSelectedCategories] = useState(['all'])
   const [sortBy, setSortBy] = useState(sortOptions[0])
   const [templates, setTemplates] = useState([])
@@ -106,11 +107,8 @@ export default function TemplatesPage() {
   }
 
   const filteredTemplates = templates.filter(template => {
-    const matchesSearch = template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         template.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategories.includes('all') || 
-                          selectedCategories.includes(template.type)
-    return matchesSearch && matchesCategory
+    const matchesCategory = selectedCategories.includes('all') || selectedCategories.includes(template.type)
+    return matchesCategory
   })
 
   return (
@@ -132,7 +130,7 @@ export default function TemplatesPage() {
                 Create Template
               </button>
             </Dialog.Trigger>
-            {showDialog && (
+            <Dialog.Portal>
               <TemplateForm 
                 onClose={() => setShowDialog(false)} 
                 onSave={handleSaveTemplate}
@@ -147,23 +145,12 @@ export default function TemplatesPage() {
                 }}
                 mode="create"
               />
-            )}
+            </Dialog.Portal>
           </Dialog.Root>
         </div>
-
-        {/* Search and Filters */}
+        {/* Removed Search input - only kept sort options */}
         <div className="flex gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search templates..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
+          {/* Removed search bar as it hinders user experience */}
           <Listbox value={sortBy} onChange={setSortBy}>
             <div className="relative w-48">
               <Listbox.Button className="w-full flex items-center justify-between px-4 py-2 border rounded-lg bg-white">
