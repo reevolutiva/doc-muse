@@ -1,9 +1,3 @@
-import logging
-import sys
-
-# Uncomment to see debug logs
-# logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-# logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
 from llama_index.core import SimpleDirectoryReader, Document, StorageContext
 from llama_index.core import VectorStoreIndex
@@ -15,10 +9,11 @@ documents = SimpleDirectoryReader("/app/data/").load_data()
 POSTGRESS_HOST = "host.docker.internal"
 POSTGRESS_PORT = "54322"
 
-api_key = "6PRu3uLnqPE89uFPmuRx8DXwg4FQ4CueoMEApPOl28VIZRfKCvxYJQQJ99BAACYeBjFXJ3w3AAAAACOGz02x"
-azure_endpoint = "https://ai-trainertbot252747638297.openai.azure.com/"
-api_version = "2024-08-01-preview"
+api_key = "4TvPwSX9pxc6ea9aIxalyC5ZwkvgthGYLixN4txH30bfI7F5rZGiJQQJ99BBACYeBjFXJ3w3AAABACOGo2tZ"
+azure_endpoint = "https://ReevCL.openai.azure.com/"
+api_version = "2024-05-01-preview"
 deployment_name = "gpt-4o"
+
 
 OPENAI_APIKEY="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"
 
@@ -54,7 +49,7 @@ index = VectorStoreIndex.from_documents(
 )
 
 # Configuración del motor de consultas con el LLM de Azure OpenAI
-#query_engine = index.as_query_engine(llm=azure_llm)
-query_engine = index.as_query_engine()
+query_engine = index.as_query_engine(llm=azure_llm)
+#query_engine = index.as_query_engine()
 response = query_engine.query("Quien es Paul Graham?")
 print(response)
