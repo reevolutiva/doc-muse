@@ -1,18 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { 
-  FileText, Share2, BookOpen, GraduationCap, Route, Layout, 
-  Book, ClipboardList, Lightbulb, Presentation, BarChart, 
-  ClipboardCheck, Video, Plus, type LucideIcon 
-} from "lucide-react"
+import { Plus } from "lucide-react"
 import { useDocumentGeneration } from "@/lib/hooks/useDocumentGeneration"
 import { DocumentTemplate } from "@/lib/types/document"
 import { supabase } from "@/lib/supabase"
 import { DocumentConfigPanel } from "@/components/document-config/document-config-panel"
+<<<<<<< HEAD
 import EtherpadEmbed from "../document-config/EtherpadEmbed"
+=======
+import { useEditor, EditorContent } from '@tiptap/react'
+import { StarterKit } from '@tiptap/starter-kit'
+import { CustomMention } from '../block-editor/extensions/mention'
+import { CustomStyles } from '../block-editor/extensions/custom-styles'
+import { DOCUMENT_TYPES } from "@/lib/constants/document-types"
+import { useDocumentTemplate } from "@/lib/hooks/useDocumentTemplate"
+import { DocumentService } from "@/lib/services/document-service"
+>>>>>>> feature/template_tool
 
 interface CreateSectionProps {
   projectId: string
@@ -20,6 +26,7 @@ interface CreateSectionProps {
   templateId?: string | null
 }
 
+<<<<<<< HEAD
 const documentTypes: DocumentTemplate[] = [
   {
     id: 'Blog',
@@ -121,46 +128,35 @@ const documentTypes: DocumentTemplate[] = [
   }
 ]
 
+=======
+>>>>>>> feature/template_tool
 export function CreateSection({ projectId, projectTitle, templateId }: CreateSectionProps) {
   const router = useRouter()
-  const [availableDocTypes, setAvailableDocTypes] = useState<string[]>([])
-  const [requiredDocs, setRequiredDocs] = useState<{[key: string]: boolean}>({})
-
-  useEffect(() => {
-    const fetchTemplateDocuments = async () => {
-      if (!templateId) {
-        setAvailableDocTypes(documentTypes.map(d => d.id))
-        return
-      }
-
-      try {
-        const { data, error } = await supabase
-          .from('project_template_doc_templates')
-          .select(`
-            document_template_id,
-            is_required
-          `)
-          .eq('project_template_id', templateId)
-          .order('sequence_order')
-
-        if (error) throw error
-
-        const docIds = data.map((d: { document_template_id: string }) => d.document_template_id)
-        setAvailableDocTypes(docIds)
-        
-        const required = data.reduce((acc: {[key: string]: boolean}, curr) => {
-          acc[curr.document_template_id] = curr.is_required
-          return acc
-        }, {})
-        setRequiredDocs(required)
-      } catch (error) {
-        console.error('Error fetching template documents:', error)
-      }
-    }
-
-    fetchTemplateDocuments()
-  }, [templateId])
+  const { 
+    availableDocTypes, 
+    requiredDocs, 
+    loading: loadingTemplate 
+  } = useDocumentTemplate({ 
+    projectId, 
+    templateId 
+  })
+  
   const { isGenerating, generateDocument } = useDocumentGeneration()
+  const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null)
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      CustomMention,
+      CustomStyles
+    ],
+    content: '',
+    onUpdate: ({ editor }) => {
+      // Store content in editor state
+      const content = editor.getHTML()
+      // You can trigger auto-save here if needed
+    }
+  })
 
   const handleCreate = async (template: DocumentTemplate) => {
 
@@ -180,7 +176,6 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
 
       // Set selected template to open config panel
       setSelectedTemplate(template)
-
     } catch (error: any) {
       console.error('Error selecting template:', error)
       toast.error(error.message || 'Failed to select template')
@@ -222,12 +217,21 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
           <DocumentConfigPanel
             templateId={selectedTemplate.id}
             projectId={projectId}
-            onConfigSave={handleConfigSave}
+            onConfigSave={(config) => handleConfigSave(selectedTemplate.id, config)}
           />
         </div>
         <div className="flex-1 p-6">
           <EtherpadEmbed />
         </div>
+      </div>
+    )
+  }
+
+  if (loadingTemplate) {
+    return (
+      <div className="py-6 text-center">
+        <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-2 text-muted-foreground">Cargando plantillas disponibles...</p>
       </div>
     )
   }
@@ -241,7 +245,7 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {documentTypes.filter(type => 
+        {DOCUMENT_TYPES.filter(type => 
           !templateId || availableDocTypes.includes(type.id)
         ).map((type) => {
           const Icon = type.icon

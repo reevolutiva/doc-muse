@@ -1,5 +1,5 @@
 {
-  "name": "creatr",
+  "name": "kimfe",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,7 +19,11 @@
     "test:all": "pnpm run test && pnpm run test:types"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@headlessui/react": "^2.2.0",
+    "@hookform/resolvers": "^4.1.3",
     "@jest/globals": "^29.7.0",
     "@monaco-editor/react": "^4.7.0",
     "@pinecone-database/pinecone": "^5.1.1",
@@ -81,6 +85,7 @@
     "prettier-plugin-tailwindcss": "^0.6.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
     "react-intersection-observer": "^9.16.0",
     "react-loading-skeleton": "^3.5.0",
     "react-pdf": "^9.2.1",
