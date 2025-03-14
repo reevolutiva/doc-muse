@@ -8,6 +8,7 @@ import { FormElementPalette } from './form-element-palette'
 import { FormPreview } from './form-preview'
 import { useTemplateOperations } from '@/lib/hooks/useTemplateOperations'
 import { toast } from 'sonner'
+import type { Template } from '@/lib/types/template'
 
 export interface FormField {
   id: string
@@ -23,11 +24,15 @@ export interface FormField {
   }
 }
 
-export function FormBuilder() {
+interface FormBuilderProps {
+  onSave?: (template: Template) => Promise<void>
+}
+
+export function FormBuilder({ onSave }: FormBuilderProps) {
   const [fields, setFields] = useState<FormField[]>([])
   const [activeTab, setActiveTab] = useState<'editor' | 'preview'>('editor')
   const { saveTemplate } = useTemplateOperations()
-  
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (!over) return
@@ -41,18 +46,12 @@ export function FormBuilder() {
     setFields(newFields)
   }
 
-import type { Template } from '@/lib/types/template'
-
-export function FormBuilder() {
-  // ... rest of the code ...
-
   const handleSave = async () => {
     try {
-      const template: Omit<Template, 'id' | 'created_at' | 'updated_at'> = {
-        id: crypto.randomUUID(),
+      const templateData = {
         title: 'Form Template',
         description: 'Custom form template',
-        content: JSON.stringify({
+        content: {
           time: Date.now(),
           blocks: fields.map(field => ({
             blockId: field.id,
@@ -62,12 +61,29 @@ export function FormBuilder() {
             system: ''
           })),
           version: '1.0.0'
-        }),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        }
       }
 
-      await saveTemplate(template)
+      const formContent = {
+        time: Date.now(),
+        blocks: fields.map(field => ({
+          blockId: field.id,
+          type: 'form-field',
+          data: JSON.stringify(field),
+          description: `Form field: ${field.label}`,
+          system: ''
+        })),
+        version: '1.0.0'
+      }
+
+      await saveTemplate({
+        title: templateData.title,
+        description: templateData.description,
+        content: formContent,
+        id: crypto.randomUUID(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
       toast.success('Form template saved successfully')
     } catch (error) {
       toast.error('Failed to save form template')

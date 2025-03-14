@@ -1,6 +1,6 @@
 "use client"
 
-import { FileText, Edit2, Eye, Trash2 } from "lucide-react"
+import { FileText, Edit2, Eye, Trash2, AlertCircle } from "lucide-react"
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import type { Template } from "./types"
 
@@ -11,6 +11,8 @@ interface TemplateListProps {
   onDelete: (id: string) => void
   mode?: "select" | "manage"
   onSelect?: (template: Template) => void
+  loading?: boolean
+  error?: Error | null
 }
 
 export function TemplateList({
@@ -19,8 +21,42 @@ export function TemplateList({
   onPreview,
   onDelete,
   mode = "manage",
-  onSelect
+  onSelect,
+  loading,
+  error
 }: TemplateListProps) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Templates</h3>
+        <p className="text-gray-500 max-w-md">
+          {error.message || "An error occurred while loading templates. Please try again."}
+        </p>
+      </div>
+    )
+  }
+
+  if (templates.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <FileText className="w-12 h-12 text-gray-400 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Templates Found</h3>
+        <p className="text-gray-500">
+          Get started by creating your first template.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-2">
       {templates.map((template) => (
