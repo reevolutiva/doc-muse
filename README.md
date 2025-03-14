@@ -144,6 +144,7 @@ doc-muse/
 
    ```bash
    docker run -p 3000:3000 -e NEXT_PUBLIC_SUPABASE_URL=your-url -e NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key doc-muse
+  ( docker run -p 3000:3000 doc-muse)
    ```
 
    O utilizando docker-compose:
