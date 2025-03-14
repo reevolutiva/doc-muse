@@ -1,39 +1,23 @@
-# Stage 1: Build the application
-FROM node:18-alpine AS builder
+# Usar una imagen base de Node.js
+FROM node:18-alpine
 
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Install pnpm globally
-RUN npm install -g pnpm
-
-# Copy package files and lockfile
+# Copiar el archivo de dependencias
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Instalar pnpm
+RUN npm install -g pnpm
 
-# Copy the rest of the application code
+# Instalar las dependencias
+RUN pnpm install
+
+# Copiar el resto del código de la aplicación
 COPY . .
 
-# Build the Next.js application
-RUN pnpm run build
-
-# Stage 2: Run the application
-FROM node:18-alpine AS runner
-
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-# Copy only necessary files from builder stage
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/.next/ ./.next/
-COPY --from=builder /app/public/ ./public/
-
-# Install production dependencies
-RUN npm install -g pnpm && pnpm install --prod --no-frozen-lockfile
-
+# Exponer el puerto en el que la aplicación correrá
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+# Comando para iniciar la aplicación
+CMD ["pnpm", "dev"]
