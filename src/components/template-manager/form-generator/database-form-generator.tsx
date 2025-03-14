@@ -163,7 +163,7 @@ export function DatabaseFormGenerator({ onClose, onSave }: DatabaseFormGenerator
   }
 
   return (
-    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl bg-white rounded-xl shadow-2xl p-8">
+    <Dialog.Content className="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-8">
       <div className="flex items-center justify-between border-b pb-6 mb-8">
         <div>
           <Dialog.Title className="text-2xl font-bold text-gray-900">

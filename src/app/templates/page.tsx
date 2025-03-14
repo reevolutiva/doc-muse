@@ -7,6 +7,8 @@ import { useInView } from 'react-intersection-observer'
 import { Listbox } from '@headlessui/react'
 import { toast, Toaster } from "sonner"
 import { supabase } from "@/lib/supabase"
+import { TemplateForm } from "@/components/template-manager/template-form"
+import * as Dialog from '@radix-ui/react-dialog'
 
 const sortOptions = [
   { id: 'popular', name: 'Most Popular' },
@@ -81,6 +83,28 @@ export default function TemplatesPage() {
     toast.success('Template favorites updated')
   }
 
+  const handleSaveTemplate = async (formData) => {
+    try {
+      const { data, error } = await supabase
+        .from('document_templates')
+        .insert({
+          title: formData.title,
+          description: formData.description,
+          content: formData.content,
+          type: selectedCategories.includes('all') ? 'elearning' : selectedCategories[0]
+        })
+        .select()
+
+      if (error) throw error
+
+      setTemplates(prev => [data[0], ...prev])
+      return data
+    } catch (error) {
+      console.error('Error saving template:', error)
+      throw error
+    }
+  }
+
   const filteredTemplates = templates.filter(template => {
     const matchesSearch = template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          template.description?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -99,13 +123,32 @@ export default function TemplatesPage() {
               Discover and manage professional learning templates
             </p>
           </div>
-          <button
-            onClick={() => setShowDialog(true)}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Create Template
-          </button>
+          <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
+            <Dialog.Trigger asChild>
+              <button
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Create Template
+              </button>
+            </Dialog.Trigger>
+            {showDialog && (
+              <TemplateForm 
+                onClose={() => setShowDialog(false)} 
+                onSave={handleSaveTemplate}
+                initialData={{
+                  title: '',
+                  description: '',
+                  content: {
+                    time: Date.now(),
+                    blocks: [],
+                    version: '1.0.0'
+                  }
+                }}
+                mode="create"
+              />
+            )}
+          </Dialog.Root>
         </div>
 
         {/* Search and Filters */}
