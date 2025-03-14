@@ -2,12 +2,14 @@
 from llama_index.core import SimpleDirectoryReader, Document, StorageContext
 from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.supabase import SupabaseVectorStore
-from models import azure_llm
-from globals import POSTGRESS_HOST, POSTGRESS_PORT
+from conf.models import azure_llm
+from conf.globals import POSTGRESS_HOST, POSTGRESS_PORT
+
+
 
 class KimfeRag:
     
-    def __init__(self, collection_name, llm = azure_llm):
+    def __init__(self, collection_name, llm = azure_llm ):
         self.collection_name = collection_name
         self.vector_store = ""
         self.storage_context = ""
@@ -43,7 +45,7 @@ class KimfeRag:
         self.vector_index_store = vector_index_store
         
     def query( self, query ):
-        query_engine = self.vector_index_store.as_query_engine(llm= self.llm)
+        query_engine = self.vector_index_store.as_query_engine(llm=self.llm)
         response = query_engine.query(query)
         return response
     
