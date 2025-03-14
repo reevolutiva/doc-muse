@@ -7,14 +7,8 @@ import { Tooltip } from 'react-tooltip'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { AIToolbar } from './editor/ai-toolbar'
-<<<<<<< HEAD
-import { useEditor } from '@/lib/hooks/useEditor'
-import type { EditorProps, EditorRef } from '@/lib/types/editor'
-import EtherpadEmbed from './document-config/EtherpadEmbed'
-=======
 import { useEditor as useDocumentEditor } from '@/lib/hooks/useEditor'
 import type { EditorProps } from '@/lib/types/editor'
->>>>>>> main
 
 export function DocumentEditor({ projectId, documentId, initialContent = '', onSave }: EditorProps) {
   const {
