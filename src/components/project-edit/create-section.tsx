@@ -74,7 +74,6 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
     }
   }
 
-  const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null)
   
   /*
   const editor = useEditor({
