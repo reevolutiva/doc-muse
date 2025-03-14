@@ -3,9 +3,9 @@ from llama_index.core import SimpleDirectoryReader, Document, StorageContext
 from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.supabase import SupabaseVectorStore
 from conf.models import azure_llm
-from conf.globals import POSTGRESS_HOST, POSTGRESS_PORT
-
-
+from conf.globals import POSTGRESS_HOST, POSTGRESS_PORT, OPENAI_APIKEY
+import os
+os.environ["OPENAI_API_KEY"] = OPENAI_APIKEY
 
 class KimfeRag:
     
