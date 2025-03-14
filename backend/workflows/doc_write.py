@@ -7,61 +7,91 @@ from llama_index.core.workflow import (
     StopEvent,
     Workflow,
 )
-from workflows.core.conf import azure_llm, init_llama_log
+from  conf.models import azure_llm
+from conf.KimfeRag import KimfeRag
 from llama_index.core import Settings
 from pydantic import BaseModel
 import json
 
-Settings.llm = azure_llm
-from workflows.core.trainerbot import TrainerBot
-trainerbot = TrainerBot()
+
+# -----------------------------
+# Pydantic Models
+# -----------------------------
 
 class CustomBlock(BaseModel):
-    data: List
+    data: dict
     type: str
     system: str
     description: str
+    blockId: str
+    
+    
+# -----------------------------
+# Eventos y Contextos
+# -----------------------------
 
-class CustomTemplateDocumnet(BaseModel):
-    blocks: List[CustomBlock]
+class ContextEvent(Event):
+    context: List[dict]
 
 class KimfeDocWrite(Workflow):
     
-    def generate_prompt( self , block, title, description ):
+    def kimbfe_query( self, query ):
         
+        kimfeRag = KimfeRag( "kimfe" )
+        kimfeRag.load_storage()
+        return kimfeRag.query( query )
+    
+    def load_block( self, block ):
+        
+        customBlock = CustomBlock(**block)
+        
+        type = customBlock.type
+        data = customBlock.data
+        system = customBlock.system
+        description = customBlock.description
+        blockId = customBlock.blockId
+        
+        return { "type": type, "data": data, "system": system, "description": description, "blockId": blockId }
+        
+    def generate_prompt(self, block: CustomBlock):
         prompt = "Eres un asistente de IA experto en construccion de documentos. \n"
-        prompt += "Tu tarea es generar un documento a partir de los bloques de texto que se te proporcionan. \n"
-        prompt += "El titulo del documento es: " + title + ".\n"
-        prompt += "La descripcion del documento es: " + description + ".\n"
-        prompt += "El tipo de Bloque es: " + block.get("type") + ".\n"
-        prompt += "La descripcion del Bloque es: " + block.get("description") + ".\n"
-        prompt += "Contexto: " + block.get("system") + ".\n"
-        prompt += "Información adicional: " +  json.dumps( block.get("data") )  + ".\n"
-        
+        prompt += block.system + "\n"
+        prompt += f"Tu tarea es generar un bloque de: {block.type} {block.description}.  \n"
         return prompt
     
     #INPUT = CustomTemplateDocumnet<CustomTemplateDocumnet>
     @step
-    def prosses_docs(self, event: StartEvent, context: Context) -> StopEvent:
-        
-        salida = ""
-        
-        blocks = event.get( "blocks" )
-        title = event.get( "title" )
-        description = event.get( "description" )
-        
-        count = 1
+    def generate_context(self, event: StartEvent, context: Context) -> ContextEvent:
+        salida = []
+        template = event.get("template", {})
+        blocks = template.get("blocks", [])
+
         for block in blocks:
-            print( block )
-            print( count )
-            prompt = self.generate_prompt( block, title, description )
-            #print( prompt )
-            response = trainerbot.complete(prompt)
-            print( response )
-            salida += response.text + "\n"
-            count += 1
+            custom_block = CustomBlock(**block)
+            prompt = self.generate_prompt(custom_block)
+            salida.append({"blockId": custom_block.blockId, "type": custom_block.type, "prompt": prompt})
             
-        return StopEvent( salida )
+        
+        #print(salida)
+
+        return ContextEvent(context=salida)
+    
+    @step
+    def generate_text( self, event: ContextEvent, context: Context ) -> StopEvent:
+        
+        salida = []
+        blocks = event.context
+        
+        
+        
+        for block in blocks:
+            
+            prompt = block["prompt"]
+            response = self.kimbfe_query( prompt )
+            print(response)
+            salida.append( { "blockId": block["blockId"], "response": response.response } )
+
+        return StopEvent( result=json.dumps(salida) )
             
     
     #Process
