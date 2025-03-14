@@ -152,6 +152,16 @@ doc-muse/
    docker-compose up
    ```
 
+## Docker Instructions
+
+This application is dockerized. Follow these steps to build and run the Docker container:
+
+1. Build the Docker image:
+   docker build -t my-app .
+
+2. Run the Docker container:
+   docker run -d -p 3000:3000 my-app
+
 ## 🌟 Características Principales
 
 - **Gestión de Documentos**: Crear, editar y organizar documentos
