@@ -11,8 +11,7 @@ services:
       - '8000:8000'
     volumes:
       - ./backend/:/app/
-
-    entrypoint: python /app/run_core.py
+    entrypoint: /app/run.sh
     # Path: backend
     # backend/llama-run.sh -f deploy.py 
 
