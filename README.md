@@ -8,6 +8,7 @@ Doc-Muse es una aplicación para gestión y generación de documentos, construid
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Configuración del Entorno de Desarrollo](#configuración-del-entorno-de-desarrollo)
   - [Requisitos Previos](#requisitos-previos)
+  - [Script de Configuración Automática](#script-de-configuración-automática)
   - [Configuración de Supabase](#configuración-de-supabase)
   - [Configuración Local](#configuración-local)
 - [Ejecución del Proyecto](#ejecución-del-proyecto)
@@ -53,6 +54,25 @@ doc-muse/
 - [Git](https://git-scm.com/)
 - [Docker](https://www.docker.com/) (opcional, para despliegue con contenedores)
 - Cuenta en [Supabase](https://supabase.com/)
+
+### Script de Configuración Automática
+
+Para facilitar la configuración del entorno de desarrollo, puedes utilizar nuestro script automatizado:
+
+```bash
+# Dar permisos de ejecución al script
+chmod +x scripts/setup-dev-env.sh
+
+# Ejecutar el script
+./scripts/setup-dev-env.sh
+```
+
+Este script guía a través del proceso completo de configuración, incluyendo:
+- Clonación del repositorio
+- Configuración de Supabase
+- Instalación de dependencias
+- Configuración de Docker (opcional)
+- Inicio del servidor de desarrollo
 
 ### Configuración de Supabase
 

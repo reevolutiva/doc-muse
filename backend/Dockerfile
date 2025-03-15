@@ -47,4 +47,6 @@
     RUN pip install python-docx
     RUN pip install json-repair
     RUN pip install json5
-    
+
+    COPY run.sh /app/run.sh
+    RUN chmod +x /app/run.sh
