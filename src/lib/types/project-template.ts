@@ -33,7 +33,6 @@ export interface ProjectTemplate {
   id: string
   name: string
   description?: string | null
-  type?: string
   created_at?: string
   updated_at?: string
   documents?: ProjectTemplateDocument[]

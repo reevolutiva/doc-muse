@@ -1,39 +1,44 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { X, Loader2, Save } from "lucide-react"
 import * as Dialog from '@radix-ui/react-dialog'
-import { toast } from "sonner"
-import { ProjectTemplate, DocumentDependency, DocumentDependencyEditorProps } from "@/lib/types/project-template"
+import { ProjectTemplate, DocumentDependencyEditorProps } from "@/lib/types/project-template"
 import { ProjectTemplateService } from "@/lib/services/project-template-service"
+import { useDependencyManagement } from "@/lib/hooks/useDependencyManagement"
 
 export function DocumentDependencyEditor({ 
   projectTemplate, 
   onSave, 
   onClose 
 }: DocumentDependencyEditorProps) {
-  const [dependencies, setDependencies] = useState<DocumentDependency[]>([])
-  const [loading, setLoading] = useState(true)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   
-  // Extraer los documentos de la plantilla
-  const documents = projectTemplate.documents || []
+  // Extraer los documentos de la plantilla y memorizarlos
+  const documents = useMemo(() => projectTemplate.documents || [], [projectTemplate.documents])
+  
+  const {
+    dependencies,
+    loading: savingDependencies,
+    toggleDependency,
+    updateDependencyType,
+    updateDependencyNotes,
+    saveDependencies
+  } = useDependencyManagement([])
   
   // Cargar dependencias existentes
   useEffect(() => {
     const fetchDependencies = async () => {
       try {
-        setLoading(true)
+        setInitialLoading(true)
         const documentIds = documents.map(doc => doc.document_template_id)
-        
-        // Cargar dependencias para cada documento
-        const allDependencies: DocumentDependency[] = []
+        const allDependencies = []
         
         for (const docId of documentIds) {
           const { data, error } = await ProjectTemplateService.getDocumentDependencies(docId)
           if (error) throw error
           
-          // Filtrar solo dependencias relevantes para esta plantilla (que tengan target dentro de la misma plantilla)
           const relevantDependencies = data.filter(dep => 
             documentIds.includes(dep.target_id)
           )
@@ -41,120 +46,53 @@ export function DocumentDependencyEditor({
           allDependencies.push(...relevantDependencies)
         }
         
-        setDependencies(allDependencies)
+        // Inicializar el estado de dependencias
+        toggleDependency(...allDependencies)
       } catch (error) {
         console.error('Error fetching dependencies:', error)
-        toast.error('Error al cargar las dependencias de documentos')
       } finally {
-        setLoading(false)
+        setInitialLoading(false)
       }
     }
     
     if (documents.length > 0) {
       fetchDependencies()
     } else {
-      setLoading(false)
+      setInitialLoading(false)
     }
-  }, [documents])
+  }, [documents, toggleDependency])
   
-  // Comprobar si existe una dependencia
-  const hasDependency = (sourceId: string, targetId: string): boolean => {
+  // Funciones memorizadas para verificaciones de dependencias
+  const hasDependency = useCallback((sourceId: string, targetId: string): boolean => {
     return dependencies.some(dep => 
       dep.source_id === sourceId && dep.target_id === targetId
     )
-  }
+  }, [dependencies])
   
-  // Obtener el tipo de dependencia
-  const getDependencyType = (sourceId: string, targetId: string): 'required' | 'optional' => {
+  const getDependencyType = useCallback((sourceId: string, targetId: string): 'required' | 'optional' => {
     const dependency = dependencies.find(dep => 
       dep.source_id === sourceId && dep.target_id === targetId
     )
     return dependency ? dependency.dependency_type : 'optional'
-  }
+  }, [dependencies])
   
-  // Obtener las notas de dependencia
-  const getDependencyNotes = (sourceId: string, targetId: string): string => {
-    const dependency = dependencies.find(dep => 
-      dep.source_id === sourceId && dep.target_id === targetId
-    )
-    return dependency?.notes || ''
-  }
+  // Obtener el título del documento (memorizado)
+  const getDocumentTitle = useCallback((documentId: string): string => {
+    const doc = documents.find(d => d.document_template_id === documentId)
+    return doc ? doc.document_template.title : 'Documento desconocido'
+  }, [documents])
   
-  // Agregar o actualizar una dependencia
-  const toggleDependency = (sourceId: string, targetId: string) => {
-    setDependencies(prev => {
-      // Verificar si existe la dependencia
-      const existingIndex = prev.findIndex(dep => 
-        dep.source_id === sourceId && dep.target_id === targetId
-      )
-      
-      if (existingIndex >= 0) {
-        // Si existe, la eliminamos
-        return prev.filter((_, i) => i !== existingIndex)
-      } else {
-        // Si no existe, la agregamos con valores predeterminados
-        return [
-          ...prev, 
-          {
-            source_id: sourceId,
-            target_id: targetId,
-            dependency_type: 'required',
-            notes: ''
-          }
-        ]
-      }
-    })
-  }
-  
-  // Actualizar el tipo de dependencia
-  const updateDependencyType = (sourceId: string, targetId: string, type: 'required' | 'optional') => {
-    setDependencies(prev => 
-      prev.map(dep => {
-        if (dep.source_id === sourceId && dep.target_id === targetId) {
-          return { ...dep, dependency_type: type }
-        }
-        return dep
-      })
-    )
-  }
-  
-  // Actualizar las notas de dependencia
-  const updateDependencyNotes = (sourceId: string, targetId: string, notes: string) => {
-    setDependencies(prev => 
-      prev.map(dep => {
-        if (dep.source_id === sourceId && dep.target_id === targetId) {
-          return { ...dep, notes }
-        }
-        return dep
-      })
-    )
-  }
-  
-  // Guardar dependencias
+  // Manejar guardado
   const handleSave = async () => {
     try {
       setSaving(true)
-      
-      const { success, error } = await ProjectTemplateService.saveDependencies(dependencies)
-      
-      if (error) throw error
-      
+      const success = await saveDependencies()
       if (success) {
-        toast.success('Dependencias guardadas correctamente')
         onSave()
       }
-    } catch (error) {
-      console.error('Error saving dependencies:', error)
-      toast.error('Error al guardar las dependencias')
     } finally {
       setSaving(false)
     }
-  }
-
-  // Obtener el título del documento a partir de su ID
-  const getDocumentTitle = (documentId: string): string => {
-    const doc = documents.find(d => d.document_template_id === documentId)
-    return doc ? doc.document_template.title : 'Documento desconocido'
   }
 
   return (
@@ -174,7 +112,7 @@ export function DocumentDependencyEditor({
       </div>
 
       <div className="p-6 flex-1 overflow-y-auto">
-        {loading ? (
+        {initialLoading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
           </div>
@@ -215,11 +153,8 @@ export function DocumentDependencyEditor({
                         {sourceDoc.document_template.title}
                       </td>
                       {documents.map((targetDoc) => {
-                        // No permitir dependencias de un documento con sí mismo
                         const isSelf = sourceDoc.document_template_id === targetDoc.document_template_id
-                        // Comprobar si existe la dependencia
                         const hasDepend = hasDependency(sourceDoc.document_template_id, targetDoc.document_template_id)
-                        // Obtener el tipo de dependencia
                         const dependType = getDependencyType(sourceDoc.document_template_id, targetDoc.document_template_id)
                         
                         return (
@@ -250,21 +185,19 @@ export function DocumentDependencyEditor({
                                 }`}>
                                   {dependType === 'required' ? 'Requerido' : 'Opcional'}
                                 </span>
-                                {hasDepend && (
-                                  <select
-                                    value={dependType}
-                                    onChange={(e) => updateDependencyType(
-                                      sourceDoc.document_template_id,
-                                      targetDoc.document_template_id,
-                                      e.target.value as 'required' | 'optional'
-                                    )}
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="text-xs border rounded px-1 py-0.5"
-                                  >
-                                    <option value="required">Requerido</option>
-                                    <option value="optional">Opcional</option>
-                                  </select>
-                                )}
+                                <select
+                                  value={dependType}
+                                  onChange={(e) => updateDependencyType(
+                                    sourceDoc.document_template_id,
+                                    targetDoc.document_template_id,
+                                    e.target.value as 'required' | 'optional'
+                                  )}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="text-xs border rounded px-1 py-0.5"
+                                >
+                                  <option value="required">Requerido</option>
+                                  <option value="optional">Opcional</option>
+                                </select>
                               </div>
                             ) : (
                               <span className="text-gray-300">Sin dependencia</span>
@@ -318,8 +251,8 @@ export function DocumentDependencyEditor({
           </div>
         )}
       </div>
-
-      <div className="p-6 border-t flex justify-end">
+      
+      <div className="p-4 border-t flex justify-end">
         <button
           onClick={onClose}
           className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 mr-3"
@@ -328,10 +261,10 @@ export function DocumentDependencyEditor({
         </button>
         <button
           onClick={handleSave}
-          disabled={saving}
+          disabled={saving || savingDependencies}
           className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          {saving ? (
+          {saving || savingDependencies ? (
             <>
               <Loader2 className="animate-spin w-4 h-4 mr-2" />
               Guardando...
