@@ -1,4 +1,3 @@
-
 export type Json =
   | string
   | number
@@ -89,6 +88,35 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      document_dependencies: {
+        Row: {
+          id: string
+          source_id: string
+          target_id: string
+          dependency_type: 'required' | 'optional'
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          source_id: string
+          target_id: string
+          dependency_type: 'required' | 'optional'
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          source_id?: string
+          target_id?: string
+          dependency_type?: 'required' | 'optional'
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
       }
       document_embeddings: {
         Row: {

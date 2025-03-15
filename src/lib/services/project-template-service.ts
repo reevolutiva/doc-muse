@@ -1,98 +1,160 @@
 import { supabase } from '@/lib/supabase'
-import { toast } from 'sonner'
-import { ProjectTemplate, DocumentDependency } from '@/lib/types/project-template'
+import { ProjectTemplate } from '@/lib/types/project-template'
+import { createErrorHandler } from '@/lib/utils/error-handler'
+import { Database } from '@/lib/supabase.types'
+
+type DocumentDependencyRow = Database['public']['Tables']['document_dependencies']['Row']
+type ProjectTemplateRow = Database['public']['Tables']['project_templates']['Row']
+
+type ProjectTemplateResponse = ProjectTemplateRow & {
+  documents: Array<{
+    id: string
+    document_template_id: string
+    is_required: boolean
+    sequence_order: number
+    document_template: {
+      id: string
+      title: string
+      description: string | null
+    }
+  }>
+}
+
+const handleError = createErrorHandler('ProjectTemplateService')
+
+const mapTemplateResponse = (template: any): ProjectTemplate => ({
+  id: template.id,
+  name: template.name,
+  description: template.description,
+  created_at: template.created_at,
+  updated_at: template.updated_at,
+  documents: template.documents.map((doc: any) => ({
+    id: doc.id,
+    document_template_id: doc.document_template_id,
+    document_template: {
+      id: doc.document_template.id,
+      title: doc.document_template.title,
+      description: doc.document_template.description
+    },
+    is_required: doc.is_required,
+    sequence_order: doc.sequence_order
+  }))
+})
 
 export const ProjectTemplateService = {
-  /**
-   * Obtiene todas las plantillas de proyecto
-   */
   async getProjectTemplates(): Promise<{ data: ProjectTemplate[] | null, error: any }> {
     try {
-      const { data, error } = await supabase
+      const { data: templates, error } = await supabase
         .from('project_templates')
-        .select('*')
+        .select(`
+          id,
+          name,
+          description,
+          created_at,
+          updated_at,
+          documents:project_template_doc_templates (
+            id,
+            document_template_id,
+            is_required,
+            sequence_order,
+            document_template:document_template_id (
+              id,
+              title,
+              description
+            )
+          )
+        `)
         .order('name')
       
       if (error) throw error
-      return { data, error: null }
+      return { 
+        data: templates ? templates.map(mapTemplateResponse) : null, 
+        error: null 
+      }
     } catch (error) {
-      console.error('Error fetching project templates:', error)
-      return { data: null, error }
+      return { 
+        data: null, 
+        error: handleError(error, { 
+          customMessage: 'Error al cargar las plantillas de proyecto',
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Obtiene una plantilla de proyecto por su ID
-   */
   async getProjectTemplateById(id: string): Promise<{ data: ProjectTemplate | null, error: any }> {
     try {
-      // Primero, obtener la información básica de la plantilla
-      const { data: templateData, error: templateError } = await supabase
+      const { data: template, error } = await supabase
         .from('project_templates')
-        .select('*')
+        .select(`
+          id,
+          name,
+          description,
+          created_at,
+          updated_at,
+          documents:project_template_doc_templates (
+            id,
+            document_template_id,
+            is_required,
+            sequence_order,
+            document_template:document_template_id (
+              id,
+              title,
+              description
+            )
+          )
+        `)
         .eq('id', id)
         .single()
       
-      if (templateError) throw templateError
-
-      // Luego, obtener los documentos asociados a la plantilla
-      const { data: documentsData, error: documentsError } = await supabase
-        .from('project_template_doc_templates')
-        .select(`
-          id,
-          document_template_id,
-          is_required,
-          sequence_order,
-          document_template:document_template_id (
-            id,
-            title,
-            description
-          )
-        `)
-        .eq('project_template_id', id)
-        .order('sequence_order')
-      
-      if (documentsError) throw documentsError
-
-      const template: ProjectTemplate = {
-        ...templateData,
-        documents: documentsData || []
+      if (error) throw error
+      return { 
+        data: template ? mapTemplateResponse(template) : null, 
+        error: null 
       }
-      
-      return { data: template, error: null }
     } catch (error) {
-      console.error(`Error fetching project template with ID ${id}:`, error)
-      return { data: null, error }
+      return { 
+        data: null, 
+        error: handleError(error, { 
+          customMessage: `Error al cargar la plantilla de proyecto ${id}`,
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Crea una nueva plantilla de proyecto
-   */
   async createProjectTemplate(data: Partial<ProjectTemplate>): Promise<{ data: ProjectTemplate | null, error: any }> {
     try {
       const { data: createdTemplate, error } = await supabase
         .from('project_templates')
-        .insert([data])
+        .insert([{
+          name: data.name,
+          description: data.description
+        }])
         .select()
         .single()
       
       if (error) throw error
       return { data: createdTemplate, error: null }
     } catch (error) {
-      console.error('Error creating project template:', error)
-      return { data: null, error }
+      return { 
+        data: null, 
+        error: handleError(error, { 
+          customMessage: 'Error al crear la plantilla de proyecto',
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Actualiza una plantilla de proyecto existente
-   */
   async updateProjectTemplate(id: string, data: Partial<ProjectTemplate>): Promise<{ data: ProjectTemplate | null, error: any }> {
     try {
       const { data: updatedTemplate, error } = await supabase
         .from('project_templates')
-        .update(data)
+        .update({
+          name: data.name,
+          description: data.description
+        })
         .eq('id', id)
         .select()
         .single()
@@ -100,25 +162,18 @@ export const ProjectTemplateService = {
       if (error) throw error
       return { data: updatedTemplate, error: null }
     } catch (error) {
-      console.error(`Error updating project template with ID ${id}:`, error)
-      return { data: null, error }
+      return { 
+        data: null, 
+        error: handleError(error, { 
+          customMessage: `Error al actualizar la plantilla de proyecto ${id}`,
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Elimina una plantilla de proyecto
-   */
   async deleteProjectTemplate(id: string): Promise<{ success: boolean, error: any }> {
     try {
-      // Primero, eliminar las relaciones con documentos
-      const { error: docsError } = await supabase
-        .from('project_template_doc_templates')
-        .delete()
-        .eq('project_template_id', id)
-      
-      if (docsError) throw docsError
-
-      // Luego, eliminar la plantilla
       const { error } = await supabase
         .from('project_templates')
         .delete()
@@ -127,14 +182,16 @@ export const ProjectTemplateService = {
       if (error) throw error
       return { success: true, error: null }
     } catch (error) {
-      console.error(`Error deleting project template with ID ${id}:`, error)
-      return { success: false, error }
+      return { 
+        success: false, 
+        error: handleError(error, { 
+          customMessage: `Error al eliminar la plantilla de proyecto ${id}`,
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Agrega un documento a una plantilla de proyecto
-   */
   async addDocumentToTemplate(
     projectTemplateId: string,
     documentTemplateId: string,
@@ -156,14 +213,16 @@ export const ProjectTemplateService = {
       if (error) throw error
       return { data, error: null }
     } catch (error) {
-      console.error('Error adding document to project template:', error)
-      return { data: null, error }
+      return { 
+        data: null, 
+        error: handleError(error, { 
+          customMessage: 'Error al agregar documento a la plantilla',
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Actualiza un documento en una plantilla de proyecto
-   */
   async updateDocumentInTemplate(
     id: string,
     updates: { is_required?: boolean, sequence_order?: number }
@@ -179,14 +238,16 @@ export const ProjectTemplateService = {
       if (error) throw error
       return { data, error: null }
     } catch (error) {
-      console.error(`Error updating document in project template with ID ${id}:`, error)
-      return { data: null, error }
+      return { 
+        data: null, 
+        error: handleError(error, { 
+          customMessage: `Error al actualizar documento en la plantilla`,
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Elimina un documento de una plantilla de proyecto
-   */
   async removeDocumentFromTemplate(id: string): Promise<{ success: boolean, error: any }> {
     try {
       const { error } = await supabase
@@ -197,44 +258,53 @@ export const ProjectTemplateService = {
       if (error) throw error
       return { success: true, error: null }
     } catch (error) {
-      console.error(`Error removing document from project template with ID ${id}:`, error)
-      return { success: false, error }
+      return { 
+        success: false, 
+        error: handleError(error, { 
+          customMessage: 'Error al eliminar documento de la plantilla',
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Obtiene las dependencias de un documento
-   */
-  async getDocumentDependencies(documentTemplateId: string): Promise<{ data: DocumentDependency[], error: any }> {
+  async getDocumentDependencies(documentTemplateId: string): Promise<{ data: DocumentDependencyRow[], error: any }> {
     try {
       const { data, error } = await supabase
         .from('document_dependencies')
-        .select('*')
+        .select(`
+          id,
+          source_id,
+          target_id,
+          dependency_type,
+          notes,
+          created_at,
+          updated_at
+        `)
         .eq('source_id', documentTemplateId)
       
       if (error) throw error
+
       return { data: data || [], error: null }
     } catch (error) {
-      console.error('Error fetching document dependencies:', error)
-      return { data: [], error }
+      return { 
+        data: [], 
+        error: handleError(error, { 
+          customMessage: 'Error al cargar las dependencias del documento',
+          silent: true 
+        })
+      }
     }
   },
 
-  /**
-   * Guarda las dependencias de documentos
-   * Esta función elimina primero todas las dependencias existentes y luego inserta las nuevas
-   */
-  async saveDependencies(dependencies: DocumentDependency[]): Promise<{ success: boolean, error: any }> {
+  async saveDependencies(dependencies: DocumentDependencyRow[]): Promise<{ success: boolean, error: any }> {
     try {
-      // Si no hay dependencias, no hacemos nada
       if (dependencies.length === 0) {
         return { success: true, error: null }
       }
 
-      // Obtenemos los IDs únicos de documentos fuente
       const sourceIds = [...new Set(dependencies.map(dep => dep.source_id))]
 
-      // Eliminar todas las dependencias existentes para estos documentos
       for (const sourceId of sourceIds) {
         const { error: deleteError } = await supabase
           .from('document_dependencies')
@@ -244,7 +314,6 @@ export const ProjectTemplateService = {
         if (deleteError) throw deleteError
       }
 
-      // Insertar las nuevas dependencias
       const { error: insertError } = await supabase
         .from('document_dependencies')
         .insert(dependencies.map(dep => ({
@@ -258,8 +327,13 @@ export const ProjectTemplateService = {
       
       return { success: true, error: null }
     } catch (error) {
-      console.error('Error saving document dependencies:', error)
-      return { success: false, error }
+      return { 
+        success: false, 
+        error: handleError(error, { 
+          customMessage: 'Error al guardar las dependencias',
+          silent: true 
+        })
+      }
     }
   }
 }

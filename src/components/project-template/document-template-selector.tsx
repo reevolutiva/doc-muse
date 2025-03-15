@@ -1,18 +1,13 @@
 "use client"
-import { useState, useEffect } from "react"
-import { X, Plus, Search, Loader2, SortAsc } from "lucide-react"
+
+import { X, Plus, Search, Check, Loader2 } from "lucide-react"
 import * as Dialog from '@radix-ui/react-dialog'
-import { supabase } from "@/lib/supabase"
 import { ProjectTemplate } from "@/lib/types/project-template"
 import { ProjectTemplateService } from "@/lib/services/project-template-service"
-import { toast } from "sonner"
-
-interface DocumentTemplate {
-  id: string
-  title: string
-  description: string | null
-  created_at: string
-}
+import { useDocumentTemplates } from "@/lib/hooks/useDocumentTemplates"
+import { useLoadingState } from "@/lib/hooks/useLoadingState"
+import { useSelectedDocuments } from "@/lib/hooks/useSelectedDocuments"
+import { handleError } from "@/lib/utils/error-handler"
 
 interface DocumentTemplateSelectorProps {
   projectTemplate: ProjectTemplate
@@ -25,147 +20,39 @@ export function DocumentTemplateSelector({
   onClose, 
   onDocumentsAdded 
 }: DocumentTemplateSelectorProps) {
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [documentTemplates, setDocumentTemplates] = useState<DocumentTemplate[]>([])
-  const [selectedTemplates, setSelectedTemplates] = useState<{
-    [key: string]: { 
-      id: string
-      title: string
-      isRequired: boolean
-      order: number
-    }
-  }>({})
-  
-  // Cargar plantillas de documento disponibles
-  useEffect(() => {
-    const fetchDocumentTemplates = async () => {
-      try {
-        setLoading(true)
-        const { data, error } = await supabase
-          .from('document_templates')
-          .select('id, title, description, created_at')
-          .order('title')
-        
-        if (error) throw error
-        setDocumentTemplates(data || [])
-      } catch (error) {
-        console.error('Error fetching document templates:', error)
-        toast.error('Error al cargar las plantillas de documento')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchDocumentTemplates()
-  }, [])
-
-  // Filtrar plantillas según la búsqueda
-  const filteredTemplates = documentTemplates.filter(template => 
-    template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (template.description && template.description.toLowerCase().includes(searchQuery.toLowerCase()))
-  )
-
-  const handleSelectTemplate = (template: DocumentTemplate) => {
-    setSelectedTemplates(prev => {
-      // Si ya está seleccionada, la quitamos
-      if (prev[template.id]) {
-        const { [template.id]: removed, ...rest } = prev
-        return rest
-      }
-      
-      // Si no, la agregamos con valores predeterminados
-      return {
-        ...prev,
-        [template.id]: {
-          id: template.id,
-          title: template.title,
-          isRequired: false,
-          order: Object.keys(prev).length + 1
-        }
-      }
-    })
-  }
-
-  const handleToggleRequired = (templateId: string) => {
-    setSelectedTemplates(prev => ({
-      ...prev,
-      [templateId]: {
-        ...prev[templateId],
-        isRequired: !prev[templateId].isRequired
-      }
-    }))
-  }
-
-  const handleUpdateOrder = (templateId: string, newOrder: number) => {
-    // Asegurarse de que el orden sea válido
-    if (newOrder < 1) newOrder = 1
-    if (newOrder > Object.keys(selectedTemplates).length) {
-      newOrder = Object.keys(selectedTemplates).length
-    }
-
-    // Actualizar el orden de la plantilla seleccionada
-    setSelectedTemplates(prev => {
-      const currentOrder = prev[templateId].order
-      
-      // Si el orden no cambió, no hacemos nada
-      if (currentOrder === newOrder) return prev
-      
-      // Crear un nuevo objeto con los órdenes actualizados
-      const updated = { ...prev }
-      
-      // Ajustar el orden de las demás plantillas
-      if (newOrder > currentOrder) {
-        // Si movemos hacia abajo, decrementamos todos los que están entre el orden actual y el nuevo
-        Object.keys(updated).forEach(key => {
-          if (updated[key].order > currentOrder && updated[key].order <= newOrder) {
-            updated[key].order--
-          }
-        })
-      } else {
-        // Si movemos hacia arriba, incrementamos todos los que están entre el nuevo orden y el actual
-        Object.keys(updated).forEach(key => {
-          if (updated[key].order >= newOrder && updated[key].order < currentOrder) {
-            updated[key].order++
-          }
-        })
-      }
-      
-      // Actualizar el orden de la plantilla seleccionada
-      updated[templateId].order = newOrder
-      
-      return updated
-    })
-  }
+  const { templates, searchQuery, setSearchQuery, loading: loadingTemplates } = useDocumentTemplates()
+  const { saving, withLoading } = useLoadingState()
+  const { 
+    selectedDocuments,
+    toggleDocument,
+    toggleRequired,
+    updateOrder,
+    getSelectedArray
+  } = useSelectedDocuments()
 
   const handleSave = async () => {
     try {
-      setSaving(true)
+      await withLoading(async () => {
+        const selectedArray = getSelectedArray()
       
-      // Convertir el objeto de plantillas seleccionadas a un array
-      const selectedArray = Object.values(selectedTemplates).sort((a, b) => a.order - b.order)
-      
-      // Crear las relaciones en la base de datos
-      for (let i = 0; i < selectedArray.length; i++) {
-        const template = selectedArray[i]
-        const { error } = await ProjectTemplateService.addDocumentToTemplate(
-          projectTemplate.id,
-          template.id,
-          template.isRequired,
-          i + 1 // Para asegurar que el orden sea secuencial
-        )
-        
-        if (error) throw error
-      }
-      
-      toast.success('Documentos agregados correctamente')
-      onDocumentsAdded()
+        for (let i = 0; i < selectedArray.length; i++) {
+          const template = selectedArray[i]
+          const { error } = await ProjectTemplateService.addDocumentToTemplate(
+            projectTemplate.id,
+            template.id,
+            template.isRequired,
+            i + 1
+          )
+          
+          if (error) throw error
+        }
+        onDocumentsAdded()
+      }, 'saving')
     } catch (error) {
-      console.error('Error adding documents to template:', error)
-      toast.error('Error al agregar documentos a la plantilla')
-    } finally {
-      setSaving(false)
+      handleError(error, {
+        customMessage: 'Error al agregar documentos a la plantilla',
+        context: 'DocumentTemplateSelector.handleSave'
+      })
     }
   }
 
@@ -196,23 +83,23 @@ export function DocumentTemplateSelector({
             </div>
           </div>
 
-          {loading ? (
+          {loadingTemplates ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="animate-spin h-6 w-6 text-blue-600" />
             </div>
-          ) : filteredTemplates.length === 0 ? (
+          ) : templates.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               No se encontraron plantillas de documento
             </div>
           ) : (
             <div className="space-y-2">
-              {filteredTemplates.map(template => {
-                const isSelected = !!selectedTemplates[template.id]
+              {templates.map(template => {
+                const isSelected = !!selectedDocuments[template.id]
                 
                 return (
                   <div 
                     key={template.id}
-                    onClick={() => handleSelectTemplate(template)}
+                    onClick={() => toggleDocument(template)}
                     className={`p-3 rounded-md cursor-pointer transition-colors ${
                       isSelected 
                         ? 'bg-blue-50 border border-blue-200' 
@@ -242,59 +129,56 @@ export function DocumentTemplateSelector({
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold">Documentos Seleccionados</h2>
             <span className="text-sm text-gray-500">
-              {Object.keys(selectedTemplates).length} seleccionados
+              {Object.keys(selectedDocuments).length} seleccionados
             </span>
           </div>
           
-          {Object.keys(selectedTemplates).length === 0 ? (
+          {Object.keys(selectedDocuments).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-gray-500 border-2 border-dashed rounded-lg border-gray-300 h-48">
               <Plus className="w-8 h-8 mb-2" />
               <p>Selecciona plantillas de documento</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {Object.values(selectedTemplates)
-                .sort((a, b) => a.order - b.order)
-                .map(template => (
-                  <div key={template.id} className="bg-white border rounded-md p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium">{template.title}</h3>
-                      <button
-                        onClick={() => handleSelectTemplate({ id: template.id } as DocumentTemplate)}
-                        className="text-gray-500 hover:text-red-500"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
+              {getSelectedArray().map(template => (
+                <div key={template.id} className="bg-white border rounded-md p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-medium">{template.title}</h3>
+                    <button
+                      onClick={() => toggleDocument(template)}
+                      className="text-gray-500 hover:text-red-500"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center">
+                      <label className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={template.isRequired}
+                          onChange={() => toggleRequired(template.id)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span>Requerido</span>
+                      </label>
                     </div>
                     
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center">
-                        <label className="flex items-center gap-2 text-sm">
-                          <input
-                            type="checkbox"
-                            checked={template.isRequired}
-                            onChange={() => handleToggleRequired(template.id)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                          />
-                          <span>Requerido</span>
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <SortAsc className="w-4 h-4 text-gray-500" />
-                        <input
-                          type="number"
-                          value={template.order}
-                          onChange={(e) => handleUpdateOrder(template.id, parseInt(e.target.value))}
-                          min="1"
-                          max={Object.keys(selectedTemplates).length}
-                          className="w-14 py-1 px-2 border rounded text-sm"
-                        />
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Search className="w-4 h-4 text-gray-500" />
+                      <input
+                        type="number"
+                        value={template.order}
+                        onChange={(e) => updateOrder(template.id, parseInt(e.target.value))}
+                        min="1"
+                        max={Object.keys(selectedDocuments).length}
+                        className="w-14 py-1 px-2 border rounded text-sm"
+                      />
                     </div>
                   </div>
-                ))
-              }
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -309,7 +193,7 @@ export function DocumentTemplateSelector({
         </button>
         <button
           onClick={handleSave}
-          disabled={Object.keys(selectedTemplates).length === 0 || saving}
+          disabled={Object.keys(selectedDocuments).length === 0 || saving}
           className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
         >
           {saving ? (
@@ -323,23 +207,5 @@ export function DocumentTemplateSelector({
         </button>
       </div>
     </Dialog.Content>
-  )
-}
-
-// Componente Check para el icono de checkmark
-function Check(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="3" 
-      strokeLinecap="round" 
-      strokeLinejoin="round"
-      {...props}
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
   )
 }

@@ -16,21 +16,14 @@ export function ProjectTemplateForm({ onClose, onSave, initialData = {}, mode }:
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formState.name.trim()) {
-      alert('Por favor ingresa un nombre para la plantilla')
-      return
-    }
-    
     try {
       setFormState(prev => ({ ...prev, loading: true }))
-      
       await onSave({
         name: formState.name,
-        description: formState.description || null
+        description: formState.description
       })
-      
     } catch (error) {
-      console.error('Error submitting form:', error)
+      console.error('Error saving project template:', error)
     } finally {
       setFormState(prev => ({ ...prev, loading: false }))
     }
