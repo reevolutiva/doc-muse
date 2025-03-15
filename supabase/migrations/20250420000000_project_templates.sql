@@ -1,8 +1,13 @@
+-- Drop existing tables and dependencies
+DROP TABLE IF EXISTS public.project_template_doc_templates CASCADE;
+DROP TABLE IF EXISTS public.project_templates CASCADE;
+
 -- Crear tabla para plantillas de proyecto
-CREATE TABLE IF NOT EXISTS public.project_templates (
+CREATE TABLE public.project_templates (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     description TEXT,
+    type TEXT NOT NULL DEFAULT 'general' CHECK (type IN ('course', 'workshop', 'microlearning', 'general')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
@@ -13,8 +18,23 @@ ALTER TABLE public.project_templates ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Permitir acceso a plantillas de proyecto para usuarios autenticados" ON public.project_templates
     FOR ALL USING (auth.role() = 'authenticated');
 
+-- Política para permitir INSERT en project_templates a usuarios autenticados
+CREATE POLICY "Insert project templates for authenticated users"
+ON public.project_templates
+FOR INSERT
+WITH CHECK (auth.role() = 'authenticated');
+
+-- Política para permitir UPDATE en project_templates a usuarios autenticados
+CREATE POLICY "Update project templates for authenticated users"
+ON public.project_templates
+FOR UPDATE
+USING (auth.role() = 'authenticated');
+
+-- Create index for type column
+CREATE INDEX IF NOT EXISTS idx_project_templates_type ON public.project_templates USING btree (type);
+
 -- Crear tabla de relación entre plantillas de proyecto y plantillas de documento
-CREATE TABLE IF NOT EXISTS public.project_template_doc_templates (
+CREATE TABLE public.project_template_doc_templates (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     project_template_id UUID REFERENCES public.project_templates(id) ON DELETE CASCADE NOT NULL,
     document_template_id UUID REFERENCES public.document_templates(id) ON DELETE CASCADE NOT NULL,
