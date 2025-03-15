@@ -1,5 +1,4 @@
-
-      /** @type {import("next").NextConfig} */
+/** @type {import("next").NextConfig} */
       const config = {
         trailingSlash: true,
         images: {
@@ -22,6 +21,6 @@
           config.stats = "verbose";
           return config;
         },
-        output: "export"
+        // output: "export" <- Eliminado para permitir SSR y next start
       };
       export default config;

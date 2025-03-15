@@ -7,7 +7,9 @@ from llama_index.core.workflow import (
     StopEvent,
     Workflow,
 )
-from  conf.models import azure_llm
+# Actualizada la importación de JsonSerializer para usar la ruta correcta
+from llama_index.serialization import JsonSerializer
+from conf.models import azure_llm
 from conf.KimfeRag import KimfeRag
 from llama_index.core import Settings
 from pydantic import BaseModel
