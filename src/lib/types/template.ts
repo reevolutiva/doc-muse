@@ -17,22 +17,22 @@ export interface TemplateContent {
 export interface Template {
   id: string;
   title: string;
-  description: string | null;
-  content: Json;
+  description?: string;
+  content: TemplateContent;
+  type: 'document' | 'project' | 'section';
   created_at: string;
   updated_at: string;
-  is_required?: boolean;
-  sequence_order?: number;
 }
 
 export interface TemplateFormData extends Omit<Template, 'id' | 'created_at' | 'updated_at'> {
   rating?: number;
   rating_count?: number;
   views?: number;
-  type?: string;
   featured?: boolean;
   thumbnail_url?: string;
   keywords?: string[];
+  // Override type to make it required since it's optional in the base interface
+  type: 'document' | 'project' | 'section';
 }
 
 export type TemplateListItem = Template;
@@ -46,8 +46,8 @@ export interface DocumentTemplate {
 
 export interface TemplateFormProps {
   onClose: () => void;
-  onSave: (formData: TemplateFormData) => Promise<void>;
-  initialData?: TemplateFormData;
+  onSave: (formData: FormData) => Promise<void>;
+  initialData?: FormData;
   mode: 'create' | 'edit';
 }
 

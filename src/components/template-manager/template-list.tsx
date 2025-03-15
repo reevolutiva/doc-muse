@@ -13,6 +13,7 @@ interface TemplateListProps {
   onSelect?: (template: Template) => void
   loading?: boolean
   error?: Error | null
+  typeFilter?: 'document' | 'project' | 'section'
 }
 
 export function TemplateList({
@@ -23,8 +24,13 @@ export function TemplateList({
   mode = "manage",
   onSelect,
   loading,
-  error
+  error,
+  typeFilter
 }: TemplateListProps) {
+  const filteredTemplates = typeFilter 
+    ? templates.filter(template => template.type === typeFilter)
+    : templates;
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -45,13 +51,13 @@ export function TemplateList({
     )
   }
 
-  if (templates.length === 0) {
+  if (filteredTemplates.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <FileText className="w-12 h-12 text-gray-400 mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No Templates Found</h3>
         <p className="text-gray-500">
-          Get started by creating your first template.
+          {typeFilter ? `No ${typeFilter} templates found.` : 'Get started by creating your first template.'}
         </p>
       </div>
     )
@@ -59,7 +65,7 @@ export function TemplateList({
 
   return (
     <div className="space-y-2">
-      {templates.map((template) => (
+      {filteredTemplates.map((template) => (
         <div
           key={template.id}
           className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
