@@ -1,6 +1,5 @@
 "use client"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useInView } from 'react-intersection-observer'
@@ -25,7 +24,17 @@ const categories = [
   { id: 'presentation', name: 'Presentation' }
 ]
 
-export default function TemplatesPage() {
+// Componente de carga mientras se resuelve la suspense boundary
+function Loading() {
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+    </div>
+  );
+}
+
+// Componente interno que usa useSearchParams
+function TemplatesContent() {
   // Obtener los parámetros de URL
   const searchParams = useSearchParams()
   const editTemplateId = searchParams.get('edit')
@@ -193,6 +202,13 @@ export default function TemplatesPage() {
     return matchesCategory
   })
 
+  // Observar si el final de la lista está en la vista para cargar más
+  useEffect(() => {
+    if (inView && hasMore && !loading) {
+      setPage(prev => prev + 1);
+    }
+  }, [inView, hasMore, loading]);
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="mx-auto max-w-7xl">
@@ -355,5 +371,14 @@ export default function TemplatesPage() {
       </div>
       <Toaster position="top-right" />
     </div>
-  )
+  );
+}
+
+// Componente principal con Suspense
+export default function TemplatesPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <TemplatesContent />
+    </Suspense>
+  );
 }

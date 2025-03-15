@@ -3,50 +3,43 @@
 # Licensed under the MIT License. See LICENSE file in the project root for license information.
 #-------------------------------------------------------------------------------------------------------------
 
-    FROM llamaindex/llama-deploy:v0.3.6
+# Dockerfile for the backend service
+# This Dockerfile sets up the backend environment, installs necessary dependencies, and ensures the run.sh script has execution permissions.
+# It will be used when building the backend service container.
 
-    USER root
-    
-    # Update the OS and install necessary packages
-    ENV DEBIAN_FRONTEND=noninteractive
-    RUN apt-get update
-    RUN apt-get upgrade -y
-    RUN apt-get -y install --no-install-recommends build-essential npm
-    RUN apt-get autoremove -y
-    RUN apt-get clean -y
+FROM llamaindex/llama-deploy:v0.3.6
 
-    ENV DEBIAN_FRONTEND=dialog
-    
-    # Update pip
-    RUN pip install --upgrade pip
-    
-    # Install Python dependencies
-    RUN pip install llama-index-readers-web
-    RUN pip install python-pptx
-    RUN pip install docx2txt 
-    RUN pip install llama-agents
-    RUN pip install llama-index-agent-openai
-    RUN pip install llama-index-embeddings-openai
-    RUN pip install llama-index-program-openai
-    RUN pip install llama-index-llms-openrouter
-    RUN pip install llama-index-embeddings-azure-openai 
-    RUN pip install transformers
-    RUN pip install torch
-    RUN pip install sentence-transformers
-    RUN pip install openai
-    RUN pip install llama-index-readers-database
-    RUN pip install openai
-    RUN pip install nltk
-    RUN pip install llama-index-vector-stores-supabase
-    RUN pip install openpyxl
-    RUN pip install ipywidgets
-    RUN pip install IPython
-    RUN pip install llama-index-readers-google
-    RUN pip install llama-index.experimental
-    RUN pip install aiohttp
-    RUN pip install python-docx
-    RUN pip install json-repair
-    RUN pip install json5
+USER root
 
-    COPY run.sh /app/run.sh
-    RUN chmod +x /app/run.sh
+# Update the OS and install necessary packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get -y install --no-install-recommends build-essential npm && \
+    apt-get autoremove -y && \
+    apt-get clean -y
+ENV DEBIAN_FRONTEND=dialog
+
+# Update pip and install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install llama-index-readers-web python-pptx docx2txt llama-agents \
+    llama-index-agent-openai llama-index-embeddings-openai llama-index-program-openai \
+    llama-index-llms-openrouter llama-index-embeddings-azure-openai transformers torch \
+    sentence-transformers openai llama-index-readers-database openai nltk \
+    llama-index-vector-stores-supabase openpyxl ipywidgets IPython \
+    llama-index-readers-google llama-index.experimental aiohttp python-docx \
+    json-repair json5
+
+# Create app directory and copy files
+WORKDIR /app
+COPY conf/ /app/conf/
+COPY data/ /app/data/
+COPY workflows/ /app/workflows/
+COPY *.py /app/
+COPY *.sh /app/
+
+# Ensure scripts have execution permissions
+RUN chmod +x /app/*.sh
+
+# Set the default command
+CMD ["/app/run.sh"]
