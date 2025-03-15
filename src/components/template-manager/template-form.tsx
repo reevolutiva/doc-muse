@@ -34,7 +34,7 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
     defaultValues: initialData
   })
   
-  const { loading, updateForm, validateForm } = useTemplateForm({
+  const { loading, updateForm, validateForm, handleSubmit } = useTemplateForm({
     initialData,
     onSave: async (formData: any) => {
       try {
@@ -42,12 +42,6 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
           ...formData,
           content: editorContent
         });
-
-        //TODO: Sincronizar con Supabase
-
-        console.log( 'formData', formData );
-        console.log( 'editorContent', editorContent );
-
         toast.success('Template saved successfully');
         onClose();
       } catch (error) {
@@ -59,7 +53,6 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
   })
 
   const handleEditorChange = (content: BlockEditorContent) => {
-    console.log('content', content);
     setEditorContent(content);
     setValue('content', content);
   }
@@ -72,7 +65,9 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
             {mode === 'create' ? 'Create Template' : 'Edit Template'}
           </Dialog.Title>
           <p className="mt-1 text-sm text-gray-500">
-            Create a reusable template for generating documents with AI-powered content
+            {mode === 'create' 
+              ? 'Create a reusable template for generating documents with AI-powered content'
+              : 'Edit your template and update its content'}
           </p>
         </div>
         <Dialog.Close className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -96,14 +91,7 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
         </Tabs.List>
         <Tabs.Content value="edit" className="outline-none">
           <form onSubmit={hookHandleSubmit((data) => {
-
-            console.log('data', data);
-
-            updateForm({
-              title: data.title,
-              description: data.description ?? null,
-              content: editorContent
-            })
+            handleSubmit();
           })} className="space-y-8">
             <div className="grid grid-cols-2 gap-8">
               <div className="space-y-6">
@@ -115,6 +103,7 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
                     <input
                       type="text"
                       {...register('title')}
+                      onChange={(e) => updateForm({ title: e.target.value })}
                       className={`w-full rounded-lg border shadow-sm px-4 py-3 transition-shadow ${
                         errors.title ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
                       }`}
@@ -139,6 +128,7 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
                   </label>
                   <textarea
                     {...register('description')}
+                    onChange={(e) => updateForm({ description: e.target.value })}
                     rows={3}
                     className="w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-shadow resize-none"
                     placeholder="Add a brief description of this template's purpose"
@@ -183,22 +173,18 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
                 </div>
               </div>
             </div>
-
             <div>
               <h3 className="text-lg font-semibold mb-4">Content Blocks</h3>
               <p className="text-sm text-gray-500 mb-4">
                 Create blocks of content with AI prompts to automatically generate content
               </p>
               <div className="border rounded-lg">                 
-      
-                  <BlockEditor 
+                <BlockEditor 
                   initialContent={editorContent}
                   onChange={handleEditorChange}
                 />
-                
               </div>
             </div>
-
             <div className="flex items-center justify-between mt-8 pt-6 border-t">
               <div className="text-sm text-gray-500">
                 <span className="text-red-500">*</span> Required fields

@@ -28,17 +28,19 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
         }
       })
     ],
-    content: selectedBlock?.data.text || '',
+    content: selectedBlock?.data?.text || '',
     onUpdate: ({ editor }) => handleEditorUpdate(editor)
   })
 
   useEffect(() => {
-    if (editor && selectedBlock) {
-      console.log( "entra al if");
+    if (editor && selectedBlock?.data) {
+      console.log(selectedBlock.data);
       editor.commands.setContent(selectedBlock.data.text || '')
     }
-    console.log("selectedBlock" ,selectedBlock );
-    console.log("editor" ,selectedBlock.data.text );
+    if (selectedBlock) {
+      console.log("selectedBlock", selectedBlock);
+      console.log("editor text", selectedBlock?.data?.text);
+    }
   }, [selectedBlock, editor])
 
   if (!editor) {
@@ -47,7 +49,11 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
 
   const handleBlockSelectWrapper = (block: Block) => {
     handleBlockSelect(block)
-    editor.commands.setContent(block.data.text || '')
+    if (block?.data?.text !== undefined) {
+      editor.commands.setContent(block.data.text || '')
+    } else {
+      editor.commands.setContent('')
+    }
     editor.commands.focus()
   }
 

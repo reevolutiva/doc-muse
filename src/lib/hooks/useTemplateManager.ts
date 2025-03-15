@@ -1,10 +1,8 @@
 "use client"
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import type { Template, TemplateFormData } from '@/lib/types/template'
-
 import { useAuth } from "@/hooks/useAuth"
 
 export function useTemplateManager() {
@@ -13,6 +11,11 @@ export function useTemplateManager() {
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null)
   const [loading, setLoading] = useState(false)
   const { session } = useAuth()
+
+  // Fetch templates on component mount
+  useEffect(() => {
+    fetchTemplates()
+  }, [])
 
   const handleSaveTemplate = async (formData: TemplateFormData) => {
     if (!formData.title?.trim()) {
@@ -28,22 +31,31 @@ export function useTemplateManager() {
         return
       }
 
+      // Parse content to ensure it's properly formatted
+      let parsedContent = formData.content
+      if (typeof formData.content === 'string') {
+        try {
+          parsedContent = JSON.parse(formData.content)
+        } catch (e) {
+          // If content is not valid JSON, create a default block structure
+          parsedContent = {
+            time: Date.now(),
+            blocks: [{
+              blockId: crypto.randomUUID(),
+              type: 'paragraph',
+              data: { text: formData.content },
+              description: '',
+              system: ''
+            }],
+            version: '1.0.0'
+          }
+        }
+      }
+
       const templateData = {
         title: formData.title.trim(),
         description: formData.description?.trim() || null,
-        content: JSON.stringify(typeof formData.content === 'string' 
-          ? {
-              time: Date.now(),
-              blocks: [{
-                blockId: crypto.randomUUID(),
-                type: 'paragraph',
-                data: { text: formData.content },
-                description: '',
-                system: ''
-              }],
-              version: '1.0.0'
-            }
-          : formData.content),
+        content: parsedContent,
         user_id: session.user.id,
         updated_at: new Date().toISOString()
       }
@@ -100,12 +112,26 @@ export function useTemplateManager() {
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setTemplates((data || []).map(template => ({
-        ...template,
-        content: typeof template.content === 'string' 
-          ? template.content 
-          : JSON.stringify(template.content)
-      })))
+      
+      // Ensure content is properly formatted for each template
+      setTemplates((data || []).map(template => {
+        let parsedContent = template.content
+        
+        // If content is a string, try to parse it as JSON
+        if (typeof template.content === 'string') {
+          try {
+            parsedContent = JSON.parse(template.content)
+          } catch (e) {
+            // If parsing fails, keep as is
+            console.warn(`Failed to parse template content for ID: ${template.id}`)
+          }
+        }
+        
+        return {
+          ...template,
+          content: parsedContent
+        }
+      }))
     } catch (error: any) {
       toast.error("Error loading templates")
       console.error("Error:", error.message)

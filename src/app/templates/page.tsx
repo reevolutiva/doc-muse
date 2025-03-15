@@ -9,6 +9,7 @@ import { toast, Toaster } from "sonner"
 import { supabase } from "@/lib/supabase"
 import { TemplateForm } from "@/components/template-manager/template-form"
 import * as Dialog from '@radix-ui/react-dialog'
+import { useSearchParams } from "next/navigation"
 
 const sortOptions = [
   { id: 'popular', name: 'Most Popular' },
@@ -25,8 +26,14 @@ const categories = [
 ]
 
 export default function TemplatesPage() {
-  // Removed search functionality
-
+  // Obtener los parámetros de URL
+  const searchParams = useSearchParams()
+  const editTemplateId = searchParams.get('edit')
+  
+  // Estado para la plantilla que se está editando
+  const [editingTemplate, setEditingTemplate] = useState(null)
+  
+  // ... existing states ...
   const [selectedCategories, setSelectedCategories] = useState(['all'])
   const [sortBy, setSortBy] = useState(sortOptions[0])
   const [templates, setTemplates] = useState([])
@@ -36,11 +43,11 @@ export default function TemplatesPage() {
   const [quickViewTemplate, setQuickViewTemplate] = useState(null)
   const [favorites, setFavorites] = useState(new Set())
   const [showDialog, setShowDialog] = useState(false)
-
   const { ref, inView } = useInView({
     threshold: 0
   })
 
+  // Cargar plantillas
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
@@ -50,9 +57,7 @@ export default function TemplatesPage() {
           .select('*')
           .order('created_at', { ascending: false })
           .range((page - 1) * 12, page * 12 - 1)
-
         if (error) throw error
-
         setTemplates(prev => page === 1 ? data : [...prev, ...data])
         setHasMore(data.length === 12)
       } catch (error) {
@@ -61,17 +66,49 @@ export default function TemplatesPage() {
         setLoading(false)
       }
     }
-
     fetchTemplates()
   }, [page])
 
+  // Cargar la plantilla específica para edición si se proporciona un ID
   useEffect(() => {
-    if (inView && hasMore && !loading) {
-      setPage(prev => prev + 1)
+    const fetchTemplateForEdit = async () => {
+      if (!editTemplateId) return
+      
+      try {
+        const { data, error } = await supabase
+          .from('document_templates')
+          .select('*')
+          .eq('id', editTemplateId)
+          .single()
+          
+        if (error) throw error
+        
+        // Procesar el contenido si es un string
+        if (data && typeof data.content === 'string') {
+          try {
+            data.content = JSON.parse(data.content)
+          } catch (e) {
+            console.warn('Failed to parse template content')
+          }
+        }
+        
+        setEditingTemplate(data)
+        setShowDialog(true)
+      } catch (error) {
+        console.error('Error fetching template:', error)
+        toast.error('No se pudo cargar la plantilla para editar')
+      }
     }
-  }, [inView, hasMore, loading])
+    
+    fetchTemplateForEdit()
+  }, [editTemplateId])
 
-  const toggleFavorite = (templateId: string) => {
+  const openTemplateEditor = (templateId) => {
+    window.open(`/templates?edit=${templateId}`, '_blank')
+  }
+
+  const toggleFavorite = (e, templateId) => {
+    e.stopPropagation(); // Evita que el clic se propague a la tarjeta
     setFavorites(prev => {
       const newFavorites = new Set(prev)
       if (newFavorites.has(templateId)) {
@@ -84,22 +121,67 @@ export default function TemplatesPage() {
     toast.success('Template favorites updated')
   }
 
-  const handleSaveTemplate = async (formData) => {
+  interface FormData {
+    title: string;
+    description: string;
+    content: {
+      time: number;
+      blocks: any[];
+      version: string;
+    };
+  }
+
+  const handleSaveTemplate = async (formData: FormData) => {
     try {
-      const { data, error } = await supabase
-        .from('document_templates')
-        .insert({
-          title: formData.title,
-          description: formData.description,
-          content: formData.content,
-          type: selectedCategories.includes('all') ? 'elearning' : selectedCategories[0]
-        })
-        .select()
-
-      if (error) throw error
-
-      setTemplates(prev => [data[0], ...prev])
-      return data
+      // Si estamos editando una plantilla existente
+      if (editTemplateId && editingTemplate) {
+        const { error } = await supabase
+          .from('document_templates')
+          .update({
+            title: formData.title,
+            description: formData.description,
+            content: formData.content,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', editTemplateId)
+          
+        if (error) throw error
+        
+        toast.success('Plantilla actualizada correctamente')
+        // Actualizar la lista de plantillas
+        setTemplates(prev => 
+          prev.map(t => t.id === editTemplateId 
+            ? { ...t, 
+                title: formData.title, 
+                description: formData.description, 
+                content: formData.content,
+                updated_at: new Date().toISOString()
+              } 
+            : t
+          )
+        )
+        
+        // Si la edición fue abierta en una nueva pestaña, cerramos al finalizar
+        if (window.opener) {
+          window.close()
+        }
+        
+        return { id: editTemplateId }
+      } else {
+        // Crear nueva plantilla
+        const { data, error } = await supabase
+          .from('document_templates')
+          .insert({
+            title: formData.title,
+            description: formData.description,
+            content: formData.content
+          })
+          .select()
+  
+        if (error) throw error
+        setTemplates(prev => [data[0], ...prev])
+        return data
+      }
     } catch (error) {
       console.error('Error saving template:', error)
       throw error
@@ -132,9 +214,16 @@ export default function TemplatesPage() {
             </Dialog.Trigger>
             <Dialog.Portal>
               <TemplateForm 
-                onClose={() => setShowDialog(false)} 
+                onClose={() => {
+                  setShowDialog(false)
+                  setEditingTemplate(null)
+                  // Limpiar parámetro de edición de la URL
+                  if (editTemplateId) {
+                    window.history.replaceState({}, '', '/templates')
+                  }
+                }} 
                 onSave={handleSaveTemplate}
-                initialData={{
+                initialData={editingTemplate || {
                   title: '',
                   description: '',
                   content: {
@@ -143,38 +232,12 @@ export default function TemplatesPage() {
                     version: '1.0.0'
                   }
                 }}
-                mode="create"
+                mode={editTemplateId ? "edit" : "create"}
               />
             </Dialog.Portal>
           </Dialog.Root>
         </div>
-        {/* Removed Search input - only kept sort options */}
-        <div className="flex gap-4 mb-8">
-          {/* Removed search bar as it hinders user experience */}
-          <Listbox value={sortBy} onChange={setSortBy}>
-            <div className="relative w-48">
-              <Listbox.Button className="w-full flex items-center justify-between px-4 py-2 border rounded-lg bg-white">
-                <span>{sortBy.name}</span>
-                <ChevronDown className="h-4 w-4" />
-              </Listbox.Button>
-              <Listbox.Options className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
-                {sortOptions.map((option) => (
-                  <Listbox.Option
-                    key={option.id}
-                    value={option}
-                    className={({ active }) =>
-                      `${active ? 'bg-blue-50 text-blue-600' : 'text-gray-900'}
-                      cursor-pointer select-none relative py-2 px-4`
-                    }
-                  >
-                    {option.name}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </div>
-          </Listbox>
-        </div>
-
+        
         {/* Categories */}
         <div className="flex gap-2 mb-8 flex-wrap">
           {categories.map((category) => (
@@ -201,7 +264,7 @@ export default function TemplatesPage() {
             </button>
           ))}
         </div>
-
+        
         {/* Featured Templates */}
         <div className="mb-12">
           <h2 className="text-xl font-semibold mb-4">Featured Templates</h2>
@@ -209,7 +272,8 @@ export default function TemplatesPage() {
             {filteredTemplates.slice(0, 3).map((template) => (
               <div
                 key={template.id}
-                className="relative group bg-white rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                onClick={() => openTemplateEditor(template.id)}
+                className="relative group bg-white rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
               >
                 <div className="aspect-[16/9] bg-gray-100">
                   <img
@@ -225,7 +289,7 @@ export default function TemplatesPage() {
                       <p className="text-sm text-gray-500 line-clamp-2">{template.description}</p>
                     </div>
                     <button
-                      onClick={() => toggleFavorite(template.id)}
+                      onClick={(e) => toggleFavorite(e, template.id)}
                       className="text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <Heart
@@ -246,7 +310,7 @@ export default function TemplatesPage() {
             ))}
           </div>
         </div>
-
+        
         {/* All Templates */}
         <div>
           <h2 className="text-xl font-semibold mb-4">All Templates</h2>
@@ -254,7 +318,8 @@ export default function TemplatesPage() {
             {filteredTemplates.map((template) => (
               <div
                 key={template.id}
-                className="relative group bg-white rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                onClick={() => openTemplateEditor(template.id)}
+                className="relative group bg-white rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
               >
                 <div className="aspect-[4/3] bg-gray-100">
                   <img
@@ -267,7 +332,7 @@ export default function TemplatesPage() {
                   <div className="flex items-start justify-between">
                     <h3 className="font-medium">{template.title}</h3>
                     <button
-                      onClick={() => toggleFavorite(template.id)}
+                      onClick={(e) => toggleFavorite(e, template.id)}
                       className="text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <Heart
@@ -280,7 +345,6 @@ export default function TemplatesPage() {
               </div>
             ))}
           </div>
-
           {/* Load More Trigger */}
           {hasMore && (
             <div ref={ref} className="flex justify-center mt-8">

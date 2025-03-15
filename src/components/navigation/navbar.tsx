@@ -7,7 +7,8 @@ import { Menu, X } from "lucide-react"
 
 const menuItems = [
   { href: "/projects", label: "Projects" },
-  { href: "/templates", label: "Templates" },
+  { href: "/project-templates", label: "Project Templates" },
+  { href: "/templates", label: "Document Templates" },
   { href: "/documents", label: "Documents" },
   { href: "/chat", label: "Chat" }
 ]
