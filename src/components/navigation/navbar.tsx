@@ -4,6 +4,9 @@ import { useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Menu, X } from "lucide-react"
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 const menuItems = [
   { href: "/projects", label: "Projects" },
@@ -17,7 +20,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 w-full bg-white border-b z-50 shadow-sm">
+    <nav className={`${inter.className} fixed top-0 w-full bg-white border-b z-50 shadow-sm`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">

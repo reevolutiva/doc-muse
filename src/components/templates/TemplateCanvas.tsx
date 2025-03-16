@@ -1,0 +1,9 @@
+// ...existing code...
+interface TemplateCanvasProps {
+  nodes: TemplateNodeData[];
+  // ...other props...
+}
+
+const TemplateCanvas: React.FC<TemplateCanvasProps> = ({ nodes }) => {
+  // ...existing code...
+};

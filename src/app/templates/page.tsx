@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase"
 import { TemplateForm } from "@/components/template-manager/template-form"
 import * as Dialog from '@radix-ui/react-dialog'
 import { useSearchParams } from "next/navigation"
+import Link from 'next/link'
 
 const sortOptions = [
   { id: 'popular', name: 'Most Popular' },
@@ -216,24 +217,23 @@ function TemplatesContent() {
           <div>
             <h1 className="text-3xl font-bold">Templates</h1>
             <p className="text-muted-foreground">
-              Discover and manage professional learning templates
+              Create and manage templates visually or using the classic editor
             </p>
           </div>
+          
           <div className="flex gap-2">
-            <a
+            <Link
               href="/templates/visual-editor"
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
             >
               <Palette className="w-4 h-4" />
-              Visual Editor
-            </a>
+              Visual Editor (New)
+            </Link>
             <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
               <Dialog.Trigger asChild>
-                <button
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-                >
+                <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                   <Plus className="w-4 h-4" />
-                  Create Template
+                  Classic Editor
                 </button>
               </Dialog.Trigger>
               <Dialog.Portal>

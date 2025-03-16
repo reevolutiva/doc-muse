@@ -1,0 +1,284 @@
+/* Estilos para el canvas y sus elementos */
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  position: relative;
+  background: #f8f9fa;
+}
+
+.canvas-container .react-flow__node {
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-container .react-flow__node.selected {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+}
+
+.canvas-container .react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: #4a9eff;
+  border-radius: 50%;
+}
+
+.canvas-container .react-flow__edge-path {
+  stroke: #4a9eff;
+  stroke-width: 2;
+}
+
+.canvas-container .react-flow__controls {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.canvas-container .react-flow__controls button {
+  background: white;
+  border: 1px solid #e9ecef;
+  color: #4a5568;
+}
+
+.canvas-container .react-flow__minimap {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-container .react-flow__panel button {
+  background: #4a9eff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.canvas-container .react-flow__panel button:hover {
+  background: #3182ce;
+}
+
+/* Estilos para el área de trabajo */
+.react-flow {
+  background-color: #ffffff;
+}
+
+/* Estilos para las conexiones entre nodos */
+.react-flow__edge path {
+  stroke: #b1b1b7;
+  stroke-width: 2;
+  transition: stroke 0.2s ease;
+}
+
+.react-flow__edge-path {
+  stroke: #b1b1b7;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #0066cc;
+  stroke-width: 3;
+}
+
+.react-flow__edge.animated path {
+  stroke-dasharray: 5;
+  animation: dashdraw 1s linear infinite;
+}
+
+.react-flow__edge.selected path {
+  stroke: #0066cc;
+  stroke-width: 3;
+}
+
+.react-flow__edge:hover path {
+  stroke: #0066cc;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 10;
+  }
+}
+
+/* Estilos para el minimap */
+.react-flow__minimap {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Estilos para los controles */
+.react-flow__controls {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.react-flow__controls button {
+  background-color: white;
+  border: none;
+  border-bottom: 1px solid #eaeaea;
+  padding: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.react-flow__controls button:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.react-flow__controls button:last-child {
+  border-bottom: none;
+}
+
+.react-flow__controls-button {
+  background: white;
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 8px;
+  color: #666;
+}
+
+.react-flow__controls-button:hover {
+  background: #f8f9fa;
+}
+
+/* Estilo para selección de nodos */
+.react-flow__node.selected {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+/* Estilos para los handles de conexión */
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: #0066cc;
+  border: 2px solid white;
+}
+
+.react-flow__handle:hover {
+  background: #004c99;
+}
+
+/* Tooltips de ayuda */
+.canvas-help {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 5;
+}
+
+.canvas-help-tooltip {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
+  max-width: 300px;
+  border: 1px solid #eaeaea;
+}
+
+.canvas-help-tooltip strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.canvas-help-tooltip ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #666;
+}
+
+.canvas-help-tooltip li {
+  margin: 4px 0;
+}
+
+/* Personalización del fondo */
+.react-flow__background {
+  background-color: #f8f9fa;
+}
+
+.react-flow__background-pattern {
+  color: #e0e0e0;
+}
+
+/* Estilo para la selección */
+.react-flow__selection {
+  background-color: rgba(0, 102, 204, 0.1);
+  border: 1px solid #0066cc;
+}
+
+/* Estados de interacción */
+.dragging {
+  cursor: grabbing;
+}
+
+.draggable {
+  cursor: grab;
+}
+
+/* Estilo para el viewport cuando se está arrastrando */
+.react-flow__viewport.dragging {
+  cursor: grabbing;
+}
+
+/* Estilo para los nodos cuando están siendo arrastrados */
+.react-flow__node.dragging {
+  cursor: grabbing !important;
+}
+
+/* Zona de soltar elementos */
+.dndflow {
+  flex-direction: column;
+  display: flex;
+  height: 100%;
+}
+
+.dndflow aside {
+  border-right: 1px solid #eee;
+  padding: 15px 10px;
+  font-size: 12px;
+  background: #fcfcfc;
+}
+
+.dndflow aside .description {
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .canvas-help {
+    display: none;
+  }
+  
+  .react-flow__minimap {
+    display: none;
+  }
+}
+
+.react-flow__node {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 12px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.react-flow__node:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #0066cc;
+}

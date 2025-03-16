@@ -45,6 +45,13 @@ doc-muse/
 └── vscode/              # Configuración de VS Code
 ```
 
+- `src/`: Contiene los componentes, hooks, y lógica principal de la aplicación.
+- `supabase/`: Configuración y funciones relacionadas con Supabase.
+- `public/`: Archivos estáticos.
+- `styles/`: Archivos de estilos globales.
+- `next.config.js`: Configuración de Next.js.
+- `package.json`: Dependencias y scripts del proyecto.
+
 ## 🔧 Configuración del Entorno de Desarrollo
 
 ### Requisitos Previos
@@ -128,6 +135,13 @@ Este script guía a través del proceso completo de configuración, incluyendo:
    # Editar .env.local con tus credenciales de Supabase
    ```
 
+3. **Configurar variables de entorno en un archivo `.env.local`**:
+
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
+
 ## 🚀 Ejecución del Proyecto
 
 ### Desarrollo Local
@@ -182,6 +196,8 @@ This application is dockerized. Follow these steps to build and run the Docker c
 2. Run the Docker container:
    docker run -d -p 3000:3000 my-app
 
+- Updated from Geist to the new font source.
+
 ## 🌟 Características Principales
 
 - **Gestión de Documentos**: Crear, editar y organizar documentos
@@ -203,6 +219,41 @@ This application is dockerized. Follow these steps to build and run the Docker c
 - **Backend**
   - [Supabase](https://supabase.com/) (Base de datos y autenticación)
   - [Edge Functions](https://supabase.com/edge-functions) (Funciones serverless)
+
+- Next.js
+- Supabase
+- Zustand (o Context API)
+- Tailwind CSS
+- Radix UI
+
+## 🚀 Ejecución del Proyecto
+
+1. Iniciar el servidor de desarrollo:
+    ```bash
+    pnpm dev
+    ```
+2. Construir el proyecto para producción:
+    ```bash
+    pnpm build
+    ```
+3. Ejecutar el proyecto en modo producción:
+    ```bash
+    pnpm start
+    ```
+
+## CI/CD
+
+- Configuración para despliegue en Vercel.
+- Pipelines de CI/CD configurados en GitHub Actions.
+
+## Testing
+
+- Estrategias de testing con Jest y React Testing Library.
+
+## Contribución
+
+- Guía de estilo de código y linting.
+- Cómo contribuir al proyecto.
 
 ## 📄 Licencia
 

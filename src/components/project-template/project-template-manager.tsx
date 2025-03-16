@@ -9,6 +9,9 @@ import { DocumentTemplateSelector } from "./document-template-selector"
 import { DocumentDependencyEditor } from "./document-dependency-editor"
 import * as Dialog from '@radix-ui/react-dialog'
 import { ProjectTemplate, ProjectTemplateManagerProps } from "@/lib/types/project-template"
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export function ProjectTemplateManager({ onSelect, mode = "manage", typeFilter }: ProjectTemplateManagerProps) {
   const {
@@ -30,7 +33,7 @@ export function ProjectTemplateManager({ onSelect, mode = "manage", typeFilter }
   const [showDependencyEditor, setShowDependencyEditor] = useState(false)
 
   return (
-    <div>
+    <div className={inter.className}>
       {/* Encabezado con acciones */}
       <div className="flex items-center justify-between mb-6">
         <div>
