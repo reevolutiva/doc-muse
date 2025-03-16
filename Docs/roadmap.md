@@ -81,3 +81,49 @@
 - [ ] Ajustar prioridades basado en feedback de usuarios
 - [ ] Realizar reuniones retrospectivas para evaluar el progreso
 - [ ] Actualizar la hoja de ruta según los resultados y aprendizajes
+
+## 7. Implementación de Nueva Interfaz Visual con React Flow e Integración IA
+
+### Fase 1: Revisión y Análisis de Requisitos
+- [x] Eliminar el campo “Tipo” en las plantillas de documentos
+- [x] Integrar React Flow (xyflow) para la gestión interactiva de nodos y conexiones
+- [x] Definir estructura de nodos visuales con propiedades editables
+- [x] Planificar sistema de dependencias entre documentos y bloques
+- [x] Diseñar esquema de datos en Supabase para el nuevo formato visual
+
+### Fase 2: Configuración del Entorno
+- [x] Añadir la librería React Flow al proyecto
+- [x] Verificar que el entorno de React esté adecuadamente configurado
+
+### Fase 3: Creación del Canvas y Layout Visual
+- [x] Definir un área principal tipo canvas
+- [ ] Diseñar una paleta lateral con elementos arrastrables
+
+### Fase 4: Implementación de Nodos y Conexiones
+- [x] Crear nodos visuales con propiedades editables
+- [ ] Establecer líneas que indiquen dependencias entre nodos
+- [ ] Añadir tooltips para visualizar detalles rápidos de la conexión
+
+### Fase 5: Panel de Propiedades y Edición Dinámica
+- [x] Desplegar un panel de propiedades al seleccionar un nodo
+- [ ] Permitir la edición de nombre, descripción, obligatoriedad y prompts IA
+
+### Fase 6: Integración de la Lógica de IA
+- [ ] Permitir generación inmediata de contenido mediante prompts
+- [ ] Previsualizar el contenido generado
+
+### Fase 7: Actualización del Esquema de Datos en Supabase
+- [x] Eliminar el campo “Tipo” de las plantillas de documento
+- [x] Ajustar la estructura JSONB para soportar almacenamiento de nodos y conexiones visuales
+
+### Fase 8: Validación, Pruebas y Optimización
+- [ ] Crear tests para validar la integridad de la nueva interfaz
+- [ ] Realizar pruebas de usabilidad con usuarios reales
+
+### Fase 9: Despliegue y Retroalimentación
+- [ ] Lanzar una versión beta a un grupo reducido de usuarios
+- [ ] Recoger feedback y realizar ajustes iterativos
+
+### Fase 10: Seguimiento y Documentación Continua
+- [ ] Mantener actualizada la documentación del proyecto
+- [ ] Establecer reuniones semanales de seguimiento

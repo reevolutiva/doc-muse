@@ -1,29 +1,27 @@
 # Etapa de desarrollo
-FROM node:18-alpine AS deps
+FROM node:18-alpine AS dev
 WORKDIR /app
 
 # Instalar dependencias necesarias para la compilación
 RUN apk add --no-cache libc6-compat python3 make g++
 
-# Instalar pnpm globalmente y configurarlo
-RUN npm install -g pnpm@9.6.0
+# Instalar pnpm globalmente y configurarlo correctamente
+RUN corepack enable && corepack prepare pnpm@9.6.0 --activate
+
+# Ambiente de desarrollo
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copiar archivos de configuración
 COPY package.json pnpm-lock.yaml ./
-COPY next.config.js ./
 COPY tsconfig.json ./
+COPY next.config.js ./
 
 # Instalar dependencias
 RUN pnpm install
 
-# Copiar el resto del código fuente
-COPY . .
-
-# Exponer puerto
-EXPOSE 3000
-
-# Iniciar en modo desarrollo
-CMD ["pnpm", "dev"]
+# El comando de inicio se moverá al docker-compose para permitir el hot-reload
+CMD ["sh", "-c", "pnpm install && pnpm dev"]
 
 # Etapa de construcción
 FROM node:18-alpine AS builder
@@ -34,7 +32,7 @@ RUN npm install -g pnpm@9.6.0 && \
     pnpm config set store-dir /root/.local/share/pnpm/store
 
 # Copiar dependencias y archivos necesarios
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=dev /app/node_modules ./node_modules
 COPY . .
 
 # Construir la aplicación
