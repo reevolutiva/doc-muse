@@ -1,4 +1,4 @@
-import { ReactFlow, Background, Controls, useNodesState, useEdgesState, addEdge } from '@xyflow/react';
+import { ReactFlow, Background, Controls, useNodesState, useEdgesState, addEdge, Connection } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -18,13 +18,21 @@ const nodeTypes = {
 let id = 1;
 const getId = () => `node_${id++}`;
 
+interface NodeData {
+  label: string;
+  type: 'document' | 'project';
+  description?: string;
+  isRequired?: boolean;
+  prompt?: string;
+}
+
 const TemplateCanvasContent = () => {
   const searchParams = useSearchParams();
   const templateId = searchParams.get('id');
-  const reactFlowWrapper = useRef(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedNode, setSelectedNode] = useState<any>(null);
   const [title, setTitle] = useState('Untitled Template');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +50,7 @@ const TemplateCanvasContent = () => {
           setEdges(template.visual_data.edges);
         }
         setTitle(template.title);
-        setDescription(template.description);
+        setDescription(template.description || '');
       } catch (error) {
         console.error('Error loading template:', error);
         toast.error('Failed to load template');
@@ -54,52 +62,75 @@ const TemplateCanvasContent = () => {
     loadTemplate();
   }, [templateId]);
 
-  const onConnect = useCallback((params) => {
+  const validateConnection = (connection: Connection) => {
+    // Evitar conexiones a sí mismo
+    if (connection.source === connection.target) {
+      return false;
+    }
+
+    // Evitar conexiones duplicadas
+    const duplicateConnection = edges.some(
+      edge => 
+        edge.source === connection.source && 
+        edge.target === connection.target
+    );
+    
+    if (duplicateConnection) {
+      toast.error('Connection already exists');
+      return false;
+    }
+
+    return true;
+  };
+
+  const onConnect = useCallback((params: Connection) => {
+    if (!validateConnection(params)) return;
+
     setEdges((eds) => addEdge(params, eds));
     
     // Guardar la dependencia en la base de datos
     if (templateId) {
-      templateService.saveDependency(params.source, params.target, {
+      templateService.saveDependency(params.source!, params.target!, {
         type: 'template_connection'
       }).catch(error => {
         console.error('Error saving dependency:', error);
         toast.error('Failed to save connection');
       });
     }
-  }, [setEdges, templateId]);
+  }, [edges, templateId]);
 
-  const onDragOver = useCallback((event) => {
+  const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
   const onDrop = useCallback(
-    (event) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
 
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
 
       if (typeof type === 'undefined' || !type) {
         return;
       }
 
-      const position = {
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      };
+      const position = reactFlowWrapper.current?.getBoundingClientRect();
+      if (!position) return;
 
       const newNode = {
         id: getId(),
         type,
-        position,
+        position: {
+          x: event.clientX - position.left,
+          y: event.clientY - position.top,
+        },
         data: { 
           label: `New ${type}`, 
           type,
           description: `Description for ${type}`,
           isRequired: false,
           prompt: ''
-        },
+        } as NodeData,
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -107,7 +138,8 @@ const TemplateCanvasContent = () => {
     [setNodes]
   );
 
-  const onNodeClick = useCallback((event, node) => {
+  const onNodeClick = useCallback((event: React.MouseEvent, node: any) => {
+    event.stopPropagation();
     setSelectedNode(node);
   }, []);
 
@@ -115,13 +147,14 @@ const TemplateCanvasContent = () => {
     setSelectedNode(null);
   };
 
-  const onNodeUpdate = (id, data) => {
+  const onNodeUpdate = (id: string, data: NodeData) => {
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id === id) {
           return {
             ...node,
             data: {
+              ...node.data,
               ...data,
             },
           };
@@ -132,11 +165,16 @@ const TemplateCanvasContent = () => {
   };
 
   const saveTemplate = async () => {
+    if (!title.trim()) {
+      toast.error('Please enter a title');
+      return;
+    }
+
     try {
       setIsLoading(true);
       const templateData = {
-        title,
-        description,
+        title: title.trim(),
+        description: description.trim(),
         visual_data: {
           nodes,
           edges
@@ -159,6 +197,10 @@ const TemplateCanvasContent = () => {
       setIsLoading(false);
     }
   };
+
+  const onBackgroundClick = useCallback(() => {
+    setSelectedNode(null);
+  }, []);
 
   return (
     <div className="flex h-screen relative">
@@ -186,13 +228,13 @@ const TemplateCanvasContent = () => {
           <Button 
             onClick={saveTemplate} 
             className="flex items-center gap-2"
-            disabled={isLoading}
+            disabled={isLoading || !title.trim()}
           >
             <Save className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             {isLoading ? 'Saving...' : 'Save Template'}
           </Button>
         </div>
-        <div ref={reactFlowWrapper} className="flex-1">
+        <div ref={reactFlowWrapper} className="flex-1 bg-accent/5">
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -202,6 +244,7 @@ const TemplateCanvasContent = () => {
             onDragOver={onDragOver}
             onDrop={onDrop}
             onNodeClick={onNodeClick}
+            onPaneClick={onBackgroundClick}
             nodeTypes={nodeTypes}
             fitView
           >

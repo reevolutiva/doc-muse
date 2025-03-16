@@ -4,154 +4,158 @@ Este documento describe los pasos detallados para implementar los cambios signif
 
 ---
 
-## 1. Revisión y Análisis de Requisitos
+## 1. Revisión y Análisis de Requisitos ✅
 
 - **Objetivos Principales:**
-  - Eliminar el campo “Tipo” en las plantillas de documentos, simplificando la lógica de identificación.
-  - Integrar React Flow (xyflow) para la gestión interactiva de nodos y conexiones.
-  - Implementar nodos visuales con propiedades editables (nombre, descripción, obligatoriedad y prompts IA).
-  - Habilitar la creación y visualización de dependencias entre documentos y bloques con tooltips informativos.
-  - Actualizar el esquema de datos en Supabase para almacenar dependencias visuales en formato JSONB.
+  - ✅ Eliminar el campo "Tipo" en las plantillas de documentos, simplificando la lógica de identificación.
+  - ✅ Integrar React Flow (xyflow) al proyecto y sus dependencias.
+  - ✅ Definir estructura de nodos visuales con propiedades editables.
+  - ✅ Planificar sistema de dependencias entre documentos y bloques.
+  - ✅ Diseñar esquema de datos en Supabase para el nuevo formato visual.
 
 - **Documentos de Referencia:**
-  - [Documento de Requerimientos (FRD)](src/app/project-templates/rfp_templates.md)
-  - [README.md](README.md) y demás documentación del proyecto.
+  - ✅ Documento de Requerimientos (FRD) actualizado
+  - ✅ Documentación técnica y de proyecto revisada
 
 ---
 
-## 2. Configuración del Entorno
+## 2. Configuración del Entorno ✅
 
 - **Instalación de Dependencias:**
-  - Añadir la librería React Flow (`xyflow`) al proyecto.
-  - Verificar que el entorno de React esté adecuadamente configurado para la integración con nuevas dependencias.
+  - ✅ Librería React Flow (@xyflow/react) instalada
+  - ✅ Dependencias de UI (shadcn/ui) configuradas
+  - ✅ Entorno de desarrollo Docker configurado
 
-- **Acciones:**
-  - Actualizar `package.json` para incluir React Flow.
-  - Ejecutar la instalación y validar la compatibilidad.
+- **Acciones Completadas:**
+  - ✅ package.json actualizado con nuevas dependencias
+  - ✅ Configuración de Docker optimizada para desarrollo
+  - ✅ next.config.js actualizado para ESM y configuraciones necesarias
 
 ---
 
-## 3. Creación del Canvas y Layout Visual
+## 3. Creación del Canvas y Layout Visual 🔄
 
 - **Diseño del Canvas:**
-  - Definir un área principal tipo canvas que permita la visualización interactiva de plantillas (documentos y proyectos).
-  - Diseñar una paleta lateral que contenga elementos arrastrables para crear nuevos nodos en el canvas.
+  - ✅ Componente base TemplateCanvas implementado
+  - ✅ Integración básica de React Flow realizada
+  - 🔄 Paleta lateral en desarrollo
 
-- **Acciones:**
-  - Crear/actualizar el componente de Canvas, integrando React Flow.
-  - Definir estilos y layouts coherentes con la interfaz actual.
+- **Acciones en Progreso:**
+  - Refinamiento de estilos y layouts
+  - Implementación de interacciones básicas
+  - Optimización de rendimiento en el canvas
 
 ---
 
-## 4. Implementación de Nodos y Conexiones
+## 4. Implementación de Nodos y Conexiones 🔄
 
 - **Nodos Visuales:**
-  - Cada nodo representará un documento o proyecto, mostrando:
-    - Nombre, descripción y estado visual.
-    - Opciones para editar, duplicar y eliminar.
-  - Incorporar componentes para edición de prompts IA de manera directa.
-  
-- **Conexiones e Interacciones:**
-  - Establecer líneas que indiquen dependencias entre nodos.
-  - Añadir tooltips o ventanas emergentes para visualizar detalles rápidos de la conexión cuando el usuario pase el cursor.
+  - ✅ Componente TemplateNode base creado
+  - 🔄 Sistema de edición y propiedades en desarrollo
+  - ⏳ Pendiente integración de prompts IA
 
-- **Acciones:**
-  - Desarrollar y personalizar componentes de nodo y conexión en React Flow.
-  - Garantizar la experiencia de arrastrar y soltar (Drag & Drop) y la edición en tiempo real.
+- **Conexiones e Interacciones:**
+  - 🔄 Sistema básico de conexiones implementado
+  - ⏳ Pendiente implementación de tooltips
+  - ⏳ Pendiente sistema de validación de conexiones
 
 ---
 
-## 5. Panel de Propiedades y Edición Dinámica
+## 5. Panel de Propiedades y Edición Dinámica 🔄
 
 - **Panel Lateral:**
-  - Desplegar un panel de propiedades cuando se seleccione un nodo.
-  - Permitir la edición de:
-    - Nombre
-    - Descripción corta
-    - Checkbox para obligatoriedad
-    - Prompts para generación automática de contenido IA (con previsualización en el mismo nodo).
+  - ✅ Componente PropertiesPanel base creado
+  - 🔄 Sistema de edición en desarrollo
+  - ⏳ Pendiente integración con el estado global
 
-- **Acciones:**
-  - Implementar el componente de panel lateral y conectar su estado con los nodos.
-  - Asegurar retroalimentación visual inmediata y validación de datos.
+- **Próximas Acciones:**
+  - Implementar validación de datos
+  - Integrar sistema de feedback visual
+  - Optimizar rendimiento de actualizaciones
 
 ---
 
-## 6. Integración de la Lógica de IA
+## 6. Integración de la Lógica de IA ⏳
 
-- **Generación de Contenido:**
-  - Permitir generación inmediata de contenido mediante prompts definidos en cada nodo.
-  - Previsualizar el contenido generado de forma directa.
-
-- **Acciones:**
-  - Integrar los controles visuales y APIs necesarias para la generación de contenido IA.
-  - Realizar pruebas iniciales de generación y previsualización de contenido.
+- **Estado:** Pendiente de iniciar
+- **Próximos Pasos:**
+  - Diseñar interfaz de prompts
+  - Implementar sistema de previsualización
+  - Integrar con API de generación
 
 ---
 
-## 7. Actualización del Esquema de Datos en Supabase
+## 7. Actualización del Esquema de Datos en Supabase 🔄
 
-- **Modificaciones de Backend:**
-  - Eliminar el campo “Tipo” de las plantillas de documento.
-  - Ajustar la estructura JSONB para soportar almacenamiento de nodos y conexiones visuales.
-  - Garantizar que la relación entre proyectos y documentos sea clara y consistente.
+- **Modificaciones Realizadas:**
+  - ✅ Migración para eliminar campo "Tipo" creada
+  - ✅ Estructura JSONB para datos visuales definida
+  - 🔄 Sistema de dependencias en implementación
 
-- **Acciones:**
-  - Actualizar scripts y migraciones en el backend (verificar [deploy.py](backend/deploy.py) y otros archivos en el directorio `backend/`).
-  - Probar la persistencia de datos mediante pruebas de integración.
-
----
-
-## 8. Validación, Pruebas y Optimización
-
-- **Pruebas Unitarias e Integración:**
-  - Crear tests para validar la integridad de la nueva interfaz.
-  - Realizar pruebas de usabilidad con usuarios reales.
-  - Verificar exhaustivamente las conexiones y dependencias visuales para asegurar integridad.
-
-- **Acciones:**
-  - Configurar y ejecutar pruebas unitarias e integración en el entorno de desarrollo.
-  - Documentar y corregir errores detectados durante la fase de pruebas.
+- **Pendiente:**
+  - Pruebas de integridad de datos
+  - Optimización de consultas
+  - Implementación de caché
 
 ---
 
-## 9. Despliegue y Retroalimentación
+## 8. Validación, Pruebas y Optimización ⏳
 
-- **Beta y Feedback:**
-  - Lanzar una versión beta a un grupo reducido de usuarios.
-  - Recoger feedback y realizar ajustes iterativos en la interfaz y experiencia de usuario.
-
-- **Acciones:**
-  - Desplegar la versión inicial y habilitar mecanismos de feedback.
-  - Planificar iteraciones de mejoras basadas en el feedback recibido.
+- **Estado:** Pendiente
+- **Próximos Pasos:**
+  - Crear suite de pruebas
+  - Implementar pruebas de integración
+  - Realizar pruebas de rendimiento
 
 ---
 
-## 10. Seguimiento y Documentación Continua
+## 9. Despliegue y Retroalimentación ⏳
 
-- **Documentar Cambios:**
-  - Mantener actualizada la documentación del proyecto con los nuevos cambios (actualizar el [README.md](README.md) y otros documentos relevantes).
-  - Establecer reuniones semanales de seguimiento para evaluar el progreso y asignar tareas.
-
-- **Acciones:**
-  - Documentar cada fase y actualización en repositorio.
-  - Actualizar la hoja de ruta periódicamente y comunicar los avances al equipo.
+- **Estado:** Pendiente
+- **Preparación:**
+  - Definir grupo de beta testers
+  - Preparar ambiente de staging
+  - Diseñar sistema de recolección de feedback
 
 ---
 
-## ✅ Checklist de Implementación
+## 10. Seguimiento y Documentación Continua 🔄
 
-- [ ] Revisión de requisitos y actualización de documentos de especificación.
-- [ ] Instalación y configuración de React Flow.
-- [ ] Creación del canvas y paleta lateral en la interfaz.
-- [ ] Implementación de nodos interactivos y conexiones con tooltips.
-- [ ] Desarrollo del panel de propiedades para edición en tiempo real.
-- [ ] Integración de generación inmediata de contenido mediante IA.
-- [ ] Actualización del esquema en Supabase y migraciones necesarias.
-- [ ] Desarrollo y ejecución de pruebas unitarias e integración.
-- [ ] Despliegue de versión beta y recolección de feedback.
-- [ ] Iteración y documentación continua del proceso de implementación.
+- **En Progreso:**
+  - 🔄 Actualización continua de documentación
+  - 🔄 Seguimiento de problemas y soluciones
+  - 🔄 Documentación de decisiones técnicas
 
 ---
 
-Esta hoja de ruta servirá como guía para el desarrollo paso a paso de la nueva funcionalidad en la plataforma. Se recomienda revisar y ajustar los pasos a medida que se avance en el desarrollo basado en el feedback y los desafíos encontrados.
+## ✅ Checklist de Implementación Actualizado
+
+- [x] Revisión de requisitos y actualización de documentos de especificación
+- [x] Instalación y configuración de React Flow
+- [x] Configuración inicial del entorno Docker
+- [x] Creación de componentes base (Canvas, Node, Panel)
+- [🔄] Implementación de sistema de nodos y conexiones
+- [🔄] Desarrollo del panel de propiedades
+- [⏳] Integración de generación IA
+- [🔄] Actualización del esquema en Supabase
+- [⏳] Desarrollo de pruebas
+- [⏳] Despliegue beta
+
+### Leyenda
+✅ Completado
+🔄 En Progreso
+⏳ Pendiente
+
+---
+
+## Próximos Pasos Inmediatos
+
+1. Resolver problemas de configuración en Docker para desarrollo
+2. Completar implementación del sistema de nodos y conexiones
+3. Finalizar panel de propiedades con todas las funcionalidades
+4. Iniciar integración de lógica IA
+5. Comenzar implementación de pruebas unitarias
+
+---
+
+Esta hoja de ruta se mantiene en actualización continua conforme avanza el desarrollo y se encuentran nuevos desafíos o requerimientos.
