@@ -21,7 +21,6 @@ import { DocumentsSection } from "./project-edit/documents-section"
 export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: ProjectEditFormProps) {
   const [formState, setFormState] = useState({
     title: project.title,
-    type: project.type,
     status: project.status,
     progress: project.progress,
     loading: false,
@@ -48,7 +47,6 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
 
       const updates = {
         title: formState.title,
-        type: formState.type,
         status: formState.status,
         progress: formState.progress,
         updated_at: new Date().toISOString()
@@ -171,13 +169,12 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
               <div className="max-w-2xl">
                 <ProjectFormSection
                   title={formState.title}
-                  type={formState.type}
                   status={formState.status}
                   progress={formState.progress}
                   loading={formState.loading}
+                  templateId={project.project_template_id}
                   onSubmit={handleSubmit}
                   onTitleChange={(value) => setFormState(prev => ({ ...prev, title: value }))}
-                  onTypeChange={(value) => setFormState(prev => ({ ...prev, type: value }))}
                   onStatusChange={(value) => setFormState(prev => ({ ...prev, status: value }))}
                   onProgressChange={(value) => setFormState(prev => ({ ...prev, progress: value }))}
                   onDelete={() => setFormState(prev => ({ ...prev, showDeleteDialog: true }))}
@@ -201,6 +198,7 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
               <CreateSection
                 projectId={project.id}
                 projectTitle={project.title}
+                templateId={project.project_template_id}
               />
             )}
           </div>

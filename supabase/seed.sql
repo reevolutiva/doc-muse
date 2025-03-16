@@ -727,11 +727,11 @@ INSERT INTO "public"."project_templates" ("id", "name", "description", "created_
 -- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."projects" ("id", "title", "type", "status", "progress", "documents_count", "user_id", "created_at", "updated_at", "project_template_id", "description", "objectives") VALUES
-	('847d678b-1f0c-49ad-bf0f-fa70a2cd8128', 'Gamificación Escuela de Vías', 'elearning', 'en-progreso', 0, 0, '8403c880-7e5f-4abc-a882-49aab687226e', '2025-03-11 15:00:03.060349+00', '2025-03-11 15:00:03.060349+00', '9e168e5f-ab4e-44fd-9da6-c6549b541335', 'Proyecto para la generación de Evaluaciones para Escuela de Vías', 'Generación de 10 documentos de evaluación'),
-	('2eb7c1f4-e1cf-47ac-89b9-8940cde5fd70', 'Compliance', 'elearning', 'en-progreso', 2, 0, '8403c880-7e5f-4abc-a882-49aab687226e', '2025-03-11 14:49:33.239984+00', '2025-03-11 15:08:38.425098+00', 'a4d42704-283b-4ab9-914f-f15368c5b92d', '', ''),
-	('d941ed10-8850-4902-8c1a-813794781004', 'Inducción ISA Vías', 'elearning', 'en-progreso', 0, 0, '8403c880-7e5f-4abc-a882-49aab687226e', '2025-03-11 15:09:40.066686+00', '2025-03-11 15:09:40.066686+00', 'a4d42704-283b-4ab9-914f-f15368c5b92d', 'Proyecto Instruccional Gamificación de automarización', ''),
-	('965dddfb-034f-42e7-81d8-a354bdf49af8', 'ro', 'workshop', 'en-progreso', 0, 0, 'c946c7c8-a3ef-4be6-aad7-bed25181146d', '2025-03-12 14:42:37.01918+00', '2025-03-12 14:42:37.01918+00', 'a4d42704-283b-4ab9-914f-f15368c5b92d', 'special', '');
+INSERT INTO "public"."projects" ("id", "title", "status", "progress", "documents_count", "user_id", "created_at", "updated_at", "project_template_id", "description", "objectives") VALUES
+	('847d678b-1f0c-49ad-bf0f-fa70a2cd8128', 'Gamificación Escuela de Vías', 'en-progreso', 0, 0, '8403c880-7e5f-4abc-a882-49aab687226e', '2025-03-11 15:00:03.060349+00', '2025-03-11 15:00:03.060349+00', '9e168e5f-ab4e-44fd-9da6-c6549b541335', 'Proyecto para la generación de Evaluaciones para Escuela de Vías', 'Generación de 10 documentos de evaluación'),
+	('2eb7c1f4-e1cf-47ac-89b9-8940cde5fd70', 'Compliance', 'en-progreso', 2, 0, '8403c880-7e5f-4abc-a882-49aab687226e', '2025-03-11 14:49:33.239984+00', '2025-03-11 15:08:38.425098+00', 'a4d42704-283b-4ab9-914f-f15368c5b92d', '', ''),
+	('d941ed10-8850-4902-8c1a-813794781004', 'Inducción ISA Vías', 'en-progreso', 0, 0, '8403c880-7e5f-4abc-a882-49aab687226e', '2025-03-11 15:09:40.066686+00', '2025-03-11 15:09:40.066686+00', 'a4d42704-283b-4ab9-914f-f15368c5b92d', 'Proyecto Instruccional Gamificación de automarización', ''),
+	('965dddfb-034f-42e7-81d8-a354bdf49af8', 'ro', 'en-progreso', 0, 0, 'c946c7c8-a3ef-4be6-aad7-bed25181146d', '2025-03-12 14:42:37.01918+00', '2025-03-12 14:42:37.01918+00', 'a4d42704-283b-4ab9-914f-f15368c5b92d', 'special', '');
 
 
 --
