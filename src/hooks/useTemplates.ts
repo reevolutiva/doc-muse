@@ -3,7 +3,7 @@
 import { useCallback } from "react"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
-import { useTemplateLoader } from "./useTemplateLoader"
+import useTemplateLoader from "./useTemplateLoader"
 import type { Template, TemplateHookResult } from '@/lib/types/templates'
 import { handleError, createErrorHandler } from '@/lib/utils/error-handler'
 

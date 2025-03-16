@@ -1,12 +1,12 @@
 # Bug Fixer
-
-Este documento rastrea bugs y problemas en la aplicación Doc-Muse que necesitan resolución.
-
-# Bug Fixer Documentation
+## Bug Fixer Instrucciones
+- Este documento rastrea bugs y problemas en la aplicación Doc-Muse que necesitan resolución. 
+- Cada vez que trabajes sobre un problema, revisa la estructura del proyecto. Nunca dupliques archivos, carpetas ni código, si la estructura cambia, acualizala en este documento al finalizar.
+- Al finalizar tu corrección, actualiza la vitácora del problema en este documento el cuál siempre tendrá información actualizada.
+- Mantén este fichero liviano y con objetivo de ayudar a agentes IA a resolver problemas. No es necesario que sea comprensible por humnanos. 
+- Cuando determines que existe un problema describelo de la forma más efectiva y eficiente posible, replicando o mejorando los ejemplos en este documento.
 
 ## Estructura del Repositorio
-
-La aplicación Doc-Muse está organizada con la siguiente estructura:
 
 ### Directorios Principales
 - **src/**: Código fuente principal de la aplicación
@@ -35,82 +35,28 @@ La aplicación Doc-Muse está organizada con la siguiente estructura:
 - **tailwind.config.ts**: Configuración de Tailwind CSS
 - **.env.local**: Variables de entorno locales (gitignored)
 
-## Problemas Activos
+# Problemas Activos
 
-### Problemas Nº 6: Manejo de Errores Incompleto
-- Prioridad: 3
-- **Descripción:** Mejorar el manejo de errores en componentes y APIs. `src/components/`, `src/app/api/`
-    **Tareas Pendientes**
-    - Implementar bloques try/catch en todos los componentes.
-    - Asegurar que todos los endpoints API devuelven códigos de estado HTTP apropiados.
-    - Implementar un sistema de log de errores para depuración.
-    **Pruebas:**
-    - Probar componentes con datos inválidos.
-    - Probar endpoints API con requests mal formados.
+## Problemas Nº 5: Advertencia sobre CSS en Next.js
+- Prioridad: 2
+- [ ] **Descripción:** Next.js advierte que se ha deshabilitado el soporte built-in para CSS debido a la configuración personalizada.
+  **Pasos**
+  1. Consultar la documentación de Next.js sobre la advertencia de CSS deshabilitado.
+  2. Verificar la configuración de PostCSS o Tailwind.
+  **Pruebas**
+  a. Asegurarse de que la configuración de CSS personalizada funciona correctamente.
+  **Listo**
+  [] Verificar que no haya advertencias sobre CSS en la compilación.
 
-### Problemas Nº 2: Inconsistencia en Estilos
-- Prioridad: 4
-- **Descripción:** Estandarizar el enfoque de estilización en toda la aplicación. `src/components/`, `styles/`
-    **Tareas Pendientes**
-    - Documentar guía de estilos de Tailwind CSS.
-    - Asegurar que todos los componentes cumplen con la guía de estilos.
-    - Configurar e implementar un linter para mantener la consistencia.
-
-### Problemas Nº 3: Problemas de Seguridad de Tipos (En Progreso)
+## Problemas Nº 6: Error en las importaciones y prerenderizado
 - Prioridad: 1
-- [x] **Descripción:** Problemas de seguridad de tipos en componentes y hooks relacionados con plantillas: `src/components/TemplateNode.tsx`, `src/components/TemplateCanvas.tsx`, `src/hooks/useTemplateLoader.ts`, `src/hooks/useTemplates.ts`, `src/hooks/useTemplateValidation.ts`, `src/hooks/useTemplateOperations.ts`
-    **Pasos**
-    1. ✓ Centralizar tipos en `/src/lib/types/templates/`
-    2. ✓ Crear interfaces base y tipos comunes en `base.ts`
-    3. ✓ Crear interfaces para operaciones en `operations.ts`
-    4. ✓ Actualizar componentes para usar tipos centralizados
-    5. ✓ Actualizar hooks para usar tipos centralizados
-    6. [✓] Implementar pruebas de tipos para los componentes
-    7. [✓] Validar tipos en tiempo de compilación
-    **Pruebas**
-    a. ✓ Confirmar que no hay errores de tipo en la compilación
-    b. ✓ Verificar que todos los componentes tienen props tipados correctamente
-    c. ✓ Asegurar que los tipos están centralizados en archivos dedicados
-    **Listo**
-    [✓] No hay errores de tipo en la compilación de los componentes principales
-    [✓] Los componentes tienen props tipados correctamente
-    [✓] Tipos centralizados en archivos dedicados
-    [✓] Componentes React Flow usan tipos correctamente
-    **Progreso**
-    * Creada estructura centralizada de tipos en `/src/lib/types/templates/`
-    * Implementadas interfaces base y operaciones
-    * Actualizados componentes TemplateNode y TemplateCanvas
-    * Actualizados hooks useTemplateLoader, useTemplateOperations y useTemplateValidation
-    * Corregidos problemas de compatibilidad con React Flow
-    * Añadido soporte para Record<string, unknown> en TemplateNodeData
-    * Mejorada la validación de tipos en los hooks
-    **Siguiente**
-    * (Todos los pasos completados)
-
-### Problemas Nº 6: Documentación de Arquitectura Insuficiente entre componentes
-- Prioridad: 2
-- **Descripción:** Crear documentación clara sobre las interacciones entre componentes. `docs/`, `src/components/`
-    **Tareas Pendientes**
-    - Crear el diagrama de arquitectura.
-    - Completar la documentación de cada componente.
-    - Definir estándares de implementación.
-    **Pruebas:**
-    - Revisar la documentación con el equipo para validar la claridad.
-
-### Problemas Nº 7: Error en renderizado de DocumentDependencyEditor
-- Prioridad: 2
-- **Descripción:** Corregir el error de renderizado del componente `DocumentDependencyEditor` cuando la cantidad de documentos es inferior a dos.
-    **Tareas Pendientes**
-    - Validar la cantidad de documentos antes de renderizar la matriz de dependencias.
-    - Mostrar un mensaje informativo cuando la cantidad de documentos sea insuficiente.
-    **Pruebas:**
-    - Renderizar el componente con 0, 1 y 2 o más documentos.
-
-  **Ejecución**
-  * Documentación unificada en [Docs/rfp_templates.md]. [✓]
-  * Retiro progresivo de componentes en `/project-templates/` y `/templates/` completado. [✓]
-  * Migración a TypeScript finalizada para todos los componentes. [✓]
-  * Incorporación de prompts IA básicos implementada. [✓]
-  * Validaciones y tooltips en diagrama y panel completados. [✓]
-  * Pruebas unitarias e integración finalizadas. [✓]
-  * Cambios documentados en este y archivos relacionados. [✓]
+- [ ] **Descripción:** El archivo de índice de hooks en `src/lib/hooks/templates/index.ts` no está exportando correctamente `useTemplateLoader` y `useTemplates`. Además, hay un error de prerenderización en la página "/_not-found".
+  **Pasos**
+  1. Actualizar las rutas de exportación en `src/lib/hooks/templates/index.ts`.
+  2. Asegurarse de que `className` esté definido en el componente de la página de error `_not-found`.
+  3. Ejecutar `pnpm build` y `docker compose up --build` para verificar los cambios.
+  **Pruebas**
+  a. Verificar que las importaciones de `useTemplateLoader` y `useTemplates` funcionen correctamente.
+  b. Asegurarse de que la página de error se prerenderice sin errores.
+  **Listo**
+  [] Verificar que las importaciones y la prerenderización funcionen correctamente.
