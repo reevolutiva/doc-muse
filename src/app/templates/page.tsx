@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect, Suspense } from "react"
-import { Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus } from "lucide-react"
+import { Star, StarHalf, Filter, ChevronDown, Heart, Loader2, Plus, Palette } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useInView } from 'react-intersection-observer'
 import { Listbox } from '@headlessui/react'
@@ -219,39 +219,48 @@ function TemplatesContent() {
               Discover and manage professional learning templates
             </p>
           </div>
-          <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
-            <Dialog.Trigger asChild>
-              <button
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                Create Template
-              </button>
-            </Dialog.Trigger>
-            <Dialog.Portal>
-              <TemplateForm 
-                onClose={() => {
-                  setShowDialog(false)
-                  setEditingTemplate(null)
-                  // Limpiar parámetro de edición de la URL
-                  if (editTemplateId) {
-                    window.history.replaceState({}, '', '/templates')
-                  }
-                }} 
-                onSave={handleSaveTemplate}
-                initialData={editingTemplate || {
-                  title: '',
-                  description: '',
-                  content: {
-                    time: Date.now(),
-                    blocks: [],
-                    version: '1.0.0'
-                  }
-                }}
-                mode={editTemplateId ? "edit" : "create"}
-              />
-            </Dialog.Portal>
-          </Dialog.Root>
+          <div className="flex gap-2">
+            <a
+              href="/templates/visual-editor"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <Palette className="w-4 h-4" />
+              Visual Editor
+            </a>
+            <Dialog.Root open={showDialog} onOpenChange={setShowDialog}>
+              <Dialog.Trigger asChild>
+                <button
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  Create Template
+                </button>
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <TemplateForm 
+                  onClose={() => {
+                    setShowDialog(false)
+                    setEditingTemplate(null)
+                    // Limpiar parámetro de edición de la URL
+                    if (editTemplateId) {
+                      window.history.replaceState({}, '', '/templates')
+                    }
+                  }} 
+                  onSave={handleSaveTemplate}
+                  initialData={editingTemplate || {
+                    title: '',
+                    description: '',
+                    content: {
+                      time: Date.now(),
+                      blocks: [],
+                      version: '1.0.0'
+                    }
+                  }}
+                  mode={editTemplateId ? "edit" : "create"}
+                />
+              </Dialog.Portal>
+            </Dialog.Root>
+          </div>
         </div>
         
         {/* Categories */}

@@ -80,7 +80,7 @@ export function FormContent({ onSubmit, loading }: FormContentProps) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Plantilla de Proyecto
+            Project Type
           </label>
           <div className="flex gap-2">
             <button

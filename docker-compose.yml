@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-
   backend:
     container_name: kimfe-backend
     build:
@@ -10,23 +7,24 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./backend/:/app/
+      - ./backend:/app
     entrypoint: sh -c "chmod +x /app/run.sh && chmod +x /app/llama-run.sh && /app/run.sh"
 
   frontend:
     container_name: kimfe-frontend
     build:
       context: .
-      dockerfile: frontend/Dockerfile
+      dockerfile: Dockerfile
+      target: deps  # Especificamos que use la etapa de desarrollo
     ports:
       - '3000:3000'
     volumes:
-      - ./src/:/app/src
-      - ./package.json:/app/package.json
-      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
-      # Eliminado el volumen node_modules que sobreescribe la instalación global
+      - .:/app
+      - /app/node_modules
+      - /app/.next
     environment:
       - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
@@ -34,3 +32,4 @@ services:
       timeout: 30s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
