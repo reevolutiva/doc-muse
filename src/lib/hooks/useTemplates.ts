@@ -5,14 +5,17 @@ import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
 import { useTemplateLoader } from "./useTemplateLoader"
 import type { Template, TemplateHookResult, TemplateListItem } from "@/lib/types/template"
-import { handleError } from "@/lib/utils/error-handler"
+import { handleError, createErrorHandler } from "@/lib/utils/error-handler"
 
 export function useTemplates(projectId?: string): TemplateHookResult {
+  const errorHandler = createErrorHandler('Templates');
   const { templateData, loading, error } = useTemplateLoader(projectId)
 
   const createDocument = useCallback(async (template: TemplateListItem): Promise<void> => {
     if (!projectId) {
-      throw new Error('Project ID is required')
+      const error = new Error('Project ID is required');
+      errorHandler(error);
+      throw error;
     }
 
     try {
@@ -36,10 +39,10 @@ export function useTemplates(projectId?: string): TemplateHookResult {
 
       toast.success('Document created successfully')
     } catch (err) {
-      handleError(err)
-      throw err
+      errorHandler(err);
+      throw err;
     }
-  }, [projectId])
+  }, [projectId, errorHandler])
 
   return {
     templateData,

@@ -7,15 +7,27 @@ import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
 import { ArrowLeft } from "lucide-react"
 
+interface Document {
+  id: string
+  content: string
+  title?: string
+  project_id: string
+  document_id: string
+  style?: { className?: string } // Make style and className optional
+}
+
+async function getDocuments(): Promise<Document[]> {
+  // Simulate fetching documents (replace with your actual data fetching)
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([{ title: "My Document", style: { className: "custom-class" } }])
+    }, 500)
+  })
+}
+
 export default function DocumentPage() {
   const router = useRouter()
-  const [document, setDocument] = useState<{
-    id: string
-    content: string
-    title?: string
-    project_id: string
-    document_id: string
-  } | null>(null)
+  const [document, setDocument] = useState<Document | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

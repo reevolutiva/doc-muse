@@ -1,8 +1,57 @@
-import { createClient } from '@supabase/supabase-js'
-import type { Database } from './supabase.types'
+import { createClient } from '@supabase/supabase-js';
 
-//const supabaseUrl = 'https://ntrprhkuupexwloxdpgl.supabase.co'
-const supabaseUrl = 'http://127.0.0.1:54321';
-//const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cnByaGt1dXBleHdsb3hkcGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE2NTE0NzAsImV4cCI6MjA1NzIyNzQ3MH0.gWz3BY-JxZ32QiDQ2J9zzgfV-_Le_V4tJiLL38GVcvA'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function fetchData() {
+  try {
+    const { data, error } = await supabase
+      .from('table')
+      .select('*');
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+export const getProjectTemplates = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('project_templates')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Error fetching project templates:", error);
+      return [];
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Unexpected error fetching project templates:", error);
+    return [];
+  }
+};
+
+export const getProjectTemplateById = async (id: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('project_templates')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching project template by ID:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Unexpected error fetching project template by ID:", error);
+    return null;
+  }
+};

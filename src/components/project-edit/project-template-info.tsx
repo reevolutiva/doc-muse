@@ -1,93 +1,60 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabase"
 import { FileText, AlertCircle } from "lucide-react"
+import { useTemplateLoader } from "@/lib/hooks/templates"
+import { createErrorHandler } from "@/lib/utils/error-handler"
 
 interface ProjectTemplateInfoProps {
-  templateId: string
-}
-
-interface TemplateDoc {
-  id: string
-  sequence_order: number
-  is_required: boolean
-  document_template: {
-    title: string
-    description: string
-  }
+  templateId: string | null
 }
 
 export function ProjectTemplateInfo({ templateId }: ProjectTemplateInfoProps) {
-  const [template, setTemplate] = useState<{
-    name: string
-    description: string
-    documents: TemplateDoc[]
-  } | null>(null)
+  const errorHandler = createErrorHandler('Project Template Info');
+  const { templateData: template, loading, error } = useTemplateLoader(templateId || undefined);
 
-  useEffect(() => {
-    const fetchTemplateInfo = async () => {
-      try {
-        // Fetch template details
-        const { data: templateData, error: templateError } = await supabase
-          .from('project_templates')
-          .select('*')
-          .eq('id', templateId)
-          .single()
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-4">
+        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+        <span className="ml-2 text-sm text-blue-600">Loading template information...</span>
+      </div>
+    )
+  }
 
-        if (templateError) throw templateError
+  if (error) {
+    return (
+      <div className="mt-2 rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-800">
+        <div className="flex items-center gap-2 mb-1">
+          <AlertCircle className="h-4 w-4" />
+          <p className="font-medium">Failed to load template information</p>
+        </div>
+        <p>{error.message || "Please try refreshing the page or select a different template."}</p>
+      </div>
+    )
+  }
 
-        // Fetch associated document templates
-        const { data: docsData, error: docsError } = await supabase
-          .from('project_template_doc_templates')
-          .select(`
-            id,
-            sequence_order,
-            is_required,
-            document_template:document_template_id (
-              title,
-              description
-            )
-          `)
-          .eq('project_template_id', templateId)
-          .order('sequence_order')
+  if (!template || template.length === 0) return null;
 
-        if (docsError) throw docsError
-
-        setTemplate({
-          ...templateData,
-          documents: docsData
-        })
-      } catch (error) {
-        console.error('Error fetching template info:', error)
-      }
-    }
-
-    if (templateId) {
-      fetchTemplateInfo()
-    }
-  }, [templateId])
-
-  if (!template) return null
+  const templateInfo = template[0].document_templates;
 
   return (
     <div className="mt-2 space-y-3">
-      <p className="text-sm text-blue-700">{template.description}</p>
+      <p className="text-sm text-blue-700">{templateInfo.description}</p>
       
-      {template.documents?.length > 0 && (
+      {template.length > 0 && (
         <div className="space-y-2">
           <h5 className="text-xs font-medium text-blue-900">Required Documents:</h5>
           <div className="space-y-2">
-            {template.documents.map((doc) => (
+            {template.map((doc) => (
               <div 
-                key={doc.id}
+                key={doc.document_template_id}
                 className="flex items-start gap-2 text-sm"
               >
                 <FileText className="h-4 w-4 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="font-medium text-blue-900">{doc.document_template.title}</p>
-                  {doc.document_template.description && (
-                    <p className="text-xs text-blue-700">{doc.document_template.description}</p>
+                  <p className="font-medium text-blue-900">{doc.document_templates.title}</p>
+                  {doc.document_templates.description && (
+                    <p className="text-xs text-blue-700">{doc.document_templates.description}</p>
                   )}
                 </div>
                 {doc.is_required && (
@@ -101,3 +68,5 @@ export function ProjectTemplateInfo({ templateId }: ProjectTemplateInfoProps) {
     </div>
   )
 }
+
+export default ProjectTemplateInfo;

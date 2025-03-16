@@ -35,19 +35,24 @@ RUN npm install -g pnpm@9.6.0 && \
 COPY --from=dev /app/node_modules ./node_modules
 COPY . .
 
+# Variables de entorno para la etapa de construcción
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+# Variables de entorno para Supabase (valores de placeholder para build)
+ENV NEXT_PUBLIC_SUPABASE_URL="https://ntrprhkuupexwloxdpgl.supabase.co"
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cnByaGt1dXBleHdsb3hkcGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE2NTE0NzAsImV4cCI6MjA1NzIyNzQ3MH0.gWz3BY-JxZ32QiDQ2J9zzgfV-_Le_V4tJiLL38GVcvA"
+
 # Construir la aplicación
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
 RUN pnpm build
 
 # Etapa de producción
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 # Crear usuario no root para mayor seguridad
 RUN addgroup --system --gid 1001 nodejs && \

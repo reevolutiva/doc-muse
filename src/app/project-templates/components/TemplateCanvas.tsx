@@ -15,6 +15,8 @@ import '@xyflow/react/dist/style.css';
 import { TemplateNode } from './TemplateNode';
 import { SideBar } from './SideBar';
 import { PropertiesPanel } from './PropertiesPanel';
+import { toast } from 'react-hot-toast';
+import { TemplateNodeData } from './TemplateNode'; // Import the TemplateNodeData interface
 
 // Define node types for our custom nodes
 const nodeTypes = {
@@ -23,9 +25,9 @@ const nodeTypes = {
 
 export const TemplateCanvas = () => {
   // Initialize nodes and edges with empty arrays
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState<TemplateNodeData[]>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
+  const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null>(null);
 
   // Handle connections between nodes
   const onConnect = useCallback(
@@ -34,12 +36,12 @@ export const TemplateCanvas = () => {
   );
 
   // Handle node selection for properties panel
-  const onNodeClick = useCallback((_, node: Node) => {
+  const onNodeClick = useCallback((_, node: Node<TemplateNodeData>) => {
     setSelectedNode(node);
   }, []);
 
   // Add a new node to the canvas
-  const onAddNode = (nodeData: any) => {
+  const onAddNode = (nodeData: TemplateNodeData) => {
     const newNode = {
       id: `node-${Date.now()}`,
       type: 'templateNode',
@@ -76,11 +78,15 @@ export const TemplateCanvas = () => {
           <PropertiesPanel 
             node={selectedNode} 
             updateNode={(updatedData) => {
-              setNodes(nodes.map(node => 
-                node.id === selectedNode.id 
-                  ? { ...node, data: { ...node.data, ...updatedData } }
-                  : node
-              ));
+              try {
+                setNodes(nodes.map(node => 
+                  node.id === selectedNode.id 
+                    ? { ...node, data: { ...node.data, ...updatedData } }
+                    : node
+                ));
+              } catch (error: any) {
+                toast.error(`Error updating node: ${error.message}`);
+              }
             }}
             onClose={() => setSelectedNode(null)}
           />

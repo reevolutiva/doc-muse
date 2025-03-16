@@ -1,0 +1,397 @@
+/* Estilos para el panel de propiedades */
+.properties-panel {
+  background: white;
+  width: 300px;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Estado vacío */
+.properties-panel.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: #666;
+  text-align: center;
+  font-size: 14px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #666;
+  padding: 24px;
+}
+
+.empty-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Cabecera del panel */
+.panel-header {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.node-type {
+  font-size: 13px;
+  color: #666;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Contenido del panel */
+.panel-content {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Títulos de secciones */
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* Grupos de campos */
+.field-group {
+  margin-bottom: 16px;
+}
+
+.field-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.field-group input[type="text"],
+.field-group textarea,
+.field-group select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.field-group input[type="text"]:focus,
+.field-group textarea:focus,
+.field-group select:focus {
+  border-color: #0066cc;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+/* Grupo de entrada con previsualización */
+.field-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 120px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 120px;
+  object-fit: contain;
+}
+
+/* Editor de arrays (listas) */
+.array-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.array-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.array-item input {
+  flex: 1;
+}
+
+.remove-item {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f5f5f5;
+  color: #777;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-item:hover {
+  background-color: #ffebeb;
+  color: #e53935;
+}
+
+.remove-item.small {
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+}
+
+.add-item {
+  padding: 6px 12px;
+  background-color: #f0f7ff;
+  color: #0066cc;
+  border: 1px dashed #95c8ff;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.add-item:hover {
+  background-color: #e0f2fe;
+}
+
+/* Editor de tablas */
+.table-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.table-preview td {
+  padding: 2px;
+}
+
+.table-preview input {
+  width: 100%;
+  padding: 6px;
+  font-size: 12px;
+}
+
+/* Checkbox para required */
+.field-group.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.field-group.checkbox label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+}
+
+.field-group.checkbox input {
+  margin-right: 8px;
+  width: auto;
+}
+
+/* Información de conexiones */
+.connections-info {
+  background-color: #fffde7;
+  border: 1px solid #fff59d;
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #5d4037;
+}
+
+/* Acciones del formulario */
+.form-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.apply-button {
+  padding: 8px 16px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.apply-button:hover {
+  background-color: #005bb5;
+}
+
+/* Estilos para el editor de listas */
+.list-items-editor,
+.options-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list-item-input,
+.option-input {
+  display: flex;
+  gap: 8px;
+}
+
+.list-item-remove,
+.option-remove,
+.header-remove,
+.row-remove {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+}
+
+.list-item-remove:hover,
+.option-remove:hover,
+.header-remove:hover,
+.row-remove:hover {
+  color: #d32f2f;
+}
+
+/* Estilos para el editor de tablas */
+.table-headers-editor,
+.table-data-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.table-header-input,
+.table-row {
+  display: flex;
+  gap: 8px;
+}
+
+.table-row {
+  align-items: start;
+}
+
+.table-row .property-input {
+  flex: 1;
+}
+
+/* Botones de acción */
+.add-list-item,
+.add-option,
+.add-column,
+.add-row {
+  background: none;
+  border: 1px dashed #0066cc;
+  color: #0066cc;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.add-list-item:hover,
+.add-option:hover,
+.add-column:hover,
+.add-row:hover {
+  background-color: #f0f7ff;
+}
+
+/* Estilos para el campo de propiedades */
+.property-field {
+  margin-bottom: 16px;
+}
+
+.property-field:last-child {
+  margin-bottom: 0;
+}
+
+.property-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.property-field input[type="text"],
+.property-field input[type="number"],
+.property-field input[type="email"],
+.property-field input[type="date"],
+.property-field select,
+.property-field textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #333;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.property-field input[type="text"]:focus,
+.property-field input[type="number"]:focus,
+.property-field input[type="email"]:focus,
+.property-field input[type="date"]:focus,
+.property-field select:focus,
+.property-field textarea:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.property-field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.property-field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825L1.175 4 2.238 2.937 6 6.7l3.762-3.763L10.825 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+.property-field input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.property-field input[type="checkbox"] + label {
+  display: inline;
+  font-weight: normal;
+}
