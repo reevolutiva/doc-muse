@@ -44,6 +44,12 @@ Este documento describe los pasos detallados para implementar los cambios signif
   - Refinamiento de estilos y layouts
   - Implementación de interacciones básicas
   - Optimización de rendimiento en el canvas
+  - **Progreso:** Se han agregado componentes para arrastrar elementos y soltar en el canvas. Próximo paso: refinar validaciones durante el drag & drop.
+
+## 3.1 Paleta Lateral 🔄
+- Finalizar la paleta con elementos arrastrables.
+- Permitir drag & drop en el canvas.
+- Agregar validaciones y retroalimentación visual.
 
 ---
 
@@ -58,6 +64,11 @@ Este documento describe los pasos detallados para implementar los cambios signif
   - 🔄 Sistema básico de conexiones implementado
   - ⏳ Pendiente implementación de tooltips
   - ⏳ Pendiente sistema de validación de conexiones
+
+## 4. Implementación de Tooltips y Validaciones 🔄
+- Añadir tooltips en conexiones para mostrar detalles.
+- Implementar validaciones de conexiones (compatibilidad y reglas de dependencia).
+- **Progreso:** Se definió la estructura básica de tooltips; se están añadiendo validaciones condicionales para conexiones dependientes.
 
 ---
 
@@ -83,6 +94,9 @@ Este documento describe los pasos detallados para implementar los cambios signif
   - Implementar sistema de previsualización
   - Integrar con API de generación
 
+- Diseñar interfaz de prompts para generación de contenido.
+- Implementar previsualización inmediata en el panel de propiedades.
+
 ---
 
 ## 7. Actualización del Esquema de Datos en Supabase 🔄
@@ -107,6 +121,9 @@ Este documento describe los pasos detallados para implementar los cambios signif
   - Implementar pruebas de integración
   - Realizar pruebas de rendimiento
 
+- Crear suite de pruebas unitarias y de integración.
+- Incluir pruebas de usabilidad y optimizar rendimiento.
+
 ---
 
 ## 9. Despliegue y Retroalimentación ⏳
@@ -116,6 +133,9 @@ Este documento describe los pasos detallados para implementar los cambios signif
   - Definir grupo de beta testers
   - Preparar ambiente de staging
   - Diseñar sistema de recolección de feedback
+
+- Preparar ambiente de staging y lanzar versión beta.
+- Recoger feedback de usuarios y hacer iteraciones rápidas.
 
 ---
 
