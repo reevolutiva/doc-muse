@@ -34,13 +34,27 @@ const TemplateSelector = ({templates, nodes, setNodes }) => {
     const newNodes = blocks.map( (block, index) => {
 
       const newY = corsd.y + (index * 100);
+
+      let label = {};
+
+      if(block.data.label) {
+        label = {
+          "label": block.data.label
+        }
+      }
+
+      if(block.data.text) {
+        label = {
+          "label": block.data.text
+        }
+      }
       
       const newNode = new Node(
         (nodes.length + 1 + index).toString(),
         corsd.x,
         newY,
         typeMap[block.type],
-        block.data.label
+        label.label
       );
 
       return newNode;
@@ -62,6 +76,7 @@ const TemplateSelector = ({templates, nodes, setNodes }) => {
     const templateId = e.target.value;
     const template = templates.find( template => template.id === templateId);
     const blocks = getBlocks(template);
+    console.log('blocks', blocks);
     const newNodes = buildNode(blocks);
     setNodes(newNodes);
   
@@ -99,7 +114,7 @@ export default function TemplatesReactFlow() {
 
   useEffect(() => {
     
-    async function getDocs() {
+    async function getDocsTemplate() {
         let { data: document_templates, error } = await supabase
         .from('document_templates')
         .select('*')
@@ -107,7 +122,7 @@ export default function TemplatesReactFlow() {
 
     }
 
-    getDocs();
+    getDocsTemplate();
 
     
   }, []);
@@ -124,7 +139,7 @@ export default function TemplatesReactFlow() {
 
   const generarDocRaw = () => {
 
-
+      console.log(nodes);
     
   }
 
@@ -136,7 +151,7 @@ export default function TemplatesReactFlow() {
         <TemplateSelector templates={templates} nodes={nodes} setNodes={setNodes} />
         
 
-        <button onClick={generarDocRaw}> Generar </button>
+        <button onClick={() => generarDocRaw()} className="px-4 py-2 bg-blue-500 text-white rounded" > Generar </button>
       </div>
       <ReactFlow
         nodes={nodes}
