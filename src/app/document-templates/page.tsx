@@ -4,11 +4,11 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 
-export default function ProjectTemplatesPage() {
+export default function DocumentTemplatesPage() {
   const router = useRouter()
   
   useEffect(() => {
-    router.replace("/templates?tab=projects")
+    router.replace("/templates")
   }, [router])
   
   return (

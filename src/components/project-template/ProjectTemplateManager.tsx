@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TemplateCanvas } from '@/app/project-templates/components/TemplateCanvas';
+import { TemplateCanvas } from '@/components/template-manager/TemplateCanvas';
 import { toast } from 'react-hot-toast';
 
 // Define the type for the template
