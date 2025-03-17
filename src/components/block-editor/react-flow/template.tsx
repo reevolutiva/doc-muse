@@ -23,9 +23,26 @@ export default function TemplatesReactFlow() {
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
   );
+
+  const addNode = () => {
+    const newNode = {
+      id: (nodes.length + 1).toString(),
+      data: { label: `Node ${nodes.length + 1}` },
+      position: { x: Math.random() * 250, y: Math.random() * 250 },
+    };
+    setNodes((nds) => [...nds, newNode]);
+  };
+
+  const removeNode = () => {
+    setNodes((nds) => nds.slice(0, -1));
+  };
  
   return (
     <div className="w-full h-[500px]">
+      <div className="flex space-x-2 mb-2">
+        <button onClick={addNode} className="px-4 py-2 bg-blue-500 text-white rounded">Add Node</button>
+        <button onClick={removeNode} className="px-4 py-2 bg-red-500 text-white rounded">Remove Node</button>
+      </div>
       <ReactFlow
         nodes={nodes}
         edges={edges}
