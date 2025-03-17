@@ -53,3 +53,33 @@ Este componente define un nodo personalizado que puede ser eliminado del flujo d
 ```tsx
 // ...existing code...
 ```
+
+### 5. `general-docs/HeadingNode.tsx`
+
+Este componente define un nodo personalizado para encabezados en el flujo de trabajo.
+
+#### Funcionalidades:
+- Renderiza un nodo con estilo de encabezado H2
+- Incluye conectores en la parte superior e inferior
+- Permite personalizar el texto del encabezado mediante `data.label`
+- Utiliza estilos CSS personalizados definidos en `headingNode.css`
+
+#### Código:
+```tsx
+// ...existing code...
+```
+
+### 6. `general-docs/ParagraphNode.tsx`
+
+Este componente define un nodo personalizado para párrafos de texto en el flujo de trabajo.
+
+#### Funcionalidades:
+- Renderiza un nodo con estilo de párrafo
+- Incluye conectores en la parte superior e inferior
+- Permite personalizar el texto mediante `data.label`
+- Utiliza estilos CSS personalizados definidos en `paragraphNode.css`
+
+#### Código:
+```tsx
+// ...existing code...
+```
