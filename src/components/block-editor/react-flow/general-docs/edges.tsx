@@ -1,0 +1,1 @@
+export const intialedges_general_docs = [{ id: 'e1-2', source: '1', target: '2' }];
