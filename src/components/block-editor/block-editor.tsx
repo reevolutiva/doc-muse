@@ -34,11 +34,13 @@ export function BlockEditor({ initialContent, onChange }: BlockEditorProps) {
 
   useEffect(() => {
     if (editor && selectedBlock) {
-      console.log( "entra al if");
+      console.log("entra al if");
       editor.commands.setContent(selectedBlock.data.text || '')
+      console.log("selectedBlock", selectedBlock);
+      console.log("editor", editor);
+    } else {
+      console.log("selectedBlock is null or undefined");
     }
-    console.log("selectedBlock" ,selectedBlock );
-    console.log("editor" ,selectedBlock.data.text );
   }, [selectedBlock, editor])
 
   if (!editor) {
