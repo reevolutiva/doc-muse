@@ -1,3 +1,21 @@
+# Arquitectura del Proyecto
+
+## Estructura de Carpetas
+
+- src/
+  - pages/
+    - index.tsx
+    - projects/
+    - documents/
+  - components/
+  - lib/
+  - styles/
+- public/
+- .env.local
+- next.config.js
+- package.json
+- docker-compose.yml
+
 ### Directorios Principales
 - **src/**: Código fuente principal de la aplicación
   - **app/**: Rutas y páginas de la aplicación utilizando Next.js App Router

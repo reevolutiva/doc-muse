@@ -1,28 +1,30 @@
-import "@/styles/globals.css";
-import { Inter } from 'next/font/google';
+import type { Metadata } from "next";
 import { Navbar } from "@/components/navigation/navbar";
 import { Toaster } from "sonner";
+import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ['latin'] });
+export const metadata: Metadata = {
+  title: "DocMuse",
+  description: "Project and document management system",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={inter.className}>
-      <body>
+    <html lang="en">
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+      </head>
+      <body className="font-inter">
         <Navbar />
-        <main className="pt-16">
+        <main className="min-h-screen bg-background">
           {children}
         </main>
-        <Toaster position="top-right" />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );
 }
-
-export const metadata = {
-  title: "Kimfe - Document Management",
-  description: "Corporate training and document management platform",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};

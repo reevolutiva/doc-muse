@@ -1,9 +1,10 @@
-import { createRouteHandlerClient } from '@supabase/ssr';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
   const { searchParams } = new URL(request.url);
   const tableName = searchParams.get('table');
 
@@ -12,9 +13,7 @@ export async function GET(request: Request) {
       // Obtener columnas de una tabla específica
       const { data, error } = await supabase
         .rpc('get_table_columns', { table_name: tableName });
-
       if (error) throw error;
-
       return NextResponse.json(data);
     } else {
       // Obtener lista de tablas públicas
@@ -22,9 +21,7 @@ export async function GET(request: Request) {
         .from('pg_tables')
         .select('tablename')
         .eq('schemaname', 'public');
-
       if (error) throw error;
-
       return NextResponse.json(data.map(t => t.tablename));
     }
   } catch (error) {

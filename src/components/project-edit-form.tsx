@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { ArrowLeft, Save, X } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
@@ -28,6 +28,10 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
     activeTab: 'Project Data'
   })
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    // Add any necessary effect logic here
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -240,3 +244,5 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
     </div>
   )
 }
+
+export default ProjectEditForm;

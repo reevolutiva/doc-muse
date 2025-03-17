@@ -17,46 +17,19 @@ Este documento sirve como bitácora de problemas en Doc-Muse y guía para agente
 
 ## Problemas Activos
 
-### Problema Nº21: Duplicación de Frontend y Configuración Inconsistente
-- **Prioridad:** 1
-- **Estado:** En progreso
-- **Descripción:** Se ha detectado una duplicación estructural del frontend con implementaciones en múltiples ubicaciones:
-  - Directorio principal `src/` (implementación principal según arquitectura.md)
-  - Posibles implementaciones alternativas o duplicadas en otros directorios
-
-- **Análisis de Impacto:**
-  - Confusión en el desarrollo: Incertidumbre sobre qué código debe modificarse
-  - Problemas de mantenimiento: Actualizaciones podrían aplicarse en lugares incorrectos
-  - Dificultad de integración: Dockerfiles y configuraciones inconsistentes
-  - Variables de entorno: Posible inconsistencia en la definición y uso
-
-- **Plan de Acción:**
-  1. **Análisis comparativo:**
-     - Identificar todas las implementaciones front-end actuales
-     - Evaluar completitud, actualidad e integración con el backend de cada implementación
-     - Determinar qué implementación debe mantenerse según la arquitectura documentada
-  
-  2. **Consolidación:**
-     - Preservar la implementación correcta (respaldando el resto)
-     - Eliminar código duplicado después de confirmar que no se pierde funcionalidad
-     - Unificar Dockerfiles y configuraciones relacionadas
-  
-  3. **Actualización de configuración:**
-     - Corregir referencias en archivos docker-compose.yml
-     - Asegurar coherencia en variables de entorno
-     - Revisar scripts de construcción y despliegue
-  
-  4. **Pruebas exhaustivas:**
-     - Verificar funcionamiento con `docker compose up --build`
-     - Ejecutar pruebas unitarias e integraciones
-     - Validar todas las funcionalidades principales de la aplicación
-
-- **Criterios de Éxito:**
-  - [ ] Una única implementación frontend identificable y consistente
-  - [ ] Docker-compose.yml referencia solo componentes existentes y necesarios
-  - [ ] Aplicación compila y funciona sin errores
-  - [ ] La estructura respeta lo documentado en arquitectura.md
-
+### Problema Nº21: Error de tipo en configuración de ESLint
+- **Resuelto:** No
+- **Descripción:** Type error: Type 'string' has no properties in common with type 'Plugin'. El mensaje indica que ESLint espera que `plugins` sea un objeto en lugar de un arreglo de cadenas.
+- **Solución propuesta:**
+  - **Opción A:** Usar configuración clásica (.eslintrc) y un array de strings en `plugins`.
+    1. Renombrar archivo a `.eslintrc.js` o `.eslintrc.cjs`.
+    2. Eliminar anotación de tipo JSDoc.
+    3. Asegurarse de que no exista un `eslint.config.js` o `eslint.config.cjs`.
+    4. Actualizar dependencias de ESLint y plugins.
+  - **Opción B:** Migrar a la “flat config” en `eslint.config.js`.
+    1. Definir `plugins` como un objeto.
+    2. Usar `FlatCompat` para migrar reglas de `.eslintrc` a configuración plana.
+- **Notas adicionales:** Verificar si el proyecto está usando la “flat config” y revisar versiones de `eslint` y plugins en `package.json`.
 ## Último Problema Resuelto
 
 ### Problema Nº20: Duplicación completa del frontend
@@ -69,4 +42,25 @@ Este documento sirve como bitácora de problemas en Doc-Muse y guía para agente
   - Se consolidaron los Dockerfiles
 
 ## Plan de Verificación
+
+# Bug Vitacora
+
+## Fecha: [Fecha Actual]
+
+### Descripción del Problema
+- [Descripción detallada del problema encontrado]
+
+### Componentes Afectados
+- [Lista de componentes afectados]
+
+### Pasos para Reproducir
+1. [Paso 1]
+2. [Paso 2]
+3. [Paso 3]
+
+### Solución Propuesta
+- [Descripción de la solución propuesta]
+
+### Notas Adicionales
+- [Cualquier nota adicional relevante]
 

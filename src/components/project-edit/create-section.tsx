@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Plus } from "lucide-react"
@@ -35,6 +35,7 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   
   const { isGenerating, generateDocument } = useDocumentGeneration()
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null)
+  const [sectionState, setSectionState] = useState({})
 
   const editor = useEditor({
     extensions: [
@@ -49,6 +50,10 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
       // You can trigger auto-save here if needed
     }
   })
+
+  useEffect(() => {
+    // ...existing code...
+  }, [])
 
   const handleCreate = async (template: DocumentTemplate) => {
 
@@ -73,24 +78,6 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
       toast.error(error.message || 'Failed to select template')
     }
   }
-
-  
-  /*
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      CustomMention,
-      CustomStyles
-    ],
-    content: '',
-    onUpdate: ({ editor }) => {
-      // Store content in editor state
-      const content = editor.getHTML()
-      // You can trigger auto-save here if needed
-    }
-  })
-
-  */
 
   const handleTemplateSelect = (template: DocumentTemplate) => {
     setSelectedTemplate(template)
@@ -192,3 +179,5 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
     </>
   )
 }
+
+export default CreateSection;

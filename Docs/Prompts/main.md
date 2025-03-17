@@ -1,0 +1,1 @@
+@workspace La interfaz de #folder:projects no está desplegando varios componentes que ya están desarrollados.  Revisa e Identifica en las carpetas y dentro del archivo las carecaterísticas #file:page.tsx  los componentes y crea el plan paso a paso para que un agente implemente las características bajo tus órdenes remotas. 

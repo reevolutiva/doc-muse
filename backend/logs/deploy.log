@@ -1,8 +1,0 @@
-Ejecutando: python /app/deploy.py
-Traceback (most recent call last):
-  File "/app/deploy.py", line 9, in <module>
-    from workflows.doc_write import KimfeDocWrite
-  File "/app/workflows/doc_write.py", line 11, in <module>
-    from llama_index import JsonSerializer  # updated import based on the new library structure
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-ImportError: cannot import name 'JsonSerializer' from 'llama_index' (unknown location)

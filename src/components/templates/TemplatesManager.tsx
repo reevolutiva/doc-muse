@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ProjectTemplateManager } from "@/components/project-template/project-template-manager"
 import { DocumentTemplateList } from "@/components/templates/document-template-list"
@@ -18,11 +18,7 @@ export function TemplatesManager() {
   const router = useRouter()
   
   const handleCreateTemplate = () => {
-    if (activeTab === "documents") {
-      router.push("/templates/visual-editor")
-    } else {
-      router.push("/templates/visual-editor?type=project")
-    }
+    router.push(`/templates/visual-editor?type=${activeTab === "documents" ? "document" : "project"}`)
   }
   
   return (
@@ -37,15 +33,14 @@ export function TemplatesManager() {
         
         <Button onClick={handleCreateTemplate} className="flex items-center gap-2">
           <Plus size={16} />
-          Create New Template
+          Create {activeTab === "documents" ? "Document" : "Project"} Template
         </Button>
       </div>
       
       <Tabs 
         defaultValue={tabParam === "projects" ? "projects" : "documents"} 
         onValueChange={(value) => {
-          setActiveTab(value as any)
-          // Actualizar URL cuando cambia la pestaña
+          setActiveTab(value as "documents" | "projects")
           router.push(`/templates?tab=${value}`, { scroll: false })
         }}
       >
@@ -60,12 +55,12 @@ export function TemplatesManager() {
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="documents" className="space-y-4">
-          <DocumentTemplateList />
+        <TabsContent value="documents">
+          <DocumentTemplateList type="document" />
         </TabsContent>
         
-        <TabsContent value="projects" className="space-y-4">
-          <ProjectTemplateManager />
+        <TabsContent value="projects">
+          <ProjectTemplateManager type="project" />
         </TabsContent>
       </Tabs>
     </div>
