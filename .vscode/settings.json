@@ -20,5 +20,7 @@
     "fs",
     "http",
     "net"
-  ]
+  ],
+  "python.terminal.activateEnvironment": true,
+  "prompty.currentModelConfiguration": "gpt-3.5-turbo"
 }

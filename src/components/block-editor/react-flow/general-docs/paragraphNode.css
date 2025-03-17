@@ -1,0 +1,13 @@
+.paragraph-node {
+    padding: 10px;
+    border-radius: 5px;
+    background: #ffffff;
+    border: 1px solid #eee;
+    min-width: 200px;
+}
+
+.paragraph-node p {
+    margin: 0;
+    padding: 8px;
+    line-height: 1.5;
+}
