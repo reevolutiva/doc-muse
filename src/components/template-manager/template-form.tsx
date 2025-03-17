@@ -102,7 +102,7 @@ export function TemplateForm({ onClose, onSave, initialData, mode }: TemplateFor
           </Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value="edit" className="outline-none">
-          <div style={{ width: '100%', height: '500px', border: '1px solid #000' }}>
+          <div>
             <TemplatesReactFlow />
           </div>
         </Tabs.Content>
