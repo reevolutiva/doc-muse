@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   ReactFlow,
   MiniMap,
@@ -13,6 +13,9 @@ import '@xyflow/react/dist/style.css';
 
 import { intialnodes_general_docs } from './general-docs/nodes'
 import { intialedges_general_docs } from './general-docs/edges'
+import DeleterNode from './general-docs/deleterNode';
+
+const nodeTypes = useMemo(() => ({ deleterNode: DeleterNode }), []);
  
 export default function TemplatesReactFlow() {
 
@@ -49,6 +52,7 @@ export default function TemplatesReactFlow() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        nodeTypes={nodeTypes}
       >
         <Controls />
         <MiniMap />
