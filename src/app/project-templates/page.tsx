@@ -1,25 +1,20 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { ProjectTemplateManager } from '@/components/project-template/project-template-manager'
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
 
 export default function ProjectTemplatesPage() {
-  const [isMounted, setIsMounted] = useState(false)
-
-  // Solo ejecutar en el cliente después del montaje inicial
+  const router = useRouter()
+  
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  // Renderizar un contenedor simple durante SSR
-  if (!isMounted) {
-    return <div className="container mx-auto p-8 max-w-7xl"></div>
-  }
-
-  // Renderizar el componente completo solo en el cliente
+    // Redirigir a la nueva página de templates con la pestaña de proyectos seleccionada
+    router.replace("/templates?tab=projects")
+  }, [router])
+  
   return (
-    <div className="container mx-auto p-8 max-w-7xl">
-      <ProjectTemplateManager />
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
     </div>
   )
 }
