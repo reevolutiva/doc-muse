@@ -12,7 +12,7 @@ from workflows.doc_write import KimfeDocWrite
 
 async def main():
     
-    host = "0.0.0.0"
+    host = "kimfe-backend-plane-conf"
     
     import asyncio
     

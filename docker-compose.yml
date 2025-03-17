@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
 
-  backend:
-    container_name: kimfe-backend
+  backend-plane-conf:
+    container_name: kimfe-backend-plane-conf
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -16,7 +16,23 @@ services:
     # Path: backend
     # backend/llama-run.sh -f deploy.py 
 
+  backend-deploys:
+    
+    container_name: kimfe-backend-deploys
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./backend/:/app/
+
+    entrypoint: python /app/deploy.py
+    depends_on:
+      - backend-plane-conf
+    restart: on-failure:5s
+
   frontend:
+
     container_name: kimfe-frontend
     build:
       context: .
