@@ -18,7 +18,6 @@ const Palette = dynamic(
 );
 
 import Canvas from '../../components/Canvas';
-// Asegurarse de que las propiedades importadas de Canvas sean correctas
 
 const PropertiesPanel = dynamic(
   () => import('../../components/PropertiesPanel'),
@@ -33,21 +32,70 @@ const FieldMappingPanel = dynamic(
 interface Props {
   className?: string;
   testProp?: string;
+  id?: string;
+}
+
+interface FlowData {
+  nodes: any[];
+  edges: any[];
 }
 
 export default function BlockEditorPage(props: Props) {
-  console.log("BlockEditorPage props:", props);
-  console.log("BlockEditorPage className:", props.className);
-  console.log("BlockEditorPage testProp:", props.testProp);
+  const [flowData, setFlowData] = useState<FlowData>({ nodes: [], edges: [] });
+  const [selectedNode, setSelectedNode] = useState<any>(null);
+  const [showFieldMapping, setShowFieldMapping] = useState(false);
+  const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [tableColumns, setTableColumns] = useState<any[]>([]);
+  const [fieldMappings, setFieldMappings] = useState<Record<string, string>>({});
 
-  const templateId = props.id;
-  // ...resto del código existente del componente...
+  useEffect(() => {
+    const loadInitialData = async () => {
+      if (props.id) {
+        try {
+          const templateData = await loadTemplate(props.id);
+          if (templateData) {
+            setFlowData(templateData);
+          }
+        } catch (error) {
+          console.error('Error loading template:', error);
+        }
+      }
+    };
+    loadInitialData();
+  }, [props.id]);
+
+  const handleNodeSelect = useCallback((node: any) => {
+    setSelectedNode(node);
+  }, []);
+
+  const handleFlowChange = useCallback((newFlow: FlowData) => {
+    setFlowData(newFlow);
+  }, []);
+
+  const handleUpdateNode = useCallback((nodeId: string, data: any) => {
+    setFlowData(prev => ({
+      ...prev,
+      nodes: prev.nodes.map(node => 
+        node.id === nodeId ? { ...node, data: { ...node.data, ...data } } : node
+      )
+    }));
+  }, []);
+
+  const handleMappingChange = useCallback((mappings: Record<string, string>) => {
+    setFieldMappings(mappings);
+  }, []);
+
   return (
     <div className={props.className || "default-class"}>
       <ReactFlowProvider>
         <Palette />
         <Canvas initialData={flowData} onNodeSelect={handleNodeSelect} onFlowChange={handleFlowChange} />
-        <PropertiesPanel selectedNode={selectedNode} onUpdateNode={handleUpdateNode} />
+        {selectedNode && (
+          <PropertiesPanel 
+            selectedNode={selectedNode} 
+            onUpdateNode={handleUpdateNode} 
+          />
+        )}
         {showFieldMapping && selectedTable && (
           <FieldMappingPanel
             nodes={flowData.nodes}
@@ -57,7 +105,6 @@ export default function BlockEditorPage(props: Props) {
           />
         )}
       </ReactFlowProvider>
-      <div className={myData?.className}>...</div>
     </div>
   );
 }

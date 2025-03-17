@@ -18,10 +18,7 @@ export async function GET(
     return NextResponse.json(data)
   } catch (error) {
     console.error('Error fetching template:', error)
-    return NextResponse.json(
-      { error: 'Error fetching template' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch template' }, { status: 500 })
   }
 }
 
@@ -37,7 +34,9 @@ export async function PUT(
       .update({
         title: body.title,
         description: body.description,
+        type: body.type,
         visual_data: body.visual_data,
+        content: body.content,
         updated_at: new Date().toISOString()
       })
       .eq('id', params.id)
@@ -50,10 +49,7 @@ export async function PUT(
     return NextResponse.json(data)
   } catch (error) {
     console.error('Error updating template:', error)
-    return NextResponse.json(
-      { error: 'Error updating template' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to update template' }, { status: 500 })
   }
 }
 
@@ -61,22 +57,17 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const supabase = createRouteHandlerClient({ cookies });
-
   try {
     const { error } = await supabase
-      .from('templates')
+      .from('document_templates')
       .delete()
-      .eq('id', params.id);
+      .eq('id', params.id)
 
-    if (error) throw error;
+    if (error) throw error
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error al eliminar la plantilla:', error);
-    return NextResponse.json(
-      { error: 'Error al eliminar la plantilla' },
-      { status: 500 }
-    );
+    console.error('Error deleting template:', error)
+    return NextResponse.json({ error: 'Failed to delete template' }, { status: 500 })
   }
 }

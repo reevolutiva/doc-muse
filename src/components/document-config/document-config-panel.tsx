@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
@@ -31,7 +31,7 @@ interface DocumentConfigPanelProps {
   onConfigSave: (config: Record<string, unknown>) => void
 }
 
-export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: DocumentConfigPanelProps) {
+const DocumentConfigPanel = ({ templateId, projectId, onConfigSave }: DocumentConfigPanelProps) => {
   const [loading, setLoading] = useState(true)
   const [template, setTemplate] = useState<{
     title: string
@@ -39,6 +39,7 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
     config: DocumentConfig
   } | null>(null)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
+  const [configState, setConfigState] = useState({})
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -223,3 +224,6 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
     </div>
   )
 }
+
+export default DocumentConfigPanel;
+export { DocumentConfigPanel };

@@ -1,11 +1,27 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import type { Template } from '@/lib/types/template'
 
-// Define the type for the template
-interface Template {
-  id: string;
-  name: string;
-  // Add other properties as needed
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const type = searchParams.get('type')
+
+  try {
+    let query = supabase.from('document_templates').select('*')
+    
+    if (type) {
+      query = query.eq('type', type)
+    }
+    
+    const { data, error } = await query.order('created_at', { ascending: false })
+
+    if (error) throw error
+
+    return NextResponse.json(data)
+  } catch (error: any) {
+    console.error('Error fetching templates:', error)
+    return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 })
+  }
 }
 
 export async function POST(request: Request) {
@@ -17,7 +33,9 @@ export async function POST(request: Request) {
       .insert({
         title: body.title,
         description: body.description,
+        type: body.type || 'document',
         visual_data: body.visual_data,
+        content: body.content,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       })
@@ -29,24 +47,6 @@ export async function POST(request: Request) {
     return NextResponse.json(data)
   } catch (error) {
     console.error('Error creating template:', error)
-    return NextResponse.json(
-      { error: 'Error creating template' },
-      { status: 500 }
-    )
-  }
-}
-
-export async function GET() {
-  try {
-    // Fetch templates from database or other source
-    const templates: Template[] = [
-      { id: '1', name: 'Template 1' },
-      { id: '2', name: 'Template 2' },
-    ];
-
-    return NextResponse.json(templates);
-  } catch (error: any) {
-    console.error(error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create template' }, { status: 500 })
   }
 }

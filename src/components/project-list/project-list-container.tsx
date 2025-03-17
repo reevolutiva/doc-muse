@@ -1,10 +1,8 @@
 "use client"
 
-import { Search, Plus, Upload } from "lucide-react"
+import { Search, Plus } from "lucide-react"
 import { ProjectCard } from "@/components/project-card"
-import { toast } from "sonner"
 import { Session } from '@supabase/supabase-js'
-import { supabase } from "@/lib/supabase"
 import type { Project } from "@/lib/utils"
 
 interface ProjectListContainerProps {
@@ -24,7 +22,6 @@ export function ProjectListContainer({
   onNewProject,
   onProjectSelect
 }: ProjectListContainerProps) {
-
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-8 flex items-center justify-between">

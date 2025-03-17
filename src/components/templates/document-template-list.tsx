@@ -1,104 +1,144 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
-import { Loader2, Eye, Edit, Trash2, Star, Search } from "lucide-react"
+import { useState } from "react"
+import { useTemplates } from "@/lib/hooks/useTemplates"
 import { useRouter } from "next/navigation"
-import { toast } from "react-hot-toast"
+import { toast } from "sonner"
+import { FileText, Edit2, Eye, Trash2, AlertCircle } from "lucide-react"
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
-export function DocumentTemplateList() {
-  const [templates, setTemplates] = useState([])
-  const [loading, setLoading] = useState(true)
+interface DocumentTemplateListProps {
+  type?: 'document' | 'project'
+}
+
+export function DocumentTemplateList({ type = 'document' }: DocumentTemplateListProps) {
   const [searchQuery, setSearchQuery] = useState("")
+  const { templateData: templates, loading, error } = useTemplates(undefined, type)
   const router = useRouter()
   
-  useEffect(() => {
-    fetchTemplates()
-  }, [])
-  
-  const fetchTemplates = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('document_templates')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (error) throw error
-      setTemplates(data || [])
-    } catch (error) {
-      toast.error("Failed to load templates")
-      console.error("Error loading templates:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
-  
-  const handleEdit = (templateId) => {
+  const handleEdit = (templateId: string) => {
     router.push(`/templates/visual-editor?id=${templateId}`)
   }
   
-  // Filtrar por búsqueda
-  const filteredTemplates = templates.filter(template => 
-    template.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    (template.description && template.description.toLowerCase().includes(searchQuery.toLowerCase()))
-  )
-  
+  const handleDelete = async (templateId: string) => {
+    try {
+      const response = await fetch(`/api/templates/${templateId}`, {
+        method: 'DELETE',
+      })
+      
+      if (!response.ok) throw new Error('Failed to delete template')
+      
+      toast.success('Template deleted successfully')
+      // Refresh the page to update the list
+      router.refresh()
+    } catch (error) {
+      toast.error('Error deleting template')
+      console.error('Error:', error)
+    }
+  }
+
   if (loading) {
     return (
-      <div className="flex justify-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     )
   }
-  
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Templates</h3>
+        <p className="text-gray-500 max-w-md">
+          {error.message || "An error occurred while loading templates. Please try again."}
+        </p>
+      </div>
+    )
+  }
+
+  const filteredTemplates = templates?.filter(template =>
+    template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    template.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  ) || []
+
   return (
     <div className="space-y-6">
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-        <input
-          type="text"
-          placeholder="Search templates..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 pr-4 py-2 w-full border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-        />
-      </div>
-      
+      <Input
+        type="search"
+        placeholder="Search templates..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="max-w-md"
+      />
+
       {filteredTemplates.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
-          No templates found. Create your first template!
+        <div className="text-center py-8 text-gray-500">
+          No templates found. Create your first template by clicking the "Create Template" button above.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTemplates.map(template => (
-            <div key={template.id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
-              <div className="aspect-[16/9] bg-gray-100 relative">
-                <img 
-                  src={`https://source.unsplash.com/featured/300x225?document,${template.id}`}
-                  alt={template.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-medium mb-1">{template.title}</h3>
-                {template.description && (
-                  <p className="text-sm text-gray-500 line-clamp-2 mb-3">{template.description}</p>
-                )}
-                <div className="flex justify-between items-center">
-                  <div className="text-gray-500 text-sm">
-                    {new Date(template.created_at).toLocaleDateString()}
-                  </div>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => handleEdit(template.id)}
-                      className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                      title="Edit template"
-                    >
-                      <Edit size={16} />
-                    </button>
-                  </div>
+        <div className="grid gap-4">
+          {filteredTemplates.map((template) => (
+            <div
+              key={template.id}
+              className="flex items-center justify-between p-4 bg-white border rounded-lg hover:border-blue-200 transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-blue-600" />
                 </div>
+                <div>
+                  <h3 className="font-medium">{template.title}</h3>
+                  {template.description && (
+                    <p className="text-sm text-gray-500">{template.description}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(template.id)}
+                >
+                  <Edit2 className="h-4 w-4" />
+                  <span className="sr-only">Edit</span>
+                </Button>
+                
+                <AlertDialog.Root>
+                  <AlertDialog.Trigger asChild>
+                    <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Delete</span>
+                    </Button>
+                  </AlertDialog.Trigger>
+                  <AlertDialog.Portal>
+                    <AlertDialog.Overlay className="fixed inset-0 bg-black/50" />
+                    <AlertDialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+                      <AlertDialog.Title className="text-lg font-semibold mb-2">
+                        Delete Template
+                      </AlertDialog.Title>
+                      <AlertDialog.Description className="text-gray-600 mb-4">
+                        Are you sure you want to delete this template? This action cannot be undone.
+                      </AlertDialog.Description>
+                      <div className="flex justify-end gap-3">
+                        <AlertDialog.Cancel asChild>
+                          <Button variant="outline">Cancel</Button>
+                        </AlertDialog.Cancel>
+                        <AlertDialog.Action asChild>
+                          <Button
+                            variant="destructive"
+                            onClick={() => handleDelete(template.id)}
+                          >
+                            Delete
+                          </Button>
+                        </AlertDialog.Action>
+                      </div>
+                    </AlertDialog.Content>
+                  </AlertDialog.Portal>
+                </AlertDialog.Root>
               </div>
             </div>
           ))}

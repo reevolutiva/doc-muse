@@ -1,18 +1,15 @@
 "use client"
-
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ReactFlowProvider } from 'reactflow'
-import type { Node, Edge } from 'reactflow'
+import { ReactFlowProvider } from '@xyflow/react'
+import type { Node, Edge } from '@xyflow/react'
 import { toast } from 'sonner'
 import { Save, ArrowLeft, Undo, Redo } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Canvas } from '@/components/Canvas'
-import { Palette } from '@/components/Palette'
-import { PropertiesPanel } from '@/components/PropertiesPanel'
+import { TemplateCanvas } from '@/components/template-editor/TemplateCanvas'
 import { ValidationPanel } from '@/components/template-manager/validation-panel'
 import { KeyboardHelpDialog } from '@/components/template-manager/keyboard-help-dialog'
 import { TemplateHints } from '@/components/template-manager/template-hints'
@@ -20,8 +17,9 @@ import { TemplateTutorial } from '@/components/template-manager/template-tutoria
 import { useTemplateEditorKeyboard } from '@/lib/hooks/useTemplateEditorKeyboard'
 import { useTemplateHistory } from '@/lib/hooks/useTemplateHistory'
 import { validateTemplateData, validateDependencies } from '@/lib/utils/template-helpers'
-import type { TemplateNodeData } from '@/components/TemplateNode'
+import type { TemplateNodeData } from '@/components/template-editor/TemplateNode'
 import { TemplateErrorBoundary } from '@/components/template-manager/template-error-boundary'
+import { supabase } from '@/lib/supabase'
 
 interface TemplateHistoryState {
   nodes: Node<TemplateNodeData & Record<string, unknown>>[]
@@ -94,8 +92,16 @@ export default function VisualEditor({ searchParams }) {
             .single()
             
           if (error) throw error
-          // Cargar datos en el editor
-          // ...
+          
+          if (data) {
+            setTitle(data.title || 'Untitled Template')
+            setDescription(data.description || '')
+            
+            if (data.visual_data) {
+              setNodes(data.visual_data.nodes || [])
+              setEdges(data.visual_data.edges || [])
+            }
+          }
         } catch (error) {
           console.error("Error loading template:", error)
           toast.error("Failed to load template")
@@ -114,7 +120,6 @@ export default function VisualEditor({ searchParams }) {
         e.returnValue = ''
       }
     }
-
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [hasUnsavedChanges])
@@ -169,7 +174,7 @@ export default function VisualEditor({ searchParams }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(templateData)
       })
-
+      
       if (!response.ok) throw new Error('Failed to save template')
       
       const savedTemplate = await response.json()
@@ -186,20 +191,6 @@ export default function VisualEditor({ searchParams }) {
       setIsLoading(false)
     }
   }
-
-  const handleNodeSelect = useCallback((node: Node<TemplateNodeData>) => {
-    setSelectedNode(node)
-  }, [])
-
-  const handleNodeUpdate = useCallback((id: string, data: Partial<TemplateNodeData>) => {
-    setNodes(prev => prev.map(node => 
-      node.id === id 
-        ? { ...node, data: { ...node.data, ...data } }
-        : node
-    ))
-    setHasUnsavedChanges(true)
-    toast.success('Node updated successfully')
-  }, [])
 
   const handleFlowChange = useCallback((newNodes: Node[], newEdges: Edge[]) => {
     setNodes(newNodes as Node<TemplateNodeData>[])
@@ -299,7 +290,6 @@ export default function VisualEditor({ searchParams }) {
                 >
                   <Redo className="h-4 w-4" />
                 </Button>
-
                 <Button 
                   onClick={handleSave}
                   disabled={isLoading || !title.trim()}
@@ -311,24 +301,20 @@ export default function VisualEditor({ searchParams }) {
               </div>
             </div>
           </header>
-
+          
           <div className="flex-1 flex relative">
-            <Palette />
             <div className="flex-1 bg-accent/5">
-              <Canvas
-                initialData={{ 
-                  nodes: nodes as Node[], 
-                  edges 
-                }}
-                onNodeSelect={handleNodeSelect as (node: Node) => void}
-                onFlowChange={handleFlowChange}
+              <TemplateCanvas 
+                initialNodes={nodes}
+                initialEdges={edges}
+                onSave={handleFlowChange}
               />
-
+              
               <TemplateHints 
                 nodes={nodes}
                 edges={edges}
               />
-
+              
               {showTutorial && (
                 <TemplateTutorial
                   nodes={nodes}
@@ -337,13 +323,7 @@ export default function VisualEditor({ searchParams }) {
                 />
               )}
             </div>
-            {selectedNode && (
-              <PropertiesPanel
-                selectedNode={selectedNode}
-                onClose={() => setSelectedNode(null)}
-                onUpdate={handleNodeUpdate}
-              />
-            )}
+            
             <ValidationPanel 
               visualData={{ 
                 nodes: nodes as Node[], 
@@ -352,7 +332,7 @@ export default function VisualEditor({ searchParams }) {
             />
             <KeyboardHelpDialog />
           </div>
-
+          
           <div className="fixed bottom-4 left-16 z-50">
             <span className="text-xs text-gray-500">
               Press <kbd className="px-1 py-0.5 text-xs font-semibold bg-gray-100 border rounded">?</kbd> for keyboard shortcuts

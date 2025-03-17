@@ -3,15 +3,10 @@
 import { Card } from "@/components/ui/card"
 import { FileText, Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
+import type { Project } from "@/lib/utils"
 
-interface ProjectCardProps {
-  title: string
-  type: string
-  progress: number
-  documentsCount: number
-  lastUpdate: string
-  status: "en-progreso" | "completado"
-  onClick?: (project: ProjectCardProps) => void
+interface ProjectCardProps extends Project {
+  onClick?: () => void
 }
 
 export function ProjectCard({
@@ -25,55 +20,44 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Card 
-      className="cursor-pointer transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]" 
-      onClick={() => onClick?.({
-        title,
-        type,
-        progress,
-        documentsCount,
-        lastUpdate,
-        status
-      })}
+      className="relative overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+      onClick={onClick}
     >
-      <div className="flex flex-col gap-4">
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">{title}</h3>
-            <p className="text-sm text-muted-foreground">{type}</p>
-          </div>
-          <span
-            className={cn(
-              "rounded-full px-3 py-1 text-xs",
-              status === "en-progreso"
-                ? "bg-blue-100 text-blue-700"
-                : "bg-green-100 text-green-700"
-            )}
-          >
-            {status === "en-progreso" ? "En progreso" : "Completado"}
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">{title}</h3>
+          <span className={cn(
+            "px-2 py-1 text-xs font-medium rounded-full",
+            status === "completado" 
+              ? "bg-green-100 text-green-800"
+              : "bg-blue-100 text-blue-800"
+          )}>
+            {status === "completado" ? "Completed" : "In Progress"}
           </span>
         </div>
-        
-        <div className="space-y-2">
-          <div className="h-2 w-full rounded-full bg-secondary">
-            <div
-              className="h-full rounded-full bg-primary transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Progreso General</span>
-            <span>{progress}%</span>
-          </div>
-        </div>
 
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            <span>{documentsCount} documentos</span>
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <FileText className="w-4 h-4" />
+            <span>{documentsCount} documents</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            <span>Última actualización: {lastUpdate}</span>
+
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Progress</span>
+              <span className="font-medium">{progress}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Clock className="w-4 h-4" />
+            <span>Last update: {new Date(lastUpdate).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
