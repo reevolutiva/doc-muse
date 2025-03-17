@@ -15,6 +15,7 @@ import { CustomStyles } from '../block-editor/extensions/custom-styles'
 import { DOCUMENT_TYPES } from "@/lib/constants/document-types"
 import { useDocumentTemplate } from "@/lib/hooks/useDocumentTemplate"
 import { DocumentService } from "@/lib/services/document-service"
+import EtherpadEmbed from "../document-config/EtherpadEmbed.tsx"
 
 interface CreateSectionProps {
   projectId: string
