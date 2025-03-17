@@ -1,6 +1,4 @@
-Doc-Muse es una aplicación para gestión y generación de documentos, construida con Next.js, Supabase y una arquitectura moderna de componentes.
-- Cada vez que vayas a crear un nuevo archivo, asegúrate de saber si ya existe otro archivo con el mismo propósito, y de almacenarlo en el lugar que corresponde según la arquitectura de aplicación.
-- Cada vez que entregues instrucciones para la integración, recuerda que el back de este proyecto es supabase y que se lanza mediante "docker compose up"
-- Usa pnpm como preferido. 
--  Cada vez que identifiques un problema y te dispongas a resolverlo,accede a [bug_fixer.md](../Docs/bug_fixer.md) para recibir instrucciones para su resolución. 
- 
+- Siempre recuerda que que el back de este proyecto supabase y que se lanza mediante "docker compose up"
+- Cada vez que identifiques un problema o se te pidan cambios y correcciones y te dispongas a resolverlo,accede a [bug_fixer.md](../Docs/bug_fixer.md) para recibir instrucciones para su resolución.
+- Cada vez que vayas a desarrollar una nueva característica o mejora, busca más información [en Feature_solver.md](../Docs/feature_solver.md)
+- Prefiere pnpm para instalación y uso de repositorios
