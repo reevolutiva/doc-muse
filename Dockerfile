@@ -1,75 +1,76 @@
-# Etapa de desarrollo
-FROM node:18-alpine AS dev
+# syntax=docker/dockerfile:1.4
+FROM node:18-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
-# Instalar dependencias necesarias para la compilación
-RUN apk add --no-cache libc6-compat python3 make g++
-
-# Instalar pnpm globalmente y configurarlo correctamente
+# Install pnpm globally
 RUN corepack enable && corepack prepare pnpm@9.6.0 --activate
 
-# Ambiente de desarrollo
-ENV NODE_ENV=development
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# Copiar archivos de configuración
+# Install dependencies based on the preferred package manager
 COPY package.json pnpm-lock.yaml ./
-COPY tsconfig.json ./
-COPY next.config.js ./
+RUN pnpm install --frozen-lockfile
 
-# Instalar dependencias
-RUN pnpm install
-
-# El comando de inicio se moverá al docker-compose para permitir el hot-reload
-CMD ["sh", "-c", "pnpm install && pnpm dev"]
-
-# Etapa de construcción
-FROM node:18-alpine AS builder
+# Development image, copy all the files and run next dev
+FROM base AS dev
 WORKDIR /app
 
-# Instalar pnpm en la etapa de builder
-RUN npm install -g pnpm@9.6.0 && \
-    pnpm config set store-dir /root/.local/share/pnpm/store
+# Install pnpm globally in development stage
+RUN corepack enable && corepack prepare pnpm@9.6.0 --activate
 
-# Copiar dependencias y archivos necesarios
-COPY --from=dev /app/node_modules ./node_modules
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Variables de entorno para la etapa de construcción
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
-# Variables de entorno para Supabase (valores de placeholder para build)
-ENV NEXT_PUBLIC_SUPABASE_URL="https://ntrprhkuupexwloxdpgl.supabase.co"
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cnByaGt1dXBleHdsb3hkcGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE2NTE0NzAsImV4cCI6MjA1NzIyNzQ3MH0.gWz3BY-JxZ32QiDQ2J9zzgfV-_Le_V4tJiLL38GVcvA"
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV development
 
-# Construir la aplicación
-RUN pnpm build
+CMD ["pnpm", "dev"]
 
-# Etapa de producción
-FROM node:18-alpine AS runner
+# Production build
+FROM base AS builder
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+RUN corepack enable && corepack prepare pnpm@9.6.0 --activate
 
-# Crear usuario no root para mayor seguridad
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 
-# Instalar solo las dependencias de producción
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
-RUN npm install -g pnpm@9.6.0 && \
-    pnpm install --prod --frozen-lockfile
+ENV NEXT_TELEMETRY_DISABLED 1
 
-# Copiar archivos necesarios
+RUN pnpm build
+
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size 
+# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 USER nextjs
 
 EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
 CMD ["node", "server.js"]

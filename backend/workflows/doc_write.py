@@ -8,7 +8,7 @@ from llama_index.core.workflow import (
     Workflow,
 )
 # Actualizada la importación de JsonSerializer para usar la ruta correcta
-from llama_index.serialization import JsonSerializer
+from llama_index import JsonSerializer  # updated import based on the new library structure
 from conf.models import azure_llm
 from conf.KimfeRag import KimfeRag
 from llama_index.core import Settings

@@ -1,0 +1,25 @@
+INFO:llama_deploy.message_queues.simple.server - Launching message queue server at http://0.0.0.0:8001/
+INFO:     Started server process [11]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:llama_deploy.control_plane.server - Launching control plane server at 0.0.0.0:8000
+INFO:     Started server process [11]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59684 - "POST /topics/llama_deploy.control_plane HTTP/1.1" 200 OK
+INFO:llama_deploy.message_queues.simple.client - Consumer 'ControlPlaneServer-3d6cabf9-cf60-4bfb-b3bc-ff7abe6baadb' for type 'control_plane' on topic 'llama_deploy.control_plane' has been registered.
+INFO:     127.0.0.1:47134 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47136 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47382 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47398 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57790 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57796 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55596 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34492 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39474 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56314 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:32924 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59416 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33374 - "GET /health HTTP/1.1" 404 Not Found

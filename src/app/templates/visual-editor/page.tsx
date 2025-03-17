@@ -30,9 +30,9 @@ interface TemplateHistoryState {
   description: string
 }
 
-export default function VisualEditorPage() {
-  const searchParams = useSearchParams()
-  const templateId = searchParams.get('id')
+export default function VisualEditor({ searchParams }) {
+  const id = searchParams?.id || null
+  const templateType = searchParams?.type || "document" // Por defecto es documento si no se especifica
   const [isLoading, setIsLoading] = useState(false)
   const [title, setTitle] = useState('Untitled Template')
   const [description, setDescription] = useState('')
@@ -80,31 +80,31 @@ export default function VisualEditorPage() {
   }, [nodes, edges, title, description, saveState])
 
   useEffect(() => {
-    const loadTemplate = async () => {
-      if (!templateId) return
-      
-      try {
-        setIsLoading(true)
-        const response = await fetch(`/api/templates/${templateId}`)
-        if (!response.ok) throw new Error('Failed to load template')
-        
-        const template = await response.json()
-        setTitle(template.title)
-        setDescription(template.description || '')
-        if (template.visual_data) {
-          setNodes(template.visual_data.nodes)
-          setEdges(template.visual_data.edges)
+    if (id) {
+      // Cargar plantilla existente
+      const fetchTemplate = async () => {
+        try {
+          // Determinar la tabla de Supabase según el tipo
+          const table = templateType === "project" ? 'project_templates' : 'document_templates'
+          
+          const { data, error } = await supabase
+            .from(table)
+            .select('*')
+            .eq('id', id)
+            .single()
+            
+          if (error) throw error
+          // Cargar datos en el editor
+          // ...
+        } catch (error) {
+          console.error("Error loading template:", error)
+          toast.error("Failed to load template")
         }
-      } catch (error) {
-        console.error('Error loading template:', error)
-        toast.error('Failed to load template')
-      } finally {
-        setIsLoading(false)
       }
+      
+      fetchTemplate()
     }
-
-    loadTemplate()
-  }, [templateId])
+  }, [id, templateType])
 
   // Prevenir navegación si hay cambios sin guardar
   useEffect(() => {
@@ -122,10 +122,10 @@ export default function VisualEditorPage() {
   useEffect(() => {
     // Check if this is the user's first time
     const hasCompletedTutorial = localStorage.getItem('template-tutorial-completed')
-    if (!hasCompletedTutorial && !templateId) {
+    if (!hasCompletedTutorial && !id) {
       setShowTutorial(true)
     }
-  }, [templateId])
+  }, [id])
 
   const handleSave = async () => {
     if (!title.trim()) {
@@ -141,7 +141,7 @@ export default function VisualEditorPage() {
 
     // Validar datos antes de guardar
     const validation = validateTemplateData({
-      id: templateId || '',
+      id: id || '',
       ...templateData,
       type: 'document',
       created_at: '',
@@ -162,12 +162,10 @@ export default function VisualEditorPage() {
 
     try {
       setIsLoading(true)
-      const url = templateId 
-        ? `/api/templates/${templateId}`
-        : '/api/templates'
+      const table = templateType === "project" ? 'project_templates' : 'document_templates'
       
-      const response = await fetch(url, {
-        method: templateId ? 'PUT' : 'POST',
+      const response = await fetch(`/api/${table}`, {
+        method: id ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(templateData)
       })
@@ -175,7 +173,7 @@ export default function VisualEditorPage() {
       if (!response.ok) throw new Error('Failed to save template')
       
       const savedTemplate = await response.json()
-      if (!templateId) {
+      if (!id) {
         window.history.replaceState({}, '', `/templates/visual-editor?id=${savedTemplate.id}`)
       }
       

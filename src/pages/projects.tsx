@@ -10,12 +10,11 @@ import { ProjectEditForm } from "@/components/project-edit-form"
 import { ProjectListContainer } from "@/components/project-list/project-list-container"
 import { Toaster } from "sonner"
 import React from 'react';
-import Card from '../../components/shared/Card';
+import Card from '../components/shared/Card';
 
 export default function ProjectsPage() {
   const { state, updateState, fetchProjects, loadStoredProject } = useProjectState()
 
-  // Initialize auth
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -39,14 +38,11 @@ export default function ProjectsPage() {
     }
   }, [])
 
-
   useEffect(() => {
     if (!state.session) return
 
-    // Initial fetch
     fetchProjects()
 
-    // Subscribe to real-time changes
     const channel = supabase.channel('projects')
     
     channel
@@ -65,7 +61,6 @@ export default function ProjectsPage() {
     }
   }, [state.session, fetchProjects])
 
-  // Load stored project
   useEffect(() => {
     loadStoredProject()
   }, [loadStoredProject])

@@ -1,34 +1,36 @@
-#-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See LICENSE file in the project root for license information.
-#-------------------------------------------------------------------------------------------------------------
-
 # Dockerfile for the backend service
-# This Dockerfile sets up the backend environment, installs necessary dependencies, and ensures the run.sh script has execution permissions.
-# It will be used when building the backend service container.
 
-FROM llamaindex/llama-deploy:v0.3.6
+FROM python:3.11-slim-bullseye
 
-USER root
-
-# Update the OS and install necessary packages
-ENV DEBIAN_FRONTEND=noninteractive
+# Install system dependencies
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get -y install --no-install-recommends build-essential npm && \
-    apt-get autoremove -y && \
-    apt-get clean -y
-ENV DEBIAN_FRONTEND=dialog
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    npm \
+    procps && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Update pip and install Python dependencies
-RUN pip install --upgrade pip && \
-    pip install llama-index-readers-web python-pptx docx2txt llama-agents \
-    llama-index-agent-openai llama-index-embeddings-openai llama-index-program-openai \
-    llama-index-llms-openrouter llama-index-embeddings-azure-openai transformers torch \
-    sentence-transformers openai llama-index-readers-database openai nltk \
-    llama-index-vector-stores-supabase openpyxl ipywidgets IPython \
-    llama-index-readers-google llama-index.experimental aiohttp python-docx \
-    json-repair json5
+# Install Python dependencies
+RUN pip install --no-cache-dir \
+    python-pptx \
+    docx2txt \
+    llama-index \
+    llama-index-core \
+    llama-deploy \
+    transformers \
+    torch \
+    sentence-transformers \
+    openai \
+    openpyxl \
+    ipywidgets \
+    IPython \
+    aiohttp \
+    python-docx \
+    json-repair \
+    json5 \
+    nltk
 
 # Create app directory and copy files
 WORKDIR /app
@@ -41,5 +43,16 @@ COPY *.sh /app/
 # Ensure scripts have execution permissions
 RUN chmod +x /app/*.sh
 
-# Set the default command
+# Install NLTK data
+RUN python -m nltk.downloader punkt
+
+# Create a simple health check endpoint
+COPY health_check.py /app/
+RUN chmod +x /app/health_check.py
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
+
 CMD ["/app/run.sh"]
