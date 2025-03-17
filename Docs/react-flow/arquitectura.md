@@ -36,7 +36,14 @@ Este archivo define los bordes iniciales para el flujo de trabajo general de doc
 
 ### 4. `general-docs/deleterNode.tsx`
 
+
 Este componente define un nodo personalizado que puede ser eliminado del flujo de trabajo.
+
+#### Funcionalidades:
+- Renderiza un nodo con un botón para eliminarlo.
+- Utiliza `ReactFlow` para manejar los nodos.
+- El botón de eliminación solo es visible cuando se pasa el cursor sobre el nodo.
+- Al hacer clic en el botón de eliminación, el nodo se elimina del flujo de trabajo.
 
 #### Funcionalidades:
 - Renderiza un nodo con un botón para eliminarlo.
