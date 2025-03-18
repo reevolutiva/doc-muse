@@ -9,7 +9,19 @@ export function MainNav() {
   
   return (
     <nav className="flex items-center space-x-4 lg:space-x-6">
-      {/* ...existing code... */}
+      <Link
+        href="/dashboard"
+        className="text-sm font-medium transition-colors hover:text-primary"
+      >
+        Dashboard
+      </Link>
+      
+      <Link
+        href="/projects"
+        className="text-sm font-medium transition-colors hover:text-primary"
+      >
+        Projects
+      </Link>
       
       <Link
         href="/templates"
@@ -18,23 +30,7 @@ export function MainNav() {
         Templates
       </Link>
       
-      {/* Eliminar o comentar las entradas individuales:
-      <Link
-        href="/document-templates"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
-        Document Templates
-      </Link>
-      
-      <Link
-        href="/project-templates"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
-        Project Templates
-      </Link>
-      */}
-      
-      {/* ...existing code... */}
+      {/* ...other navigation items... */}
     </nav>
   )
 }
