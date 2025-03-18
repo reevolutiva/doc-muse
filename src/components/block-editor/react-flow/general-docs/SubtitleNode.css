@@ -2,4 +2,22 @@
     font-size: 16px;
     font-weight: bold;
     
+    .delte-button{
+        position: absolute;
+        font-size: 11px;
+        color: red;
+        border: 1px solid red;
+        right: -90px;
+        top: 0;
+        bottom: 0;
+        padding: 3px;
+        height: max-content;
+        opacity: 0;
+    }
+
+}
+
+.subtitle-node:hover .delte-button{
+    opacity: 1;
+
 }
