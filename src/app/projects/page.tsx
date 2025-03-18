@@ -11,7 +11,7 @@ import ProjectsClient from './ProjectsClient';
 export default function ProjectsPage() {  
 
    return (
-      <div className="container mx-auto py-8 max-w-7xl mt-[100px]">
+      <div className="container mx-auto py-8 max-w-7xl mt-[80px]">
         <ProjectsClient />
       </div>
     )
