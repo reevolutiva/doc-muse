@@ -193,10 +193,21 @@ if [ -f "supabase/config.toml" ] && [ -d "supabase/migrations" ]; then
                 fi
                 
                 echo -e "Iniciando Supabase local..."
-                supabase start
+                # Capturar la salida del comando en una variable
+                MIGRATION_LOG=$(supabase start 2>&1)
                 echo -e "Aplicando migraciones a Supabase local..."
-                supabase db reset
-                echo -e "✅ Migraciones aplicadas correctamente a Supabase local"
+                # Capturar la salida del comando db reset
+                MIGRATION_LOG+=$(supabase db reset 2>&1)
+                
+                # Verificar si las migraciones fueron exitosas
+                if [[ $MIGRATION_LOG == *"reset schema"* ]] || [[ $MIGRATION_LOG == *"migrations applied"* ]]; then
+                    echo -e "✅ Migraciones aplicadas correctamente a Supabase local"
+                    # Marcamos las migraciones como ejecutadas
+                    migrations_completed="y"
+                else
+                    echo -e "${YELLOW}Es posible que las migraciones no se hayan aplicado correctamente. Por favor verifique.${NC}"
+                    migrations_completed="n"
+                fi
             else
                 # Para Supabase remoto, usamos el SQL Editor
                 echo -e "${YELLOW}Para aplicar migraciones en un proyecto Supabase remoto:${NC}"
@@ -233,26 +244,38 @@ if [ -f "supabase/config.toml" ] && [ -d "supabase/migrations" ]; then
                 read migrations_done
                 if [ "$migrations_done" = "y" ]; then
                     echo -e "✅ Migraciones aplicadas manualmente"
+                    # Marcamos las migraciones como ejecutadas
+                    migrations_completed="y"
                 else
                     echo -e "${YELLOW}Por favor, complete las migraciones antes de continuar con la configuración.${NC}"
+                    migrations_completed="n"
                 fi
             fi
+        else
+            # No se desea aplicar migraciones automáticamente
+            migrations_completed="n"
         fi
     else
         echo -e "${YELLOW}No se encontraron archivos de migración${NC}"
+        # No hay migraciones que aplicar
+        migrations_completed="y" 
     fi
 else
     echo -e "${RED}Error: Estructura de Supabase incompleta${NC}"
     echo -e "Por favor, asegúrese de que existen los siguientes archivos:"
     echo -e "- supabase/config.toml"
     echo -e "- supabase/migrations/*.sql"
+    migrations_completed="n"
 fi
 
-read -p "Have you run the database migrations? (y/n): " run_migrations
-if [ "$run_migrations" != "y" ]; then
-  echo -e "${YELLOW}Please run the migrations before continuing.${NC}"
-  echo -e "Press any key when you're ready to continue..."
-  read -n 1
+# Solo preguntamos si aún no se han confirmado las migraciones
+if [ "$migrations_completed" != "y" ]; then
+    read -p "Have you run the database migrations? (y/n): " run_migrations
+    if [ "$run_migrations" != "y" ]; then
+      echo -e "${YELLOW}Please run the migrations before continuing.${NC}"
+      echo -e "Press any key when you're ready to continue..."
+      read -n 1
+    fi
 fi
 
 # Step 4: Install dependencies
