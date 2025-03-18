@@ -17,6 +17,8 @@ import { intialedges_general_docs } from './general-docs/edges'
 import DeleterNode from './general-docs/deleterNode';
 import HeadingNode from './general-docs/HeadingNode';
 import ParagraphNode from './general-docs/ParagraphNode';
+import ImageNode from './general-docs/ImageNode.tsx';
+import SubtitleNode from './general-docs/SubtitleNode';
 
 import { supabase } from '@/lib/supabase';
 import { AddNodeForm } from './forms/AddNodeForm';
@@ -109,7 +111,13 @@ export default function TemplatesReactFlow() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(intialnodes_general_docs);
   const [edges, setEdges, onEdgesChange] = useEdgesState(intialedges_general_docs);
-  const nodeTypes = useMemo(() => ({ deleterNode: DeleterNode, headingNode: HeadingNode, paragraphNode: ParagraphNode }), []);
+  const nodeTypes = useMemo(() => ({
+    deleterNode: DeleterNode,
+    headingNode: HeadingNode,
+    paragraphNode: ParagraphNode,
+    imageNode: ImageNode,
+    subtitleNode: SubtitleNode,
+  }), []);
   const [ templates, setTemplates ] = useState([]);
  
   const onConnect = useCallback(
@@ -133,9 +141,17 @@ export default function TemplatesReactFlow() {
   }, []);
 
   const addNode = (type, content) => {
+
+    let data = { label: content };
+    if (type === 'imageNode') {
+      data = { url: content, alt: 'Image' };
+    } else if (type === 'subtitleNode') {
+      data = { text: content };
+    }
+
     const newNode = {
       id: (nodes.length + 1).toString(),
-      data: { label: content },
+      data: data,
       type: type,
       position: { x: Math.random() * 250, y: Math.random() * 250 },
     };

@@ -28,6 +28,8 @@ const AddNodeForm = ( { nodes, setNodes, addNode } ) => {
           <option value="paragraph">Paragraph</option>
           <option value="heading">Heading</option>
           <option value="deleterNode">Deleter Node</option>
+          <option value="imageNode">Image</option>
+          <option value="subtitleNode">Subtitle</option>
         </select>
         {
             edit && <input type="text" className="shadow-inner bg-gray-100 rounded" onChange={ e => onChangeInputHandler(e) }/>

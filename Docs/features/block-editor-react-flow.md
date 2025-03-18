@@ -15,10 +15,6 @@ Se creará una caja de controles que permita escoger un tipo de nodo personaliza
 
 ### 1. Crear el Componente de la Caja de Controles
 
-```tsx
-// ...existing code...
-```
-
 **Descripción:**
 
 El componente `ControlBox` permite a los usuarios seleccionar un tipo de nodo (Paragraph, Heading, Deleter Node) desde un menú desplegable, configurar el contenido del nodo a través de un campo de texto y añadir el nodo al canvas de React Flow mediante un botón. También incluye un botón para actualizar la lista de nodos, aunque la lógica para esta funcionalidad aún necesita ser implementada.
@@ -62,19 +58,27 @@ Con esta implementación, se ha creado la lógica para capturar la información 
    - [x] Integrar la función de creación de nodos con el canvas de React Flow para insertar el nuevo nodo.
    - [x] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
 
-4. **Optimizar el Código**
-   - Revisar y optimizar el código para mejorar el rendimiento y la legibilidad.
-   - Asegurarse de que el código sigue las mejores prácticas y estándares de codificación.
-   - **Actualizar**: Documentar cualquier cambio en el código en `block-editor-react-flow.md`.
+  ## Tareas Adicionales: Nodos Personalizados de Imagen y Subtítulo
 
-5. **Actualizar la Documentación**
-   - Asegurarse de que toda la documentación relacionada con la implementación de la caja de controles esté actualizada en `block-editor-react-flow.md`.
-   - Incluir ejemplos de uso, descripciones de las funcionalidades y cualquier otra información relevante.
+  1. **Crear Nodos Personalizados de Imagen y Subtítulo**
+    - [ ] Crear un nuevo tipo de nodo personalizado llamado `ImageNode` que permita insertar una imagen en el canvas de React Flow.
+      - [ ] El `ImageNode` debe tener un campo para la URL de la imagen.
+      - [ ] El `ImageNode` debe mostrar la imagen en el canvas.
+    - [ ] Crear un nuevo tipo de nodo personalizado llamado `SubtitleNode` que permita insertar un subtítulo en el canvas de React Flow.
+      - [ ] El `SubtitleNode` debe tener un campo para el texto del subtítulo.
+      - [ ] El `SubtitleNode` debe mostrar el subtítulo en el canvas.
+    - [ ] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
 
-6. **Revisar y Validar**
-   - Revisar todo el trabajo realizado para asegurarse de que cumple con los requisitos y especificaciones.
-   - Validar que la implementación funciona correctamente en diferentes escenarios y casos de uso.
-   - **Actualizar**: Documentar la revisión y validación en `block-editor-react-flow.md`.
+  2. **Integrar los Nuevos Nodos en la Caja de Controles**
+    - [ ] Añadir los nuevos tipos de nodos (`ImageNode` y `SubtitleNode`) al dropdown de selección de tipo de nodo en el componente `ControlBox`.
+    - [ ] Asegurarse de que la selección de `ImageNode` y `SubtitleNode` funcione correctamente y que los nodos se inserten en el canvas de React Flow.
+    - [ ] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
+
+  3. **Implementar la Lógica de Inserción de Nodos de Imagen y Subtítulo**
+    - [ ] Implementar los handlers de los inputs del formulario para capturar la información de la URL de la imagen y el texto del subtítulo.
+    - [ ] Crear una función que tome la información capturada y cree un nuevo nodo de imagen o subtítulo con esa información.
+    - [ ] Integrar la función de creación de nodos con el canvas de React Flow para insertar el nuevo nodo.
+    - [ ] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
 
 ## Pruebas
 
