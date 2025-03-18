@@ -1,19 +1,9 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
-import { useAuth } from '@/hooks/useAuth';
+import { renderHook, act } from '@testing-library/react-hooks';
+import useAuth from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
 
 // Mock de supabase
-jest.mock('@/lib/supabase', () => ({
-  supabase: {
-    auth: {
-      getUser: jest.fn(),
-      getSession: jest.fn(),
-      onAuthStateChange: jest.fn(),
-      signInWithPassword: jest.fn(),
-      signOut: jest.fn(),
-    }
-  }
-}));
+jest.mock('@/lib/supabase');
 
 describe('useAuth Hook', () => {
   beforeEach(() => {
