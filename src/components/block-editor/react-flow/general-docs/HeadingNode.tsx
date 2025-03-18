@@ -4,9 +4,9 @@ import './headingNode.css';
 
 const HeadingNode = ({ data }) => {
     return (
-        <div className="heading-node">
+        <div className="heading-node react-flow__node-default">
             <Handle type="target" position={Position.Top} />
-            <div className="react-flow__node-default">
+            <div>
                 <h2 className="text-2xl font-bold">
                     {data.label || 'Encabezado'}
                 </h2>

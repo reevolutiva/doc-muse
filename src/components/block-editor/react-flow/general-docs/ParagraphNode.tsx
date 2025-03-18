@@ -4,9 +4,9 @@ import './paragraphNode.css';
 
 const ParagraphNode = ({ data }) => {
     return (
-        <div className="paragraph-node">
+        <div className="paragraph-node react-flow__node-default">
             <Handle type="target" position={Position.Top} />
-            <div className="react-flow__node-default">
+            <div>
                 <p className="text-base">
                     {data.label || 'Escribe tu párrafo aquí'}
                 </p>

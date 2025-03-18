@@ -33,7 +33,14 @@ const TemplateSelector = ({templates, nodes, setNodes }) => {
 
     const newNodes = blocks.map( (block, index) => {
 
-      const newY = corsd.y + (index * 100);
+
+      let cords_scale = 100;
+
+      if( block.type == 'paragraph' && index > 1 ){
+        cords_scale = 180;
+      }
+
+      const newY = corsd.y + (index * cords_scale );
 
       let label = {};
 
