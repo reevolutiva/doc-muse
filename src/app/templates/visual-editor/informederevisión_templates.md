@@ -151,8 +151,46 @@ docker compose up
 
 4. **Cerrar tarea de migración y eliminación**
 
-## Recomendaciones 
+## Estado de Avance
 
-- Ejecutar la eliminación de componentes en un entorno de desarrollo aislado antes de aplicar a la rama principal
-- Realizar commits frecuentes durante el proceso
-- Mantener el directorio `.backup` durante al menos una semana después de la migración
+- **Fase 1: Inventario y Respaldo (Completada)**
+  - Inventario realizado y verificado en [scripts/migration/template-components-inventory.md](scripts/migration/template-components-inventory.md).
+  - Respaldos generados en `.backup/templates` y `.backup/project-templates`.
+
+- **Fase 2: Identificación y Verificación de Componentes React Flow (Completada)**
+  - Componentes identificados y listados en [scripts/migration/react-flow-components.md](scripts/migration/react-flow-components.md).
+
+- **Fase 3: Verificación de Redirecciones (Completada)**
+  - Se han comprobado las redirecciones esperadas: 
+      - `/document-templates/` redirige a `/templates`.
+      - `/project-templates/` redirige a `/templates?tab=projects`.
+
+- **Fase 4: Respaldo y Eliminación Gradual (Completada)**
+  - Primer bloque de eliminaciones ejecutado y validado.
+  - Eliminación completa de los directorios `/project-templates` y `/templates` confirmada.
+
+- **Fase 5: Pruebas de Regresión (Completada)**
+  - Pruebas automatizadas ejecutadas con `pnpm test`.
+  - Funcionalidad verificada en desarrollo con `pnpm dev`.
+  - Verificación de rutas y funcionamiento de la interfaz React Flow confirmada.
+
+- **Fase 6: Consolidación de Documentación (En Curso)**
+  - Documento unificado `Docs/unified_templates.md` creado.
+  - Información consolidada desde `Docs/rfp_templates.md` y `Docs/roadmap_templates.md`.
+  - Actualización pendiente en `Docs/arquitectura.md` (eliminación de referencias a directorios legacy).
+
+- **Fase 7: Verificación Final y Cierre (En Curso)**
+  - Build de producción ejecutado con éxito (`pnpm build`).
+  - Verificación con Docker pendiente (`docker compose up`).
+  - Actualización final en el archivo y cierre de la tarea pendiente.
+
+## Próximos Pasos
+
+1. Completar la consolidación de documentación en `Docs/unified_templates.md`.
+2. Actualizar `Docs/arquitectura.md` eliminando referencias a directorios legacy.
+3. Ejecutar `docker compose up` para verificar la funcionalidad en entorno Docker.
+4. Confirmar que las rutas principales funcionan correctamente:
+   - `/templates`
+   - `/templates/visual-editor`
+   - Rutas antiguas redirigidas correctamente.
+5. Actualizar la sección "Migración Completada" con fecha y resumen final.
