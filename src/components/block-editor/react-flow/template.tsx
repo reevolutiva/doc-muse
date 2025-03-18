@@ -69,7 +69,7 @@ const CreateTemplateModal = ({ isOpen, onClose, onCreate }) => {
 };
 
 
-const TemplateSelector = ({templates, nodes, setNodes, setCurrentTemplate  }) => {
+const TemplateSelector = ({templates, nodes, setNodes, setCurrentTemplate, setEdges, edges  }) => {
 
   function buildNode( blocks ) {
 
@@ -124,7 +124,16 @@ const TemplateSelector = ({templates, nodes, setNodes, setCurrentTemplate  }) =>
     console.log('blocks', blocks);
     const newNodes = buildNode(blocks);
     setNodes(newNodes);
+    setEdges(getEdge(template));
+    
   
+  }
+
+  function getEdge( template ){
+    
+    const edges = template.content.edges;
+    console.log('edges', edges);
+    return edges;
   }
 
   return ( 
@@ -175,7 +184,6 @@ export default function TemplatesReactFlow() {
     }
 
     getDocsTemplate();
-
     
   }, []);
 
@@ -277,7 +285,7 @@ export default function TemplatesReactFlow() {
 
         <AddNodeForm nodes={nodes} setNodes={setNodes} addNode={addNode} />
 
-        <TemplateSelector templates={templates} nodes={nodes} setNodes={setNodes} setCurrentTemplate={setCurrentTemplate} />
+        <TemplateSelector templates={templates} nodes={nodes} setNodes={setNodes} setEdges={setEdges} edges={edges} setCurrentTemplate={setCurrentTemplate} />
         
         {/* Button to open the create template modal */}
         <button

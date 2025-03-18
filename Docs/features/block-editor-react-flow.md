@@ -59,11 +59,31 @@ Con esta implementación, se ha creado la lógica para capturar la información 
    - [x] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
 
 4. **Crear un Template desde 0**
-  - [ ] Permitir a los usuarios crear un template desde cero, comenzando con un lienzo en blanco para añadir nodos personalizados.
-  - [ ] Implementar la funcionalidad para guardar el template en la base de datos, asignándole un nombre.
-  - [ ] Asegurarse de que el template sea fácil de usar y personalizable.
-  - [ ] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
+   - [x] Permitir a los usuarios crear un template desde cero, comenzando con un lienzo en blanco para añadir nodos personalizados.
+   - [x] Implementar la funcionalidad para guardar el template en la base de datos, asignándole un nombre.
+   - [x] Asegurarse de que el template sea fácil de usar y personalizable.
+   - [x] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
 
+   #### Componentes y Funcionalidades
+
+   1. **Template.tsx**
+      - Se añadió un botón "Crear Nuevo Template" que abre un modal.
+      - El modal permite ingresar el nombre del nuevo template y crear una entrada en la base de datos.
+      - Se implementó la función `handleCreateTemplate` para crear un nuevo template en la base de datos.
+      - Después de crear el template, se refresca la lista de templates.
+      - Se actualizó la función `onChangeHandler` para que cuando se seleccione un template, se limpien los nodos y edges existentes.
+
+   2. **CreateTemplateModal.tsx**
+      - Nuevo componente modal para crear un nuevo template.
+      - Permite ingresar el nombre del template.
+      - Llama a la función `onCreate` para crear el template.
+
+   ### Pasos para Crear un Nuevo Template
+
+   1. Hacer clic en "Crear Nuevo Template".
+   2. Ingresar el nombre del template en el modal.
+   3. Confirmar la creación para guardar el template en la base de datos.
+   4. El lienzo se inicializa en blanco para empezar a personalizar el template.
 
   ## Tareas Adicionales: Nodos Personalizados de Imagen y Subtítulo
 
