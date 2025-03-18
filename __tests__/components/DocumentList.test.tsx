@@ -18,7 +18,7 @@ describe('DocumentList Component', () => {
 
   test('sorts documents', () => {
     render(<DocumentList documents={[{ id: 2, name: 'Doc 2' }, { id: 1, name: 'Doc 1' }]} />);
-    fireEvent.click(screen.getByText('Sort'));
+    fireEvent.click(screen.getByRole('button', { name: /Sort/i })); // Usar getByRole
     const sortedDocs = screen.getAllByTestId('document-item');
     expect(sortedDocs[0]).toHaveTextContent('Doc 1');
     expect(sortedDocs[1]).toHaveTextContent('Doc 2');

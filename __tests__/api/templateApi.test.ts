@@ -1,7 +1,23 @@
-import { saveTemplate, getTemplate, deleteTemplate } from '@/api/templateApi';
+import { saveTemplate, getTemplate } from '@/api/templateApi'; // Importación nombrada
 import { supabase } from '@/lib/supabase';
 
-jest.mock('@/lib/supabase');
+jest.mock('@/lib/supabase', () => ({
+  supabase: {
+    from: jest.fn().mockReturnValue({
+      insert: jest.fn().mockReturnValue({
+        select: jest.fn().mockResolvedValue(mockResponse)
+      }),
+      select: jest.fn().mockReturnValue({
+        eq: jest.fn().mockReturnValue({
+          single: jest.fn().mockResolvedValue({
+            data: mockTemplate,
+            error: null,
+          })
+        })
+      })
+    })
+  }
+}));
 
 describe('templateApi', () => {
   beforeEach(() => {

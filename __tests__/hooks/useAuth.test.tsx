@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth'; // Importación nombrada
 import { supabase } from '@/lib/supabase';
 
 // Mock del cliente Supabase
@@ -9,6 +9,7 @@ jest.mock('@/lib/supabase', () => ({
       getUser: jest.fn(),
       signInWithOAuth: jest.fn(),
       signOut: jest.fn(),
+      getSession: jest.fn().mockResolvedValue({ data: { session: null }, error: null }), // Mock de getSession
     },
   },
 }));

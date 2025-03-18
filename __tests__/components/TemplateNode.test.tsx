@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { TemplateNode } from '@/components/TemplateNode';
+import { TemplateNode } from '@/components/TemplateNode'; // Importación nombrada
 
 // Mock necesario para ReactFlow
 jest.mock('reactflow', () => ({
