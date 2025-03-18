@@ -48,3 +48,17 @@ yarn-error.log*
 
 #api keys
 .env.local
+
+# Cache directories
+.cache
+.supabase
+
+# Distribution directories
+dist
+
+# Temporary files and directories
+tmp
+.temp
+
+# Supabase specific files
+.branches

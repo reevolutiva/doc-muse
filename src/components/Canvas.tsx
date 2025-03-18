@@ -10,7 +10,7 @@ import {
   SelectContent,
   SelectItem 
 } from '@/components/ui/select';
-import TemplateNode, { TemplateNodeData } from './TemplateNode';
+import { TemplateNode } from './TemplateNode';
 import { TemplateEdge } from './template-manager/template-edge';
 
 // Helper function to generate unique edge IDs
