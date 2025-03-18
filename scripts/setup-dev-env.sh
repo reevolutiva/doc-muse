@@ -12,6 +12,15 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Helper function for Git checks
+check_git_repo() {
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 echo -e "${BLUE}===========================================================${NC}"
 echo -e "${GREEN}Doc-Muse Development Environment Setup${NC}"
 echo -e "${BLUE}===========================================================${NC}"
@@ -40,27 +49,49 @@ if command -v docker >/dev/null 2>&1; then
   echo -e "✓ Docker is installed"
 fi
 
-# Step 1: Clone repository if needed
+# Step 1: Repository Setup
 echo -e "\n${YELLOW}Step 1: Repository Setup${NC}"
 
-REPO_DIR="doc-muse"
-if [ -d "$REPO_DIR" ]; then
-  echo -e "Repository directory already exists. Skipping clone."
-  cd "$REPO_DIR"
-  echo -e "Updating repository..."
-  git pull
+# Check if we're already in a git repository
+if check_git_repo; then
+    REPO_DIR=$(basename $(git rev-parse --show-toplevel))
+    echo -e "✓ Already in git repository: ${REPO_DIR}"
 else
-  echo -e "Cloning Doc-Muse repository..."
-  git clone https://github.com/kimfe/doc-muse.git
-  cd "$REPO_DIR"
+    # Ask for repository URL
+    read -p "Enter the repository URL (e.g., https://github.com/user/repo.git): " REPO_URL
+    REPO_DIR=$(basename "${REPO_URL}" .git)
+    
+    if [ -d "$REPO_DIR" ]; then
+        echo -e "Directory ${REPO_DIR} already exists"
+        read -p "Do you want to use the existing directory? (y/n): " use_existing
+        
+        if [ "$use_existing" = "y" ]; then
+            cd "$REPO_DIR"
+            if ! check_git_repo; then
+                echo -e "Initializing git repository..."
+                git init
+                git remote add origin "$REPO_URL"
+            fi
+        else
+            echo -e "Backing up existing directory..."
+            mv "$REPO_DIR" "${REPO_DIR}_backup_$(date +%Y%m%d_%H%M%S)"
+            echo -e "Cloning repository..."
+            git clone "$REPO_URL"
+            cd "$REPO_DIR"
+        fi
+    else
+        echo -e "Cloning repository..."
+        git clone "$REPO_URL"
+        cd "$REPO_DIR"
+    fi
 fi
 
-# Step 2: Supabase Configuration
-echo -e "\n${YELLOW}Step 2: Supabase Configuration${NC}"
-echo -e "You need to have a Supabase project set up at https://supabase.com/dashboard"
-echo -e "Please have your Supabase URL and anon key ready."
+# Step 2: Supabase Project Credentials
+echo -e "\n${YELLOW}Step 2: Supabase Project Credentials${NC}"
+echo -e "You need to have your own Supabase project set up at https://supabase.com/dashboard"
+echo -e "Please have your personal Supabase URL and anon key ready."
 
-read -p "Do you have a Supabase project already? (y/n): " has_supabase
+read -p "Do you already have your own Supabase project credentials? (y/n): " has_supabase
 
 if [ "$has_supabase" != "y" ]; then
   echo -e "${BLUE}Please follow these steps to create a Supabase project:${NC}"
@@ -74,33 +105,147 @@ fi
 
 # Set up environment variables
 echo -e "\nSetting up environment variables..."
-if [ ! -f .env.local ]; then
+if [ -f .env.local ]; then
+  echo -e "✓ .env.local file detected"
+  
+  # Obtener los valores actuales de las variables
+  supabase_url=$(grep NEXT_PUBLIC_SUPABASE_URL .env.local | cut -d '=' -f2)
+  supabase_anon_key=$(grep NEXT_PUBLIC_SUPABASE_ANON_KEY .env.local | cut -d '=' -f2)
+  
+  # Verificar si las variables tienen valores válidos
+  if [ -z "$supabase_url" ] || [ "$supabase_url" = "your-supabase-url" ]; then
+    read -p "Enter your Supabase URL: " supabase_url
+    sed -i.bak "s|NEXT_PUBLIC_SUPABASE_URL=.*|NEXT_PUBLIC_SUPABASE_URL=${supabase_url}|g" .env.local
+  else
+    echo -e "✓ Supabase URL already configured: $supabase_url"
+  fi
+  
+  if [ -z "$supabase_anon_key" ] || [ "$supabase_anon_key" = "your-supabase-anon-key" ]; then
+    read -p "Enter your Supabase anon key: " supabase_anon_key
+    sed -i.bak "s|NEXT_PUBLIC_SUPABASE_ANON_KEY=.*|NEXT_PUBLIC_SUPABASE_ANON_KEY=${supabase_anon_key}|g" .env.local
+  else
+    echo -e "✓ Supabase anon key already configured"
+  fi
+  
+  # Limpiar archivos de respaldo si existen
+  rm -f .env.local.bak
+else
   cp .env.example .env.local 2>/dev/null || echo -e "NEXT_PUBLIC_SUPABASE_URL=your-supabase-url\nNEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key" > .env.local
   echo -e "Created .env.local file"
+
+  read -p "Enter your Supabase URL: " supabase_url
+  read -p "Enter your Supabase anon key: " supabase_anon_key
+
+  # Update the .env.local file
+  sed -i.bak "s|NEXT_PUBLIC_SUPABASE_URL=.*|NEXT_PUBLIC_SUPABASE_URL=${supabase_url}|g" .env.local
+  sed -i.bak "s|NEXT_PUBLIC_SUPABASE_ANON_KEY=.*|NEXT_PUBLIC_SUPABASE_ANON_KEY=${supabase_anon_key}|g" .env.local
+  rm -f .env.local.bak
 fi
-
-read -p "Enter your Supabase URL: " supabase_url
-read -p "Enter your Supabase anon key: " supabase_anon_key
-
-# Update the .env.local file
-sed -i.bak "s|NEXT_PUBLIC_SUPABASE_URL=.*|NEXT_PUBLIC_SUPABASE_URL=${supabase_url}|g" .env.local
-sed -i.bak "s|NEXT_PUBLIC_SUPABASE_ANON_KEY=.*|NEXT_PUBLIC_SUPABASE_ANON_KEY=${supabase_anon_key}|g" .env.local
-rm .env.local.bak
 
 echo -e "✓ Environment variables configured"
 
 # Step 3: Initialize Supabase Database
 echo -e "\n${YELLOW}Step 3: Initialize Supabase Database${NC}"
-echo -e "${BLUE}To initialize your Supabase database:${NC}"
-echo -e "1. Go to the SQL Editor in your Supabase dashboard"
-echo -e "2. Look for SQL migration files in the supabase/migrations/ directory"
-echo -e "3. Run these SQL scripts in the Supabase SQL Editor to set up your database schema"
 
-if [ -d "supabase/migrations" ]; then
-  echo -e "\nMigration files found. You should run these SQL scripts in your Supabase project."
-  ls -la supabase/migrations
+# Verificar la estructura de Supabase y configuración
+echo -e "\n${YELLOW}Verificando configuración de Supabase...${NC}"
+
+# Verificar existencia de archivos clave
+if [ -f "supabase/config.toml" ] && [ -d "supabase/migrations" ]; then
+    echo -e "✓ Estructura de Supabase encontrada"
+    
+    # Verificar si existe supabase CLI
+    if ! command -v supabase &> /dev/null; then
+        echo -e "${YELLOW}Instalando Supabase CLI...${NC}"
+        pnpm add -g supabase
+    fi
+    
+    # Verificar migrations
+    MIGRATION_COUNT=$(ls -1 supabase/migrations/*.sql 2>/dev/null | wc -l)
+    if [ $MIGRATION_COUNT -gt 0 ]; then
+        echo -e "✓ Encontradas $MIGRATION_COUNT migraciones"
+        echo -e "${BLUE}¿Desea aplicar las migraciones automáticamente? (y/n):${NC}"
+        read auto_migrate
+        
+        if [ "$auto_migrate" = "y" ]; then
+            echo -e "Aplicando migraciones..."
+            
+            echo -e "${BLUE}===========================================================${NC}"
+            echo -e "${YELLOW}Configuración de las migraciones de base de datos${NC}"
+            echo -e "${BLUE}===========================================================${NC}"
+            echo -e "Esta pregunta determina cómo se aplicarán las migraciones de la base de datos:"
+            echo -e ""
+            echo -e "  ${GREEN}local${NC}: Si estás ejecutando Supabase en Docker localmente."
+            echo -e "         • Se iniciará automáticamente una instancia local de Supabase"
+            echo -e "         • Las migraciones se aplicarán automáticamente con 'supabase db reset'"
+            echo -e ""
+            echo -e "  ${GREEN}remoto${NC}: Si estás utilizando un proyecto hospedado en Supabase Cloud."
+            echo -e "         • Recibirás instrucciones para aplicar migraciones manualmente"
+            echo -e "         • Necesitarás acceder al dashboard de Supabase y usar el SQL Editor"
+            echo -e ""
+            read -p "¿Estás utilizando Supabase local o remoto? (local/remoto): " supabase_env
+            
+            if [ "$supabase_env" = "local" ]; then
+                # Para Supabase local
+                if ! command -v supabase &> /dev/null; then
+                    echo -e "${YELLOW}Supabase CLI no encontrado. Instalando...${NC}"
+                    pnpm add -g supabase
+                fi
+                
+                echo -e "Iniciando Supabase local..."
+                supabase start
+                echo -e "Aplicando migraciones a Supabase local..."
+                supabase db reset
+                echo -e "✅ Migraciones aplicadas correctamente a Supabase local"
+            else
+                # Para Supabase remoto, usamos el SQL Editor
+                echo -e "${YELLOW}Para aplicar migraciones en un proyecto Supabase remoto:${NC}"
+                echo -e "1. Vaya a https://supabase.com/dashboard y seleccione su proyecto"
+                echo -e "2. Navegue a SQL Editor"
+                echo -e "3. Cargue y ejecute cada archivo de migración en el directorio supabase/migrations/"
+                echo -e "4. Confirme que cada migración se ha ejecutado correctamente"
+                
+                echo -e "\n${YELLOW}¿Desea abrir la documentación de migraciones de Supabase en su navegador? (y/n):${NC}"
+                read open_docs
+                if [ "$open_docs" = "y" ]; then
+                    # Abrir la documentación en el navegador predeterminado según el sistema operativo
+                    case "$(uname -s)" in
+                        Darwin)
+                            # macOS
+                            open "https://supabase.com/docs/guides/cli/local-development#database-migrations"
+                            ;;
+                        Linux)
+                            # Linux
+                            xdg-open "https://supabase.com/docs/guides/cli/local-development#database-migrations" &> /dev/null
+                            ;;
+                        CYGWIN*|MINGW*|MSYS*)
+                            # Windows
+                            start "https://supabase.com/docs/guides/cli/local-development#database-migrations"
+                            ;;
+                        *)
+                            echo -e "${YELLOW}No se pudo abrir automáticamente. Por favor visite:${NC}"
+                            echo -e "https://supabase.com/docs/guides/cli/local-development#database-migrations"
+                            ;;
+                    esac
+                fi
+                
+                echo -e "\n${YELLOW}¿Ha completado la aplicación manual de migraciones? (y/n):${NC}"
+                read migrations_done
+                if [ "$migrations_done" = "y" ]; then
+                    echo -e "✅ Migraciones aplicadas manualmente"
+                else
+                    echo -e "${YELLOW}Por favor, complete las migraciones antes de continuar con la configuración.${NC}"
+                fi
+            fi
+        fi
+    else
+        echo -e "${YELLOW}No se encontraron archivos de migración${NC}"
+    fi
 else
-  echo -e "\nNo migration files found. Please check the repository structure or documentation."
+    echo -e "${RED}Error: Estructura de Supabase incompleta${NC}"
+    echo -e "Por favor, asegúrese de que existen los siguientes archivos:"
+    echo -e "- supabase/config.toml"
+    echo -e "- supabase/migrations/*.sql"
 fi
 
 read -p "Have you run the database migrations? (y/n): " run_migrations
