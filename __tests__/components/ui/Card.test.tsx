@@ -110,4 +110,31 @@ describe('Card Component', () => {
     expect(screen.getByText('Card Content')).toBeInTheDocument();
     expect(screen.getByText('Card Footer')).toBeInTheDocument();
   });
+
+  test('renderiza Card básico correctamente', () => {
+    render(<Card>Card content</Card>);
+    expect(screen.getByText('Card content')).toBeInTheDocument();
+  });
+  
+  test('renderiza Card con subcomponentes', () => {
+    render(
+      <Card>
+        <CardHeader>Header</CardHeader>
+        <CardContent>Content</CardContent>
+        <CardFooter>Footer</CardFooter>
+      </Card>
+    );
+    
+    expect(screen.getByText('Header')).toBeInTheDocument();
+    expect(screen.getByText('Content')).toBeInTheDocument();
+    expect(screen.getByText('Footer')).toBeInTheDocument();
+  });
+  
+  test('aplica clases personalizadas', () => {
+    render(
+      <Card className="test-class" data-testid="test-card">Card content</Card>
+    );
+    const card = screen.getByTestId('test-card');
+    expect(card).toHaveClass('test-class');
+  });
 });

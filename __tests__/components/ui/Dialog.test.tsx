@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import {
   Dialog,
   DialogTrigger,
@@ -11,6 +11,7 @@ import {
   DialogClose
 } from '@/components/ui/dialog';
 import userEvent from '@testing-library/user-event';
+import { Button } from '@/components/ui/button';
 
 // Debido a la complejidad de testear componentes de Radix UI, creamos un wrapper para
 // verificar la funcionalidad básica del Dialog
@@ -174,5 +175,35 @@ describe('Dialog Component', () => {
     // Ahora el contenido debería ser visible
     // Nota: En un entorno real, este test podría fallar ya que Radix UI usa el DOM real
     // y necesitaríamos una configuración más avanzada para estos tests
+  });
+
+  test('abre el diálogo al hacer click en el trigger', async () => {
+    render(
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>Open Dialog</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Dialog Title</DialogTitle>
+            <DialogDescription>Dialog Description</DialogDescription>
+          </DialogHeader>
+          <div>Dialog Content</div>
+        </DialogContent>
+      </Dialog>
+    );
+    
+    // El diálogo no debería estar visible inicialmente
+    expect(screen.queryByText('Dialog Title')).not.toBeInTheDocument();
+    
+    // Abrir el diálogo
+    fireEvent.click(screen.getByRole('button', { name: /open dialog/i }));
+    
+    // El diálogo debería ser visible
+    await waitFor(() => {
+      expect(screen.getByText('Dialog Title')).toBeVisible();
+      expect(screen.getByText('Dialog Description')).toBeVisible();
+      expect(screen.getByText('Dialog Content')).toBeVisible();
+    });
   });
 });

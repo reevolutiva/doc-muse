@@ -25,54 +25,24 @@ jest.mock('next/router', () => ({
   },
 }));
 
-// Mock completo para Supabase
-jest.mock('./src/lib/supabase', () => {
-  const mockSupabase = {
+// Mock actualizado para supabase con los métodos correctos
+jest.mock('@/lib/supabase', () => ({
+  supabase: {
     auth: {
-      getSession: jest.fn().mockResolvedValue({
-        data: { session: { user: { id: 'test-user-id', email: 'test@example.com' } } },
-        error: null,
-      }),
-      getUser: jest.fn().mockResolvedValue({ 
-        data: { user: { id: 'test-user-id', email: 'test@example.com' } },
-        error: null 
-      }),
-      onAuthStateChange: jest.fn(() => ({
-        data: { subscription: { unsubscribe: jest.fn() } }
-      })),
-      signOut: jest.fn().mockResolvedValue({ error: null }),
-      signInWithPassword: jest.fn().mockResolvedValue({ 
-        data: { user: { id: 'test-user-id' } }, 
-        error: null 
-      }),
+      getUser: jest.fn().mockResolvedValue({ data: { user: { id: 'test-user-id' } } }),
+      getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'test-user-id' } } } }),
+      signIn: jest.fn(),
+      signOut: jest.fn(),
     },
     from: jest.fn().mockReturnThis(),
     select: jest.fn().mockReturnThis(),
-    insert: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    delete: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
-    neq: jest.fn().mockReturnThis(),
-    gt: jest.fn().mockReturnThis(),
-    lt: jest.fn().mockReturnThis(),
-    gte: jest.fn().mockReturnThis(),
-    lte: jest.fn().mockReturnThis(),
     order: jest.fn().mockReturnThis(),
-    limit: jest.fn().mockReturnThis(),
-    single: jest.fn().mockResolvedValue({
-      data: { id: '123', name: 'Test Document' },
-      error: null
-    }),
-    then: jest.fn().mockImplementation(callback => Promise.resolve(callback({
-      data: [{ id: '123', name: 'Test Document' }],
-      error: null
-    }))),
-  };
-
-  return {
-    supabase: mockSupabase
-  };
-});
+    insert: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({ data: {}, error: null }),
+  },
+}));
 
 // Mock para next/navigation
 jest.mock('next/navigation', () => ({

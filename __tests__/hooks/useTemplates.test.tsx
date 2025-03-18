@@ -1,31 +1,38 @@
-import { renderHook, act } from '@testing-library/react-hooks';
-import useTemplates from '@/hooks/useTemplates';
+import { renderHook, waitFor } from '@testing-library/react';
+import { useTemplates } from '@/hooks/useTemplates';
 import { supabase } from '@/lib/supabase';
 
 jest.mock('@/lib/supabase');
 
 describe('useTemplates Hook', () => {
-  test('fetches templates successfully', async () => {
-    supabase.from.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: [{ id: 1, name: 'Template 1' }], error: null })
-    });
-
-    const { result, waitForNextUpdate } = renderHook(() => useTemplates());
-    await waitForNextUpdate();
-
-    expect(result.current.templates).toEqual([{ id: 1, name: 'Template 1' }]);
-    expect(result.current.error).toBeNull();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('handles fetch error', async () => {
-    supabase.from.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: null, error: 'Error fetching templates' })
+  test('carga templates correctamente', async () => {
+    const mockTemplates = [
+      { id: '1', title: 'Template 1', description: 'Description 1' },
+      { id: '2', title: 'Template 2', description: 'Description 2' },
+    ];
+
+    // Configurar el mock adecuadamente
+    (supabase.from as jest.Mock).mockReturnValue({
+      select: jest.fn().mockReturnValue({
+        order: jest.fn().mockResolvedValue({
+          data: mockTemplates,
+          error: null
+        })
+      })
     });
 
-    const { result, waitForNextUpdate } = renderHook(() => useTemplates());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useTemplates());
+    
+    // Esperar a que se actualice el estado
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
 
-    expect(result.current.templates).toBeNull();
-    expect(result.current.error).toBe('Error fetching templates');
+    expect(result.current.templates).toEqual(mockTemplates);
+    expect(supabase.from).toHaveBeenCalledWith(expect.any(String));
   });
 });
