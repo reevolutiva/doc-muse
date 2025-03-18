@@ -9,6 +9,7 @@ import { AuthForm } from "@/components/auth/auth-form"
 import { supabase } from "@/lib/supabase"
 import { Toaster, toast } from "sonner"
 import { useAuth } from "@/hooks/useAuth"
+import { SupabaseTokenManager } from "@/lib/utils/SupabaseTokenMannager.ts"
 
 interface Project {
   id: string
@@ -87,6 +88,12 @@ export default function HomePage() {
       fetchProjects()
     }
   }, [session?.user?.id])
+
+
+  useEffect(() => {
+    SupabaseTokenManager.setSession(session);
+  }, [session]);
+
 
 
   if (loading) {
