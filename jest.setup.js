@@ -1,6 +1,7 @@
 // Optional: configure or set up a testing framework before each test
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 
 // Mock para next/router
@@ -116,6 +117,13 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+// Mock para ResizeObserver
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
 // Suprimir errores de consola durante las pruebas para evitar ruido en los reportes de testing
 console.error = jest.fn();
