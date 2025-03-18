@@ -7,17 +7,6 @@ export default async function ProjectsLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies })
-  
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  console.log("session", session)
-
-  if (!session) {
-    //redirect("/")
-  }
 
   return (
     <div className="pt-16">

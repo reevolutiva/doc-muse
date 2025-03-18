@@ -7,16 +7,7 @@ export default async function TemplatesLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies })
   
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session) {
-    //redirect("/")
-  }
-
   return (
     <div className="pt-16">
       {children}
