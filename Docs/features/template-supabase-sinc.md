@@ -21,3 +21,6 @@ Esta característica permite sincronizar las plantillas de documentos creadas en
     *   Se agregó el estado `currentTemplate` para mantener el ID de la plantilla actual seleccionada.
 7.  **Modificación del componente `TemplateSelector`:**
     *   Se modificó el componente `TemplateSelector` para pasar la función `setCurrentTemplate` y actualizar el estado `currentTemplate` al seleccionar una plantilla.
+
+
+    

@@ -58,6 +58,13 @@ Con esta implementación, se ha creado la lógica para capturar la información 
    - [x] Integrar la función de creación de nodos con el canvas de React Flow para insertar el nuevo nodo.
    - [x] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
 
+4. **Crear un Template desde 0**
+  - [ ] Permitir a los usuarios crear un template desde cero, comenzando con un lienzo en blanco para añadir nodos personalizados.
+  - [ ] Implementar la funcionalidad para guardar el template en la base de datos, asignándole un nombre.
+  - [ ] Asegurarse de que el template sea fácil de usar y personalizable.
+  - [ ] **Actualizar**: Documentar el código en `block-editor-react-flow.md`.
+
+
   ## Tareas Adicionales: Nodos Personalizados de Imagen y Subtítulo
 
   1. **Crear Nodos Personalizados de Imagen y Subtítulo**
