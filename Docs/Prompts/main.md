@@ -21,3 +21,7 @@ Hemos actualizado nuestro plan en #file:informederevisión_templates.md con las 
 2.- Ejecuta las tareas que allí se indican
 3.- documenta los avances en el mismo documento
 4.-pide ayuda al usuario para hacer comprobaciones. 
+
+
+## Revisar el código
+@workspace Vamos a generar la documentación de los repositorios para los desarrolladores. El primero de los ficheros que vamos a documentar #folder:src  es  el cuál tiene componentes en #folder:template-editor. Genera la documentación para los desarrolladores con toda la explicación de los elementos del componente, sus dependencias e instrucciones de cómo usarlo en #file:docs_visualeditor.md 
