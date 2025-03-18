@@ -7,17 +7,19 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Helper para mocks
 export const mockSupabase = {
-  from: jest.fn(() => mockSupabase),
-  select: jest.fn(() => mockSupabase),
-  insert: jest.fn(() => mockSupabase),
-  update: jest.fn(() => mockSupabase),
-  delete: jest.fn(() => mockSupabase),
+  from: typeof jest !== 'undefined' ? jest.fn(() => mockSupabase) : (() => mockSupabase),
+  select: typeof jest !== 'undefined' ? jest.fn(() => mockSupabase) : (() => mockSupabase),
+  insert: typeof jest !== 'undefined' ? jest.fn(() => mockSupabase) : (() => mockSupabase),
+  update: typeof jest !== 'undefined' ? jest.fn(() => mockSupabase) : (() => mockSupabase),
+  delete: typeof jest !== 'undefined' ? jest.fn(() => mockSupabase) : (() => mockSupabase),
   auth: {
-    signIn: jest.fn(),
-    signOut: jest.fn(),
-    getSession: jest.fn(),
-    onAuthStateChange: jest.fn(() => ({
-      data: { subscription: { unsubscribe: jest.fn() } }
+    signIn: typeof jest !== 'undefined' ? jest.fn() : (() => {}),
+    signOut: typeof jest !== 'undefined' ? jest.fn() : (() => {}),
+    getSession: typeof jest !== 'undefined' ? jest.fn() : (() => {}),
+    onAuthStateChange: typeof jest !== 'undefined' ? jest.fn(() => ({
+      data: { subscription: { unsubscribe: typeof jest !== 'undefined' ? jest.fn() : (() => {}) } }
+    })) : (() => ({
+      data: { subscription: { unsubscribe: () => {} } }
     }))
   }
 };
