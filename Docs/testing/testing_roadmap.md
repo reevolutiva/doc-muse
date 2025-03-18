@@ -4,23 +4,89 @@ Este roadmap presenta un plan estructurado y secuencial para implementar un sist
 
 ## Resumen Ejecutivo
 
-| Fase                        | Duración | Recursos       | Dependencias |
-|-----------------------------|----------|----------------|--------------|
-| 1. Evaluación y Configuración | 1 semana | 1 desarrollador| Ninguna      |
-| 2. Tests Unitarios          | 2 semanas| 1-2 desarrolladores | Fase 1   |
-| 3. Automatización CI/CD     | 1 semana | 1 desarrollador| Fase 2      |
-| 4. Tests Integración/E2E    | 2 semanas| 1-2 desarrolladores | Fase 3  |
-| 5. Optimización y Documentación | 1 semana | 1 desarrollador | Fase 4   |
+| Fase                        | Duración | Recursos       | Dependencias | Estado      |
+|-----------------------------|----------|----------------|--------------|-------------|
+| 1. Evaluación y Configuración | 1 semana | 1 desarrollador| Ninguna      | ✅ Completado |
+| 2. Tests Unitarios          | 2 semanas| 1-2 desarrolladores | Fase 1   | 🟡 En progreso |
+| 3. Automatización CI/CD     | 1 semana | 1 desarrollador| Fase 2      | ⬜ Pendiente |
+| 4. Tests Integración/E2E    | 2 semanas| 1-2 desarrolladores | Fase 3  | ⬜ Pendiente |
+| 5. Optimización y Documentación | 1 semana | 1 desarrollador | Fase 4   | ⬜ Pendiente |
+
+## Progreso Actual
+
+**Fecha de actualización**: [CURRENT_DATE]
+
+### Tests Implementados:
+- ✅ Button component (`__tests__/components/ui/Button.test.tsx`)
+- ✅ Input component (`__tests__/components/ui/Input.test.tsx`)
+- ✅ Canvas component (`__tests__/components/Canvas.test.tsx`)
+- ✅ Badge component (`__tests__/components/ui/Badge.test.tsx`)
+
+### Cobertura Actual:
+- Button: 100%
+- Input: 100%
+- Badge: 83.33%
+- Canvas: 42.25%
+- **Global**: ~1.65% (se espera incrementar con tests adicionales)
+
+### Problemas Resueltos:
+- ✅ Configuración de moduleNameMapper en Jest para mapear correctamente los alias `@/components/` a `<rootDir>/src/components/`
+- ✅ Instalación y configuración de `@testing-library/user-event` para simular interacciones de usuario
+- ✅ Implementación de mocks para componentes externos como ReactFlow/XYFlow
+
+## Próximos Tests Prioritarios
+
+A continuación se presenta una lista de los 10 tests más prioritarios a implementar para aumentar la cobertura:
+
+1. **Card Component** (`src/components/ui/card.tsx`)
+   - Componente UI básico reutilizado en múltiples vistas
+   - Pruebas: renderizado básico, aplicación de clases personalizadas, renderizado de subcomponentes (CardHeader, CardContent, etc)
+
+2. **Dialog Component** (`src/components/ui/dialog.tsx`)
+   - Componente crítico para interacciones modales en la aplicación
+   - Pruebas: apertura/cierre, interacción con botones, manejo de contenido dinámico
+
+3. **Select Component** (`src/components/ui/select.tsx`)
+   - Componente de formulario esencial usado en múltiples flujos de usuario
+   - Pruebas: selección de opciones, cambios de estado, accesibilidad
+
+4. **useTemplates Hook** (`src/hooks/useTemplates.ts`)
+   - Hook crítico para la gestión de plantillas
+   - Pruebas: carga de datos, manejo de errores, actualización de plantillas
+
+5. **TemplateNode Component** (`src/components/TemplateNode.tsx`)
+   - Componente fundamental para el editor de plantillas
+   - Pruebas: renderizado con diferentes tipos de datos, interacciones de usuario, conexiones con otros nodos
+
+6. **Sidebar Component** (`src/components/Sidebar.tsx`)
+   - Componente de navegación principal
+   - Pruebas: renderizado de links, estados activos, colapso/expansión
+
+7. **DocumentList Component** (`src/components/DocumentList.tsx`)
+   - Componente crítico para mostrar listas de documentos
+   - Pruebas: renderizado con datos, filtrado, ordenamiento
+
+8. **Breadcrumbs Component** (`src/components/ui/breadcrumbs.tsx`)
+   - Componente de navegación importante 
+   - Pruebas: renderizado de rutas, navegación entre páginas
+
+9. **Avatar Component** (`src/components/ui/avatar.tsx`)
+   - Componente UI básico reutilizado en áreas clave
+   - Pruebas: renderizado con diferentes props, fallbacks para imágenes
+
+10. **Form Components** (`src/components/ui/form.tsx` y componentes relacionados)
+    - Componentes críticos para entradas de usuario
+    - Pruebas: validación, envío de formularios, manejo de errores
 
 ## Fase 1: Evaluación y Configuración Inicial (Semana 1)
 
 ### 1.1 Análisis del Estado Actual
 
 **Actividades:**
-- Ejecutar evaluación de cobertura inicial para establecer línea base
-- Identificar componentes críticos que requieren pruebas prioritarias
-- Mapear flujos de usuario principales para pruebas E2E
-- Revisar configuración actual de Jest y TypeScript
+- ✅ Ejecutar evaluación de cobertura inicial para establecer línea base
+- ✅ Identificar componentes críticos que requieren pruebas prioritarias
+- ✅ Mapear flujos de usuario principales para pruebas E2E
+- ✅ Revisar configuración actual de Jest y TypeScript
 
 **Comandos:**
 ```bash
@@ -29,16 +95,16 @@ pnpm test:coverage
 ```
 
 **Entregables:**
-- Informe de estado actual de testing con métricas de cobertura
-- Lista priorizada de componentes para implementación de tests
-- Mapa de flujos de usuario críticos para tests E2E
+- ✅ Informe de estado actual de testing con métricas de cobertura
+- ✅ Lista priorizada de componentes para implementación de tests
+- ✅ Mapa de flujos de usuario críticos para tests E2E
 
 ### 1.2 Configuración del Entorno Base
 
 **Actividades:**
-- Verificar y actualizar dependencias necesarias para testing
-- Configurar estructuras de directorios para tests
-- Implementar configuración básica de Jest y RTL
+- ✅ Verificar y actualizar dependencias necesarias para testing
+- ✅ Configurar estructuras de directorios para tests
+- ✅ Implementar configuración básica de Jest y RTL
 
 **Comandos:**
 ```bash
@@ -120,23 +186,27 @@ jest.mock('@/lib/supabase', () => ({
 ```
 
 **Entregables:**
-- Entorno de testing configurado y funcional
-- Scripts de testing integrados en el flujo de trabajo
+- ✅ Entorno de testing configurado y funcional
+- ✅ Scripts de testing integrados en el flujo de trabajo
 
 ## Fase 2: Implementación de Tests Unitarios (Semanas 2-3)
 
 ### 2.1 Tests para Componentes UI Básicos
 
 **Actividades:**
-- Implementar tests para componentes UI fundamentales
-- Priorizar componentes reutilizables y críticos para el negocio
-- Implementar tests para layout y navegación
+- 🟡 Implementar tests para componentes UI fundamentales
+- ⬜ Priorizar componentes reutilizables y críticos para el negocio
+- ⬜ Implementar tests para layout y navegación
 
 **Componentes prioritarios:**
-1. Componentes UI base (Button, Input, etc.)
-2. Componentes de layout y navegación
-3. Tarjetas y listados (project-card.tsx, document-list.tsx)
-4. Formularios principales (project-form.tsx, BlockForm.jsx)
+1. ✅ Button
+2. ✅ Input
+3. ✅ Badge
+4. ⬜ Card (Próximo)
+5. ⬜ Dialog (Próximo)
+6. ⬜ Select (Próximo)
+7. ⬜ Avatar
+8. ⬜ Breadcrumbs
 
 **Ejemplo de test:**
 ```tsx

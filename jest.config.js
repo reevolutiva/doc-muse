@@ -1,4 +1,4 @@
-const nextJest = require('next/jest');
+import nextJest from 'next/jest.js';
 
 // Providing the path to your Next.js app which will enable loading next.config.js and .env files
 const createJestConfig = nextJest({
@@ -11,9 +11,11 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     // Handle module aliases (if you have any in your project)
-    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
     '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
     '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
+    // Añadir más mapeos para asegurar que todas las importaciones se resuelvan correctamente
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   transform: {
@@ -24,7 +26,18 @@ const customJestConfig = {
     '/node_modules/',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
+  // Configuración para cobertura de código
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/_*.{js,jsx,ts,tsx}',
+    '!**/node_modules/**',
+    '!**/.next/**',
+    '!**/dist/**'
+  ],
+  coverageReporters: ['text', 'lcov', 'html'],
+  coverageDirectory: '<rootDir>/coverage',
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config
-module.exports = createJestConfig(customJestConfig);
+export default createJestConfig(customJestConfig);
