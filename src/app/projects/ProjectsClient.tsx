@@ -38,6 +38,7 @@ export default function ProjectsClient() {
     project.title.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+
   return (
     <ProjectListContainer 
       projects={filteredProjects}
