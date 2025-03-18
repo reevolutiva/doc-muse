@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import IndexPage from '../../src/pages/index'; // Ruta corregida
-import { supabase } from '../../src/lib/supabase';
+import IndexPage from '@/pages/index'; // Ruta corregida
+import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/router';
 
 // Mock de dependencias
@@ -8,7 +8,7 @@ jest.mock('next/router', () => ({
   useRouter: jest.fn()
 }));
 
-jest.mock('../../src/lib/supabase', () => ({
+jest.mock('@/lib/supabase', () => ({
   supabase: {
     auth: {
       getSession: jest.fn(),
@@ -19,7 +19,7 @@ jest.mock('../../src/lib/supabase', () => ({
   }
 }));
 
-jest.mock('../../src/components/auth/auth-form', () => ({
+jest.mock('@/components/auth/auth-form', () => ({
   AuthForm: () => <div data-testid="auth-form">Auth Form</div>
 }));
 
