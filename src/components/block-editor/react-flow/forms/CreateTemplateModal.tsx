@@ -1,3 +1,5 @@
+import React,{ useState, useEffect } from 'react';
+
 // New component for creating a new template
 const CreateTemplateModal = ({ isOpen, onClose, onCreate }) => {
   

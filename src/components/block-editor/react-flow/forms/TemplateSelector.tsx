@@ -1,3 +1,5 @@
+import React,{ useState, useEffect } from 'react';
+import { Node } from '../general-docs/nodes';
 const TemplateSelector = ({templates, nodes, setNodes, setCurrentTemplate, setEdges, edges  }) => {
 
     function buildNode( blocks ) {
