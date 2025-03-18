@@ -19,6 +19,7 @@ import HeadingNode from './general-docs/HeadingNode';
 import ParagraphNode from './general-docs/ParagraphNode';
 
 import { supabase } from '@/lib/supabase';
+import { AddNodeForm } from './forms/AddNodeForm';
 
 
 const TemplateSelector = ({templates, nodes, setNodes }) => {
@@ -104,9 +105,6 @@ const TemplateSelector = ({templates, nodes, setNodes }) => {
    );
 }
  
-
-
- 
 export default function TemplatesReactFlow() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(intialnodes_general_docs);
@@ -152,8 +150,9 @@ export default function TemplatesReactFlow() {
 
   return (
     <div className="w-full h-[500px]">
-      <div className="flex space-x-2 mb-2">
-        <button onClick={addNode} className="px-4 py-2 bg-blue-500 text-white rounded">Add Node</button>
+      <div className="flex space-x-2 mb-2 pb-5">
+
+        <AddNodeForm nodes={nodes} setNodes={setNodes} />
 
         <TemplateSelector templates={templates} nodes={nodes} setNodes={setNodes} />
         
