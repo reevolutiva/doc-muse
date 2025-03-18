@@ -463,3 +463,18 @@ doc-muse/
 5. **Mejora continua**: Utilizar métricas de cobertura para identificar áreas de mejora.
 
 Esta refactorización permitirá un sistema de testing más organizado, mantenible y efectivo, facilitando la incorporación de nuevos tests y mejorando la confiabilidad del código.
+
+## 9. Avances Realizados
+
+### Fase 1: Limpieza y Unificación
+
+1. **Eliminación de archivos redundantes**: Se eliminó el archivo `jest.config.cjs` redundante.
+2. **Unificación de configuración de Jest**: Se actualizó `jest.config.js` con la configuración consolidada, incluyendo un umbral de cobertura del 70%.
+3. **Reorganización de scripts en `package.json`**: Se simplificaron y aclararon los propósitos de cada script, eliminando scripts redundantes.
+
+### Fase 2: Estructura y Organización
+
+1. **Creación de estructura de directorios para mocks**: Se creó la estructura de directorios `__mocks__/lib`, `__mocks__/next`, y `__mocks__/components/ui`.
+2. **Implementación de mocks modulares**: Se crearon mocks individuales para Supabase, Next.js (router y navigation), next-themes, y reactflow.
+3. **Actualización de `jest.setup.js`**: Se actualizó `jest.setup.js` para importar los mocks modulares.
+4. **Creación de script de verificación de archivos de prueba**: Se creó el script `scripts/verify-test-files.js` para verificar la existencia de archivos necesarios para las pruebas.
