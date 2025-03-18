@@ -197,3 +197,14 @@ Esta sección identifica componentes y archivos que están duplicados, obsoletos
 3. Unificar documentación dispersa en múltiples archivos
 4. Eliminar archivos de respaldo o versiones antiguas
 5. Estructurar consistentemente las pruebas para reflejar la estructura del código fuente
+
+## Estructura de Directorios
+
+- `/src/app/templates/visual-editor/`: Contiene la implementación principal del editor visual basado en React Flow.
+- `/src/components/shared/`: Componentes compartidos consolidados para uso en múltiples partes de la aplicación.
+
+## Cambios Recientes
+
+- Eliminación de los directorios legacy `/project-templates/` y `/templates/`.
+- Migración de componentes duplicados a `/src/components/shared/`.
+- Consolidación de la funcionalidad en el editor visual ubicado en `/src/app/templates/visual-editor/`.

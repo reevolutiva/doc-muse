@@ -14,3 +14,10 @@ Una vez conoscaz el contexto completo. Entrega las instrucciones al agente IA pa
 2.- EL plan debe ser escrito con el objetivo que un Agente IA sepa ejecutar la tarea, por lo que debes ser resumido y preciso en escribir sólo información necesaria. 
 3.- Debes incluir contexto y  un plan paso a paso que el agente IA pueda seguir
 4.- Entrega la instrucción dentro del paso a paso de cada cierto tiempo, hacer comprobaciones y actualizar el archivo #file:informederevisión_templates.md 
+
+### seguir el plan en un documento 
+Hemos actualizado nuestro plan en #file:informederevisión_templates.md con las tareas y el proceso que debemos seguir para migrar el editor de bloques y comenzar utilizar la aplicación. 
+1. lee el #file:informederevisión_templates.md y comienza a ejecutar las tareas que ahí se indican
+2.- Ejecuta las tareas que allí se indican
+3.- documenta los avances en el mismo documento
+4.-pide ayuda al usuario para hacer comprobaciones. 
