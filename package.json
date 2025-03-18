@@ -19,7 +19,6 @@
     "test:coverage": "jest --coverage",
     "test:ui": "jest --coverage --coverageReporters=html && open coverage/lcov-report/index.html",
     "test:ci": "jest --ci --coverage --reporters='default' --reporters='jest-junit'",
-    "test:types": "tsc --noEmit --pretty",
     "verify:test-files": "node scripts/verify-test-files.js"
   },
   "dependencies": {
