@@ -208,3 +208,16 @@ Esta sección identifica componentes y archivos que están duplicados, obsoletos
 - Eliminación de los directorios legacy `/project-templates/` y `/templates/`.
 - Migración de componentes duplicados a `/src/components/shared/`.
 - Consolidación de la funcionalidad en el editor visual ubicado en `/src/app/templates/visual-editor/`.
+
+## Autenticación y Redirección
+
+### Autenticación
+La autenticación se gestiona mediante `createServerComponentClient` de Supabase. Cada sección principal (`/projects`, `/templates`, etc.) implementa la verificación de sesión y redirección a la página principal si no hay sesión activa.
+
+### Redirección
+Se han implementado redirecciones para `/projects` y `/templates` en función del estado de autenticación del usuario. Si el usuario está autenticado, se redirige a `/projects`; de lo contrario, se redirige a `/templates`.
+
+### Rutas Involucradas
+- `src/app/page.tsx`: Redirección basada en el estado de autenticación.
+- `src/app/projects/page.tsx`: Verificación de autenticación y redirección si no está autenticado.
+- `src/app/templates/page.tsx`: Verificación de autenticación y redirección si no está autenticado.

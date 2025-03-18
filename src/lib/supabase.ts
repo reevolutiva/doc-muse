@@ -3,7 +3,27 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Create a single instance of Supabase client
+let supabaseInstance: ReturnType<typeof createClient> | null = null;
+
+export const getSupabase = () => {
+  if (!supabaseInstance && typeof window !== 'undefined') {
+    // Only create the client in browser environments
+    console.log('Creating new Supabase instance');
+    supabaseInstance = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: true,
+        storageKey: 'docmuse-auth',
+        detectSessionInUrl: true,
+        autoRefreshToken: true,
+      }
+    });
+  }
+  return supabaseInstance || createClient(supabaseUrl, supabaseKey);
+};
+
+// Export the singleton instance
+export const supabase = getSupabase();
 
 // Helper para mocks
 export const mockSupabase = {
@@ -24,6 +44,7 @@ export const mockSupabase = {
   }
 };
 
+// Existing functions
 export async function fetchData() {
   try {
     const { data, error } = await supabase
