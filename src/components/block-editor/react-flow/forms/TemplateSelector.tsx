@@ -50,6 +50,10 @@ const TemplateSelector = ({templates, nodes, setNodes, setCurrentTemplate, setEd
     function onChangeHandler(e) {
       const templateId = e.target.value;
       setCurrentTemplate(templateId);
+
+      //TODO: Guardar template ID en sessionStorage
+      sessionStorage.setItem('kimfe-templateId', templateId);
+
       const template = templates.find( template => template.id === templateId);
       const blocks = getBlocks(template);
       console.log('blocks', blocks);

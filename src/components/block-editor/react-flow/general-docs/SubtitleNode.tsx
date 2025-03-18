@@ -2,18 +2,21 @@ import React, { useCallback } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { useStoreApi } from '@xyflow/react';
 import "./SubtitleNode.css";
+import { generarDocRaw } from '@/lib/utils';
 
 const SubtitleNode = ({ id, data }) => {
   const storeApi = useStoreApi();
 
   const onDelete = useCallback(() => {
-    const { nodes, setNodes } = storeApi.getState();
+
+    const { nodes, edges, setNodes } = storeApi.getState();
 
     if (!nodes) {
       return;
     }
 
     const newNodes = nodes.filter((node) => node.id !== id);
+    generarDocRaw(id, newNodes, edges );
     setNodes(newNodes);
   }, [id, storeApi]);
 

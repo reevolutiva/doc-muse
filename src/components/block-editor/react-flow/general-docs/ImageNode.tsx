@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { useStoreApi } from '@xyflow/react';
+import { generarDocRaw } from '@/lib/utils';
 
 const ImageNode = ({ id, data }) => {
   const storeApi = useStoreApi();
 
   const onDelete = useCallback(() => {
-    const { nodes, setNodes } = storeApi.getState();
+    const { nodes, setNodes, edges } = storeApi.getState();
 
     if (!nodes) {
       return;
@@ -14,6 +15,7 @@ const ImageNode = ({ id, data }) => {
 
     const newNodes = nodes.filter((node) => node.id !== id);
     setNodes(newNodes);
+    generarDocRaw(id, newNodes, edges );
   }, [id, storeApi]);
 
   return (

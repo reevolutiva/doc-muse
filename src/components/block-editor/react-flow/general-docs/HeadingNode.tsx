@@ -2,6 +2,7 @@ import React,{ useCallback } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import './headingNode.css';
 import { useStoreApi } from '@xyflow/react';
+import { generarDocRaw } from '@/lib/utils';
 
 const HeadingNode = ({ id, data }) => {
 
@@ -9,7 +10,7 @@ const HeadingNode = ({ id, data }) => {
     
         const onDelete = useCallback(() => {
     
-            const { nodes, setNodes } = storeApi.getState();
+            const { nodes, setNodes, edges } = storeApi.getState();
     
             if(! nodes ) {
                 return;
@@ -17,6 +18,7 @@ const HeadingNode = ({ id, data }) => {
             }
             const newNodes = nodes.filter((node) => node.id !== id);
             setNodes(newNodes);
+            generarDocRaw(id, newNodes, edges );
         
         }, [id, storeApi]);
 

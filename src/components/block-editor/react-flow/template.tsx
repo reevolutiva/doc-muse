@@ -24,6 +24,7 @@ import { supabase } from '@/lib/supabase';
 import { AddNodeForm } from './forms/AddNodeForm';
 import CreateTemplateModal from './forms/CreateTemplateModal';
 import TemplateSelector from './forms/TemplateSelector';
+import { generarDocRaw } from '@/lib/utils';
  
 export default function TemplatesReactFlow() {
 
@@ -87,47 +88,14 @@ export default function TemplatesReactFlow() {
     setNodes((nds) => [...nds, newNode]);
   };
 
-  const generarDocRaw = async ( id ) => {
-
-    try {
-      // Recopilar los datos de los nodos en un formato adecuado para Supabase
-      const blocksData = nodes.map(node => ({
-        id: node.id,
-        type: node.type,
-        data: node.data,
-        position: node.position,
-      }));
-
-      const content = { blocks: blocksData, edges: edges };
-
-      // Actualizar la tabla 'projects.blocks' en Supabase
-      const { data, error } = await supabase
-      .from('document_templates')
-      .update({ content : content })
-      .eq('id', id)
-      .select()
-
-      if (error) {
-        console.error("Error al actualizar Supabase:", error);
-        alert("Error al guardar los cambios en Supabase.");
-        return;
-      }
-
-      console.log("Datos guardados en Supabase:", data);
-      alert("Cambios guardados exitosamente en Supabase!");
-
-    } catch (error) {
-      console.error("Error inesperado:", error);
-      alert("Ocurrió un error inesperado al guardar.");
-    }
-  }
+  
 
   // Function to handle the creation of a new template
   const handleCreateTemplate = async (templateName) => {
     setIsCreateModalOpen(false);
 
     const { data: { user } } = await supabase.auth.getUser();
-  
+
     try {
       const { data, error } = await supabase
         .from('document_templates')
@@ -158,7 +126,14 @@ export default function TemplatesReactFlow() {
 
         <AddNodeForm nodes={nodes} setNodes={setNodes} addNode={addNode} />
 
-        <TemplateSelector templates={templates} nodes={nodes} setNodes={setNodes} setEdges={setEdges} edges={edges} setCurrentTemplate={setCurrentTemplate} />
+        <TemplateSelector 
+          templates={templates} 
+          nodes={nodes} 
+          setNodes={setNodes} 
+          setEdges={setEdges} 
+          edges={edges} 
+          setCurrentTemplate={setCurrentTemplate} 
+        />
         
         {/* Button to open the create template modal */}
         <button
@@ -170,7 +145,7 @@ export default function TemplatesReactFlow() {
           </svg>
         </button>
 
-        <button onClick={() => generarDocRaw( currentTemplate )} className="px-4 py-2 bg-blue-500 text-white rounded" >          
+        <button onClick={() => generarDocRaw( currentTemplate, nodes, edges )} className="px-4 py-2 bg-blue-500 text-white rounded" >          
           <p> Guardar </p>
         </button>
       </div>
