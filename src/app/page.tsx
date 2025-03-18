@@ -1,5 +1,10 @@
+"use client";
+// This is a client component
 import { redirect } from 'next/navigation';
-
-export default function HomePage() {
-  // Redirección directa desde el servidor
+export const metadata = {
+  title: "Hola Mundo",
+};
+export async function getServerSideProps() {
+  redirect('/templates');
+  return { props: {} };
 }
