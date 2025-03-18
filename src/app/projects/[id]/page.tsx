@@ -54,6 +54,7 @@ export default function ProjectEditPage({ params }: { params: { id: string } }) 
   }
 
   return (
+
     <ProjectEditForm
       project={project}
       onClose={() => router.push("/projects")}
@@ -64,5 +65,6 @@ export default function ProjectEditPage({ params }: { params: { id: string } }) 
         router.push("/projects")
       }}
     />
+    
   )
 }
