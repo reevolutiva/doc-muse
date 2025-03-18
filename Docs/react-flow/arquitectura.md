@@ -63,6 +63,7 @@ Este componente define un nodo personalizado para encabezados en el flujo de tra
 - Incluye conectores en la parte superior e inferior
 - Permite personalizar el texto del encabezado mediante `data.label`
 - Utiliza estilos CSS personalizados definidos en `headingNode.css`
+- Toma el ancho dinamicamente segun su contenido :: NEW Feature
 
 #### Código:
 ```tsx
@@ -78,6 +79,7 @@ Este componente define un nodo personalizado para párrafos de texto en el flujo
 - Incluye conectores en la parte superior e inferior
 - Permite personalizar el texto mediante `data.label`
 - Utiliza estilos CSS personalizados definidos en `paragraphNode.css`
+- Toma el ancho dinamicamente segun su contenido con ancho maximo de 400px :: NEW Feature
 
 #### Código:
 ```tsx
