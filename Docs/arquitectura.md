@@ -1,4 +1,4 @@
-# Arquitectura del Proyecto (Actualizada)
+# Arquitectura del Proyecto Kimfe
 
 ## Estructura General del Proyecto
 
@@ -221,3 +221,35 @@ Se han implementado redirecciones para `/projects` y `/templates` en función de
 - `src/app/page.tsx`: Redirección basada en el estado de autenticación.
 - `src/app/projects/page.tsx`: Verificación de autenticación y redirección si no está autenticado.
 - `src/app/templates/page.tsx`: Verificación de autenticación y redirección si no está autenticado.
+
+## Sistema de Testing
+
+### Diseño Central
+El sistema de testing del proyecto Kimfe sigue un diseño basado en **CommonJS** para los archivos de configuración, mientras que el código de la aplicación utiliza **ESM**. Esta decisión se tomó para garantizar compatibilidad con herramientas como Jest y Next.js, que tienen soporte más robusto para CommonJS en sus configuraciones.
+
+### Convenciones
+1. **Archivos de configuración**:
+   - Usar extensión `.cjs` para todos los archivos de configuración relacionados con Jest, Next.js y otras herramientas.
+   - Ejemplo: `jest.config.cjs`, `jest.setup.cjs`, `next.config.cjs`.
+
+2. **Código de la aplicación**:
+   - Usar ESM con la sintaxis `import/export`.
+   - Mantener `"type": "module"` en `package.json`.
+
+3. **Scripts de prueba**:
+   - Configurar los scripts en `package.json` para usar `NODE_OPTIONS=--experimental-vm-modules` cuando sea necesario.
+
+### Estructura de Archivos Relacionados
+- **Testing**:
+  - `jest.config.cjs`: Configuración principal de Jest.
+  - `jest.setup.cjs`: Configuración adicional para Jest.
+  - `test_docs.md`: Documentación de pruebas.
+  - `testing-inform.md`: Información técnica sobre el sistema de testing.
+
+- **Configuración General**:
+  - `next.config.cjs`: Configuración de Next.js.
+  - `.env.local`: Variables de entorno para desarrollo.
+
+### Notas
+- Asegurarse de que todas las referencias en la documentación y el código sean consistentes con estas convenciones.
+- Revisar periódicamente la compatibilidad de herramientas con ESM para evaluar una posible migración futura.

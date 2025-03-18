@@ -1,15 +1,33 @@
-export const supabase = {
-  auth: {
-    getUser: jest.fn().mockResolvedValue({ data: { user: { id: 'test-user-id' } } }),
-    getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'test-user-id' } } } }),
-    signIn: jest.fn(),
-    signOut: jest.fn(),
-  },
-  from: jest.fn().mockReturnThis(),
-  select: jest.fn().mockReturnThis(),
-  eq: jest.fn().mockReturnThis(),
-  order: jest.fn().mockReturnThis(),
-  insert: jest.fn().mockReturnThis(),
-  delete: jest.fn().mockReturnThis(),
-  single: jest.fn().mockResolvedValue({ data: {}, error: null }),
+const mockSubscription = {
+  unsubscribe: jest.fn()
+};
+
+const mockAuth = {
+  onAuthStateChange: jest.fn(() => ({
+    data: { subscription: mockSubscription }
+  })),
+  getSession: jest.fn(() => ({
+    data: { session: null },
+    error: null
+  })),
+  signInWithPassword: jest.fn(),
+  signOut: jest.fn(),
+  getUser: jest.fn()
+};
+
+const mockSupabase = {
+  auth: mockAuth,
+  from: jest.fn(() => ({
+    select: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockReturnThis(),
+    update: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    single: jest.fn(),
+    execute: jest.fn()
+  }))
+};
+
+module.exports = {
+  supabase: mockSupabase
 };

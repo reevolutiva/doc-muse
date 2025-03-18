@@ -103,3 +103,31 @@ const customJestConfig = {
 
 module.exports = createJestConfig({ dir: './' })(customJestConfig);
 ```
+
+# Información Técnica del Sistema de Testing
+
+## Decisión de Diseño
+El sistema de testing utiliza **CommonJS** para los archivos de configuración debido a la compatibilidad con herramientas como Jest y Next.js. El código de la aplicación sigue utilizando **ESM** para aprovechar las características modernas de JavaScript.
+
+## Archivos Clave
+1. `jest.config.cjs`: Configuración principal de Jest.
+2. `jest.setup.cjs`: Configuración adicional para Jest.
+3. `next.config.cjs`: Configuración de Next.js.
+
+## Scripts en `package.json`
+Los scripts de prueba están configurados para usar `NODE_OPTIONS=--experimental-vm-modules` para habilitar soporte ESM en Jest:
+```json
+"scripts": {
+  "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --config=jest.config.cjs",
+  "test:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --watch --config=jest.config.cjs",
+  "test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest --coverage --config=jest.config.cjs"
+}
+```
+
+## Compatibilidad
+- **Node.js**: Asegurarse de usar una versión compatible con `--experimental-vm-modules`.
+- **Jest**: Configurado para funcionar con CommonJS en los archivos de configuración.
+
+## Notas Adicionales
+- Mantener consistencia en el uso de `.cjs` para archivos de configuración.
+- Revisar la documentación oficial de Jest y Next.js para actualizaciones sobre soporte ESM.

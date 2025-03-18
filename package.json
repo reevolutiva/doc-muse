@@ -14,11 +14,11 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:ui": "jest --coverage --coverageReporters=html && open coverage/lcov-report/index.html",
-    "test:ci": "jest --ci --coverage --reporters='default' --reporters='jest-junit'",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --config=jest.config.cjs",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --watch --config=jest.config.cjs",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --coverage --config=jest.config.cjs",
+    "test:ui": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --coverage --coverageReporters=html && open coverage/lcov-report/index.html",
+    "test:ci": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --ci --coverage --reporters='default' --reporters='jest-junit'",
     "verify:test-files": "node scripts/verify-test-files.js"
   },
   "dependencies": {

@@ -1,51 +1,41 @@
 import React from 'react';
 import { Handle, Position } from 'reactflow';
+import { cn } from '@/lib/utils';
 
 interface TemplateNodeProps {
   id?: string;
   data?: {
-    id?: string;
-    label?: string;
+    title?: string;
     type?: string;
-    properties?: any;
+    description?: string;
   };
   title?: string;
   description?: string;
   className?: string;
-  onConnect?: () => void;
 }
 
-export const TemplateNode: React.FC<TemplateNodeProps> = ({ 
-  id, 
-  data, 
-  title, 
-  description, 
-  className = '',
-  onConnect
+export const TemplateNode: React.FC<TemplateNodeProps> = ({
+  id,
+  data,
+  title,
+  description,
+  className,
 }) => {
-  // Usar los datos pasados directamente o desde el objeto data
-  const nodeTitle = title || (data?.label || 'Nodo');
-  const nodeType = data?.type || 'document';
-  
+  const nodeTitle = title || data?.title || 'Node';
+  const nodeType = data?.type || 'default';
+  const nodeDescription = description || data?.description;
+
   return (
-    <div className={`template-node ${className}`} data-testid="template-node">
-      <Handle
-        id="target"
-        type="target"
-        position={Position.Top}
-        data-testid="handle-target"
-      />
-      <div className="template-node-content">
-        <div className="template-node-title">{nodeTitle}</div>
-        {description && <div className="template-node-description">{description}</div>}
-        <div className="template-node-type">{nodeType}</div>
+    <div data-testid="template-node" className={cn('node-container', className)}>
+      <Handle type="target" position={Position.Top} id="target" />
+      <div className="node-header">
+        <h3>{nodeTitle}</h3>
+        <span>{nodeType}</span>
       </div>
-      <Handle
-        id="source"
-        type="source"
-        position={Position.Bottom}
-        data-testid="handle-source"
-      />
+      {nodeDescription && <p className="node-description">{nodeDescription}</p>}
+      <Handle type="source" position={Position.Bottom} id="source" />
     </div>
   );
-}
+};
+
+export default TemplateNode;

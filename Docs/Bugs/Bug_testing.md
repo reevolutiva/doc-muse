@@ -28,31 +28,19 @@ El error se presenta en:
 - [x] Comprobar los mocks de @radix-ui/react-select
 
 ### Fase 2: Corrección de Implementación
-- [ ] Actualizar los mocks de @radix-ui/react-select para incluir todas las subcomponentes necesarios
-- [ ] Asegurar que las exportaciones en select.tsx son correctas:
-  ```typescript
-  export {
-    Select,
-    SelectGroup,
-    SelectValue,
-    SelectTrigger,
-    SelectContent,
-    SelectLabel,
-    SelectItem,
-    SelectSeparator,
-  }
-  ```
-- [ ] Verificar que los tests están importando correctamente los componentes
+- [x] Actualizar los mocks de @radix-ui/react-select para incluir todas las subcomponentes necesarios
+- [x] Asegurar que las exportaciones en select.tsx son correctas
+- [x] Verificar que los tests están importando correctamente los componentes
 
 ### Fase 3: Actualización de Tests
-- [ ] Actualizar Select.test.tsx para manejar correctamente los componentes compuestos
-- [ ] Implementar mocks más robustos para @radix-ui/react-select
-- [ ] Asegurar que las pruebas de interacción utilizan correctamente userEvent
+- [x] Actualizar Select.test.tsx para manejar correctamente los componentes compuestos
+- [x] Implementar mocks más robustos para @radix-ui/react-select
+- [x] Asegurar que las pruebas de interacción utilizan correctamente userEvent
 
 ### Fase 4: Verificación
-- [ ] Ejecutar las pruebas unitarias para verificar que los errores se han resuelto
-- [ ] Comprobar que no se han introducido nuevos errores
-- [ ] Verificar la cobertura de código del componente Select
+- [x] Ejecutar las pruebas unitarias para verificar que los errores se han resuelto
+- [x] Comprobar que no se han introducido nuevos errores
+- [x] Verificar la cobertura de código del componente Select
 
 ## Rutas involucradas
 
@@ -62,11 +50,11 @@ El error se presenta en:
 
 ## Pruebas y definición de listos
 
-- [ ] Todas las pruebas del componente Select pasan sin errores
-- [ ] Los mocks de @radix-ui/react-select funcionan correctamente
-- [ ] La cobertura de código del componente es adecuada
-- [ ] Las interacciones de usuario se prueban correctamente
-- [ ] No hay errores de tipos en TypeScript
+- [x] Todas las pruebas del componente Select pasan sin errores
+- [x] Los mocks de @radix-ui/react-select funcionan correctamente
+- [x] La cobertura de código del componente es adecuada
+- [x] Las interacciones de usuario se prueban correctamente
+- [x] No hay errores de tipos en TypeScript
 
 ## Notas adicionales
 

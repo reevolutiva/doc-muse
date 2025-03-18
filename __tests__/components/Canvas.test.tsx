@@ -4,9 +4,9 @@ import { TemplateProvider } from '@/contexts/TemplateContext';
 
 // Agregar mocks necesarios para ReactFlow
 jest.mock('reactflow', () => ({
-  ReactFlow: ({ children }) => <div data-testid="reactflow">{children}</div>,
-  Background: () => <div data-testid="background"></div>,
-  Controls: () => <div data-testid="controls"></div>,
+  ReactFlow: ({ children }) => <div data-testid="rf__wrapper">{children}</div>,
+  Background: () => <div data-testid="rf__background"></div>,
+  Controls: () => <div data-testid="rf__controls"></div>,
   useReactFlow: () => ({
     fitView: jest.fn(),
     zoomIn: jest.fn(),
@@ -24,9 +24,9 @@ describe('Canvas Component', () => {
       </TemplateProvider>
     );
     
-    expect(screen.getByTestId('reactflow')).toBeInTheDocument();
-    expect(screen.getByTestId('background')).toBeInTheDocument();
-    expect(screen.getByTestId('controls')).toBeInTheDocument();
+    expect(screen.getByTestId('rf__wrapper')).toBeInTheDocument();
+    expect(screen.getByTestId('rf__background')).toBeInTheDocument();
+    expect(screen.getByTestId('rf__controls')).toBeInTheDocument();
   });
   
   // Añadir más tests para funcionalidades específicas

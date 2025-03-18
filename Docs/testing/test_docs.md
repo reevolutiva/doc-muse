@@ -16,8 +16,8 @@ Este documento centraliza toda la información relacionada con el sistema de tes
 
 ### Configuración
 
-- **Archivo de Configuración**: `jest.config.js`
-- **Setup Global**: `jest.setup.js` para inicializar mocks y configuraciones globales.
+- **Archivo de Configuración**: `jest.config.cjs`
+- **Setup Global**: `jest.setup.cjs` para inicializar mocks y configuraciones globales.
 - **Cobertura de Código**:
   - Umbral global: 70% para declaraciones, ramas, funciones y líneas.
   - Directorio de salida: `coverage/`.
@@ -25,16 +25,15 @@ Este documento centraliza toda la información relacionada con el sistema de tes
 ### Configuración de Jest para Next.js 14
 
 ```javascript
-// jest.config.js
+// filepath: /Users/giorgiolapietra/Documents/GitHub/Kimfe/jest.config.cjs
 const createJestConfig = require('next/jest');
 
 const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.cjs'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
-  // Configuración adicional...
 };
 
 module.exports = createJestConfig({ dir: './' })(customJestConfig);
@@ -51,9 +50,10 @@ module.exports = createJestConfig({ dir: './' })(customJestConfig);
 Asegúrate de instalar todas las dependencias necesarias antes de ejecutar las pruebas:
 
 ```bash
-pnpm install
+pnpm add -D jest @testing-library/react @testing-library/jest-dom
 ```
 
+### Comandos Principales
 ### Comandos Principales
 
 1. **Ejecutar Todas las Pruebas**:
