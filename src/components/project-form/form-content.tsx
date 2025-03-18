@@ -88,6 +88,7 @@ export function FormContent({ onSubmit, loading }: FormContentProps) {
               onClick={() => setShowTemplateSelector(true)}
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-left text-gray-700 hover:bg-gray-50"
             >
+              
               {templateId ? (
                 templates.find(t => t.id === templateId)?.name || 'Seleccionar plantilla'
               ) : (

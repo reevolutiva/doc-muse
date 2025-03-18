@@ -34,7 +34,7 @@ const useTemplateLoader = (): Template[] => {
 
   useEffect(() => {
     fetchTemplates()
-  }, [fetchTemplates])
+  }, [])
 
   return templates
 }

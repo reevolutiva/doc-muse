@@ -31,10 +31,10 @@ export function useDocumentTemplates(options: UseDocumentTemplatesOptions = {}) 
       })
     }
   }, [withLoading])
-
+ 
   useEffect(() => {
     fetchTemplates()
-  }, [fetchTemplates])
+  }, [])
 
   const filteredTemplates = useCallback(() => {
     if (!searchQuery) return templates
