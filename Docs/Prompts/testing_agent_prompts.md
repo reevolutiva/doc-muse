@@ -179,3 +179,17 @@ Establece un plan de mantenimiento y mejora continua:
 - Sigue el enfoque de testing orientado al comportamiento
 - Mantén los mocks al mínimo necesario
 - Documenta los patrones y decisiones importantes
+
+# Testing Agent Prompts
+
+## Continuous Integration
+
+- Configurar GitHub Actions para ejecutar tests en paralelo.
+- Utilizar caching para dependencias y resultados de pruebas.
+- Asegurar que los tests se ejecuten en cada push y pull request.
+
+## Pruebas de Regresión
+
+- Añadir pruebas de regresión automáticas para detectar fallos introducidos por cambios recientes.
+- Configurar notificaciones para fallos en las pruebas de regresión.
+```

@@ -42,9 +42,11 @@ const TestSelect = ({
 describe('Select Component', () => {
   test('SelectTrigger renderiza correctamente con las clases por defecto', () => {
     render(
-      <SelectTrigger data-testid="select-trigger">
-        <SelectValue placeholder="Selecciona una opción" />
-      </SelectTrigger>
+      <Select>
+        <SelectTrigger data-testid="select-trigger">
+          <SelectValue placeholder="Selecciona una opción" />
+        </SelectTrigger>
+      </Select>
     );
     
     const trigger = screen.getByTestId('select-trigger');
@@ -60,9 +62,11 @@ describe('Select Component', () => {
 
   test('SelectTrigger acepta clases personalizadas', () => {
     render(
-      <SelectTrigger className="custom-class" data-testid="select-trigger">
-        <SelectValue placeholder="Selecciona una opción" />
-      </SelectTrigger>
+      <Select>
+        <SelectTrigger className="custom-class" data-testid="select-trigger">
+          <SelectValue placeholder="Selecciona una opción" />
+        </SelectTrigger>
+      </Select>
     );
     
     const trigger = screen.getByTestId('select-trigger');
@@ -71,9 +75,11 @@ describe('Select Component', () => {
 
   test('SelectTrigger respeta el estado disabled', () => {
     render(
-      <SelectTrigger disabled data-testid="select-trigger">
-        <SelectValue placeholder="Selecciona una opción" />
-      </SelectTrigger>
+      <Select>
+        <SelectTrigger disabled data-testid="select-trigger">
+          <SelectValue placeholder="Selecciona una opción" />
+        </SelectTrigger>
+      </Select>
     );
     
     const trigger = screen.getByTestId('select-trigger');
@@ -82,16 +88,21 @@ describe('Select Component', () => {
     expect(trigger).toHaveClass('disabled:opacity-50');
   });
 
-  test('SelectContent renderiza con las clases correctas', () => {
+  test('SelectContent renderiza con las clases correctas', async () => {
     render(
       <Select defaultValue="test">
-        <SelectTrigger>
+        <SelectTrigger data-testid="select-trigger">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent data-testid="select-content">Content</SelectContent>
+        <SelectContent data-testid="select-content">
+          <SelectGroup>
+            Content
+          </SelectGroup>
+        </SelectContent>
       </Select>
     );
     
+    await userEvent.click(screen.getByTestId('select-trigger'));
     const content = screen.getByTestId('select-content');
     expect(content).toBeInTheDocument();
     expect(content).toHaveClass('relative');
@@ -104,7 +115,13 @@ describe('Select Component', () => {
   });
 
   test('SelectLabel renderiza con las clases correctas', () => {
-    render(<SelectLabel data-testid="select-label">Label</SelectLabel>);
+    render(
+      <Select>
+        <SelectGroup>
+          <SelectLabel data-testid="select-label">Label</SelectLabel>
+        </SelectGroup>
+      </Select>
+    );
     
     const label = screen.getByTestId('select-label');
     expect(label).toBeInTheDocument();
@@ -116,9 +133,21 @@ describe('Select Component', () => {
     expect(label).toHaveTextContent('Label');
   });
 
-  test('SelectItem renderiza con las clases correctas', () => {
-    render(<SelectItem data-testid="select-item" value="test">Item</SelectItem>);
+  test('SelectItem renderiza con las clases correctas', async () => {
+    render(
+      <Select>
+        <SelectTrigger data-testid="select-trigger">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem data-testid="select-item" value="test">Item</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
     
+    await userEvent.click(screen.getByTestId('select-trigger'));
     const item = screen.getByTestId('select-item');
     expect(item).toBeInTheDocument();
     expect(item).toHaveClass('relative');
@@ -137,7 +166,11 @@ describe('Select Component', () => {
   });
 
   test('SelectSeparator renderiza con las clases correctas', () => {
-    render(<SelectSeparator data-testid="select-separator" />);
+    render(
+      <Select>
+        <SelectSeparator data-testid="select-separator" />
+      </Select>
+    );
     
     const separator = screen.getByTestId('select-separator');
     expect(separator).toBeInTheDocument();

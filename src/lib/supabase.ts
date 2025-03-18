@@ -5,6 +5,23 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Helper para mocks
+export const mockSupabase = {
+  from: jest.fn(() => mockSupabase),
+  select: jest.fn(() => mockSupabase),
+  insert: jest.fn(() => mockSupabase),
+  update: jest.fn(() => mockSupabase),
+  delete: jest.fn(() => mockSupabase),
+  auth: {
+    signIn: jest.fn(),
+    signOut: jest.fn(),
+    getSession: jest.fn(),
+    onAuthStateChange: jest.fn(() => ({
+      data: { subscription: { unsubscribe: jest.fn() } }
+    }))
+  }
+};
+
 export async function fetchData() {
   try {
     const { data, error } = await supabase
