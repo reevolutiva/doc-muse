@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { redirect } from "next/navigation"
 
-export default async function TemplatesLayout({
+export default async function ProjectsLayout({
   children,
 }: {
   children: React.ReactNode
@@ -12,6 +12,8 @@ export default async function TemplatesLayout({
   const {
     data: { session },
   } = await supabase.auth.getSession()
+
+  console.log("session", session)
 
   if (!session) {
     //redirect("/")
