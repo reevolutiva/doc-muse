@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
+import clsx from 'clsx';
 
 describe('Breadcrumbs Component', () => {
   test('renders Breadcrumbs with links', () => {
@@ -10,7 +11,7 @@ describe('Breadcrumbs Component', () => {
   });
 
   test('applies custom className', () => {
-    render(<Breadcrumbs className="custom-class" links={[{ name: 'Home', href: '/' }]} />);
+    render(<Breadcrumbs className={clsx("custom-class", "transition-colors hover:text-foreground font-medium text-foreground pointer-events-none")} links={[{ name: 'Home', href: '/' }]} />);
     expect(screen.getByText('Home')).toHaveClass('custom-class');
   });
 });

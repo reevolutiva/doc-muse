@@ -19,27 +19,38 @@ export function useTemplates(projectId?: string): TemplateHookResult {
   const errorHandler = createErrorHandler('Templates')
   const { templates, loading, error } = useTemplateLoader()
 
-  const [templates, setTemplates] = useState<Template[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchTemplates = async () => {
     setIsLoading(true);
     try {
-      const { data, error: supabaseError } = await supabase
-        .from('templates')
-        .select('*')
-        .order('created_at', { ascending: false });
+      if (!projectId) {
+        const { data, error } = await supabase
+          .from('templates')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (supabaseError) {
-        throw supabaseError;
+        if (error) {
+          errorHandler(error)
+          setError(error.message);
+        }
+        setTemplates(data);
+      } else {
+        const { data, error } = await supabase
+          .from('templates')
+          .select('*')
+          .eq('project_id', projectId)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          errorHandler(error)
+          setError(error.message);
+        }
+        setTemplates(data);
       }
-
-      setTemplates(data);
-      setError(null);
-    } catch (err: any) {
-      setError(err.message || 'Error fetching templates');
-      setTemplates(null);
+    } catch (error) {
+      errorHandler(error)
+      setError('Failed to fetch templates');
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +79,7 @@ export function useTemplates(projectId?: string): TemplateHookResult {
 
   useEffect(() => {
     fetchTemplates();
-  }, []);
+  }, [projectId]);
 
   const createDocument = useCallback(async (template: Template): Promise<void> => {
     if (!projectId) {

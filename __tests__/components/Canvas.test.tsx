@@ -17,9 +17,10 @@ jest.mock('reactflow', () => ({
 
 describe('Canvas Component', () => {
   test('renderiza correctamente con controles', () => {
+    const initialData = { nodes: [], edges: [] };
     render(
       <TemplateProvider>
-        <Canvas />
+        <Canvas initialData={initialData} />
       </TemplateProvider>
     );
     

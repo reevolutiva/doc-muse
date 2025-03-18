@@ -29,7 +29,8 @@ describe('Form Component', () => {
         <input name="test-input" placeholder="Test Input" />
       </Form>
     );
-    fireEvent.change(screen.getByPlaceholderText('Test Input'), { target: { value: 'Test Value' } });
+    const input = screen.getByPlaceholderText('Test Input');
+    fireEvent.change(input, { target: { value: 'Test Value' } });
     fireEvent.submit(screen.getByRole('form'));
     expect(handleSubmit).toHaveBeenCalledWith({ 'test-input': 'Test Value' });
   });
