@@ -6,11 +6,21 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import ProjectsClient from './ProjectsClient';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
-  
+  const { session } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) {
+      router.replace('/');
+    }
+  }, [session, router]);
+
   useEffect(() => {
     async function fetchProjects() {
       setLoading(true)

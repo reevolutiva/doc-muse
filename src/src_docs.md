@@ -113,3 +113,43 @@ La aplicación utiliza Supabase como backend, integrándose a través de:
 - Funcionalidades organizadas por características en `features/`
 - Utilidades y servicios compartidos en `lib/`
 - Hooks personalizados en `hooks/` o dentro de `features/`
+
+## Flujo de la Aplicación y Navegación
+
+### Punto de Entrada
+- El punto de entrada principal es `src/app/page.tsx`
+- Este componente implementa redirección inteligente basada en autenticación:
+  - Si el usuario está autenticado → redirección a `/projects` o `/dashboard`
+  - Si no está autenticado → redirección a página de login o `/templates`
+  - El código utiliza `createServerComponentClient` de Supabase para verificar la sesión
+
+### Configuración de Rutas
+- **App Router de Next.js**: Cada carpeta en `/src/app/` representa una ruta
+- **Middleware**: Ubicado en `src/middleware.ts` para interceptar solicitudes y manejar autenticación global
+- **Layout Principal**: `src/app/layout.tsx` envuelve toda la aplicación y provee:
+  - Proveedores de contexto globales
+  - Estructura visual compartida
+  - Componentes de navegación persistentes
+
+### Sistema de Redirecciones
+- **Redirecciones por Autenticación**:
+  - No autenticado intenta acceder a ruta protegida → `/login` o ruta especificada
+  - Autenticado accede a `/login` → redirigido a `/projects`
+- **Redirecciones por Migración**:
+  - `/document-templates/` → `/templates`
+  - `/project-templates/` → `/templates?tab=projects`
+- **Redirecciones por Error**: Manejo en `error.tsx` → redirección apropiada o página de error
+
+### Flujo de Navegación Típico
+1. **Entrada**: Usuario llega a `/` (src/app/page.tsx)
+2. **Verificación**: Middleware/page verifica autenticación con Supabase
+3. **Redirección**: Basada en estado de autenticación
+   - Autenticado → `/projects` o última ruta
+   - No autenticado → `/login` o página pública
+4. **Navegación Interna**: A través de componentes como Navbar, Sidebar o enlaces
+
+### Flujo de Autenticación
+1. **Login**: `src/components/auth/auth-form.tsx` maneja inicio de sesión/registro
+2. **Verificación**: `supabase.auth.getSession()` verifica sesión activa
+3. **Almacenamiento**: Sesión guardada en cookies por Supabase
+4. **Protección**: Componentes verifican sesión y redirigen si es necesario

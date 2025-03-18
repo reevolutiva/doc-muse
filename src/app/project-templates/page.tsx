@@ -1,7 +1,14 @@
 "use client"
 
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function ProjectTemplatesRedirect() {
-  redirect('/templates?tab=projects')
+  const router = useRouter();
+  
+  useEffect(() => {
+    router.push('/templates?tab=projects');
+  }, [router]);
+  
+  return null;
 }

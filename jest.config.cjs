@@ -1,8 +1,4 @@
-const nextJest = require('next/jest');
-
-const createJestConfig = nextJest({
-  dir: './',
-});
+const createJestConfig = require('next/jest');
 
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -18,7 +14,6 @@ const customJestConfig = {
     '!**/.next/**'
   ],
   coverageDirectory: 'coverage',
-  reporters: ['default', 'jest-junit'],
   coverageThreshold: {
     global: {
       statements: 70,
@@ -29,4 +24,5 @@ const customJestConfig = {
   },
 };
 
-module.exports = createJestConfig(customJestConfig);
+module.exports = createJestConfig({ dir: './' })(customJestConfig);
+
