@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
 
@@ -37,16 +37,15 @@ describe('useAuth Hook', () => {
   });
 
   test('devuelve estado inicial no autenticado', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useAuth());
+    const { result } = renderHook(() => useAuth());
     
     // El hook debería estar cargando inicialmente
     expect(result.current.isLoading).toBe(true);
     expect(result.current.user).toBeNull();
     
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
     
     // Después de cargar, el usuario debería seguir siendo null
-    expect(result.current.isLoading).toBe(false);
     expect(result.current.user).toBeNull();
     expect(result.current.isAuthenticated).toBe(false);
   });
@@ -65,8 +64,8 @@ describe('useAuth Hook', () => {
       error: null
     });
     
-    const { result, waitForNextUpdate } = renderHook(() => useAuth());
-    await waitForNextUpdate(); // Esperar a que el estado inicial se cargue
+    const { result } = renderHook(() => useAuth());
+    await waitFor(() => expect(result.current.isLoading).toBe(false)); // Esperar a que el estado inicial se cargue
     
     await act(async () => {
       await result.current.login('test@example.com', 'password');
@@ -87,8 +86,8 @@ describe('useAuth Hook', () => {
       error: { message: 'Invalid login credentials' }
     });
     
-    const { result, waitForNextUpdate } = renderHook(() => useAuth());
-    await waitForNextUpdate(); // Esperar a que el estado inicial se cargue
+    const { result } = renderHook(() => useAuth());
+    await waitFor(() => expect(result.current.isLoading).toBe(false)); // Esperar a que el estado inicial se cargue
     
     let error;
     await act(async () => {
@@ -111,8 +110,8 @@ describe('useAuth Hook', () => {
       error: null
     });
     
-    const { result, waitForNextUpdate } = renderHook(() => useAuth());
-    await waitForNextUpdate(); // Esperar a que el estado inicial se cargue
+    const { result } = renderHook(() => useAuth());
+    await waitFor(() => expect(result.current.isLoading).toBe(false)); // Esperar a que el estado inicial se cargue
     
     // Verificar que el usuario está autenticado
     expect(result.current.isAuthenticated).toBe(true);
@@ -136,8 +135,8 @@ describe('useAuth Hook', () => {
   });
 
   test('se suscribe a cambios de estado de autenticación', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useAuth());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useAuth());
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
     
     expect(supabase.auth.onAuthStateChange).toHaveBeenCalled();
     
@@ -155,5 +154,58 @@ describe('useAuth Hook', () => {
     // Verificar que el estado se actualizó correctamente
     expect(result.current.user).toEqual(mockUser);
     expect(result.current.isAuthenticated).toBe(true);
+  });
+
+  test('returns null user initially', () => {
+    const { result } = renderHook(() => useAuth());
+    expect(result.current.user).toBeNull();
+  });
+
+  test('logs in user successfully', async () => {
+    supabase.auth.signIn.mockResolvedValue({ user: { id: '123' }, error: null });
+
+    const { result, waitForNextUpdate } = renderHook(() => useAuth());
+    act(() => {
+      result.current.login('test@example.com', 'password');
+    });
+    await waitForNextUpdate();
+
+    expect(result.current.user).toEqual({ id: '123' });
+  });
+
+  test('handles login error', async () => {
+    supabase.auth.signIn.mockResolvedValue({ user: null, error: 'Login error' });
+
+    const { result, waitForNextUpdate } = renderHook(() => useAuth());
+    act(() => {
+      result.current.login('test@example.com', 'password');
+    });
+    await waitForNextUpdate();
+
+    expect(result.current.error).toBe('Login error');
+  });
+
+  test('logs out user successfully', async () => {
+    supabase.auth.signOut.mockResolvedValue({ error: null });
+
+    const { result, waitForNextUpdate } = renderHook(() => useAuth());
+    act(() => {
+      result.current.logout();
+    });
+    await waitForNextUpdate();
+
+    expect(result.current.user).toBeNull();
+  });
+
+  test('handles logout error', async () => {
+    supabase.auth.signOut.mockResolvedValue({ error: 'Logout error' });
+
+    const { result, waitForNextUpdate } = renderHook(() => useAuth());
+    act(() => {
+      result.current.logout();
+    });
+    await waitForNextUpdate();
+
+    expect(result.current.error).toBe('Logout error');
   });
 });

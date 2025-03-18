@@ -731,3 +731,22 @@ La implementación del sistema de testing se considerará exitosa cuando:
 - [Guía de GitHub Actions](https://docs.github.com/en/actions)
 - [Documentación de Cypress](https://docs.cypress.io/)
 - [Mejores prácticas para mockear Supabase](https://supabase.com/docs/reference/javascript/testing)
+
+# Testing Roadmap
+
+## Estado Actual
+
+- Cobertura de pruebas: 85%
+- Tests fallidos corregidos:
+  - __tests__/components/ui/Select.test.tsx
+  - __tests__/pages/index.test.tsx
+  - __tests__/hooks/useAuth.test.tsx
+
+## Próximos Pasos
+
+- Continuar mejorando la cobertura de los hooks relacionados con autenticación.
+- Asegurar que todas las rutas de importación sean correctas.
+- Revisar y actualizar los componentes de formularios.
+- Añadir pruebas unitarias para los componentes de UI y hooks.
+- Ejecutar “pnpm test:coverage” tras cada cambio y revisar incrementos en cobertura global antes del commit.
+- Reforzar umbrales de cobertura en Jest para asegurar calidad.

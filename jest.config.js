@@ -27,16 +27,26 @@ const customJestConfig = {
     '^.+\\.module\\.(css|sass|scss)$',
   ],
   // Configuración para cobertura de código
+  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
+    '!src/**/index.ts',
     '!src/**/_*.{js,jsx,ts,tsx}',
     '!**/node_modules/**',
     '!**/.next/**',
     '!**/dist/**'
   ],
-  coverageReporters: ['text', 'lcov', 'html'],
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'html'],
   coverageDirectory: '<rootDir>/coverage',
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config

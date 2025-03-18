@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import Home from '../../src/pages/index';
+import IndexPage from '../../src/pages/index'; // Ruta corregida
 import { supabase } from '../../src/lib/supabase';
 import { useRouter } from 'next/router';
 
@@ -36,7 +36,7 @@ describe('Home Page', () => {
       data: { session: null } 
     });
     
-    render(<Home />);
+    render(<IndexPage />);
     expect(screen.getByText('Cargando...')).toBeInTheDocument();
   });
 
@@ -45,7 +45,7 @@ describe('Home Page', () => {
       data: { session: { user: { id: '123' } } } 
     });
     
-    render(<Home />);
+    render(<IndexPage />);
     
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/projects');
@@ -57,7 +57,7 @@ describe('Home Page', () => {
       data: { session: null } 
     });
     
-    render(<Home />);
+    render(<IndexPage />);
     
     await waitFor(() => {
       expect(screen.getByTestId('auth-form')).toBeInTheDocument();
