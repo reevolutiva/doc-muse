@@ -44,4 +44,3 @@ export default function HomePage() {
   // Esto no debería mostrarse normalmente debido a las redirecciones
   return null;
 }
->>>>>>> ghcw-session-e95d
