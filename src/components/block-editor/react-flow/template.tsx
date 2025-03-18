@@ -132,11 +132,11 @@ export default function TemplatesReactFlow() {
     
   }, []);
 
-  const addNode = () => {
+  const addNode = (type, content) => {
     const newNode = {
       id: (nodes.length + 1).toString(),
-      data: { label: `Node ${nodes.length + 1}` },
-      type: 'deleterNode',
+      data: { label: content },
+      type: type,
       position: { x: Math.random() * 250, y: Math.random() * 250 },
     };
     setNodes((nds) => [...nds, newNode]);
@@ -152,7 +152,7 @@ export default function TemplatesReactFlow() {
     <div className="w-full h-[500px]">
       <div className="flex space-x-2 mb-2 pb-5">
 
-        <AddNodeForm nodes={nodes} setNodes={setNodes} />
+        <AddNodeForm nodes={nodes} setNodes={setNodes} addNode={addNode} />
 
         <TemplateSelector templates={templates} nodes={nodes} setNodes={setNodes} />
         
