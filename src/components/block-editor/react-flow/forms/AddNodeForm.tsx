@@ -25,8 +25,8 @@ const AddNodeForm = ( { nodes, setNodes, addNode } ) => {
     return (
       <form className="add-node-form" onSubmit={ e => onSubmitHandler(e)}>
         <select name="block" id="block-selector" onChange={ e => onChangeSelectorHandler(e) } >
-          <option value="paragraph">Paragraph</option>
-          <option value="heading">Heading</option>
+          <option value="paragraphNode">Paragraph</option>
+          <option value="headingNode">Heading</option>
           <option value="deleterNode">Deleter Node</option>
           <option value="imageNode">Image</option>
           <option value="subtitleNode">Subtitle</option>
