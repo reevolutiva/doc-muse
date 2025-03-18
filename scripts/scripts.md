@@ -32,6 +32,11 @@ This document provides a list and usage instructions for the scripts located in 
     *   **Description**: Verifies the project build and deployment steps, including checking Node.js and pnpm versions, installing dependencies, running TypeScript checks, building the project, and checking Docker containers.
     *   **Usage**: Execute this script to ensure that the project builds successfully and that all dependencies are correctly installed.
     *   **How to Run**: `bash scripts/verify_build.sh`
+    
+6.  **[coverage-to-md.js](scripts/coverage-to-md.js)**:
+    *   **Description**: Generates a coverage report and saves it to a markdown file (`Docs/testing/coverage.md`).
+    *   **Usage**: Run this script to generate a coverage report in markdown format for analysis.
+    *   **How to Run**: `node scripts/coverage-to-md.js`
 
 ## Usage Details
 
@@ -72,3 +77,10 @@ This script is used to verify the build and deployment process. It performs the 
 4.  **TypeScript Check**: Runs a TypeScript check.
 5.  **Builds Project**: Builds the project.
 6.  **Docker Check**: Checks if Docker is running and optionally starts Docker containers, verifies Supabase and frontend accessibility.
+
+### [coverage-to-md.js](scripts/coverage-to-md.js)
+
+This script generates a coverage report and saves it to a markdown file. It performs the following actions:
+
+1.  **Generates Coverage Report**: Executes `pnpm test:coverage` to generate the coverage report.
+2.  **Saves to Markdown**: Saves the generated coverage report to `Docs/testing/coverage.md`.
