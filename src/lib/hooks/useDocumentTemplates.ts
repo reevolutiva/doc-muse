@@ -20,6 +20,13 @@ export function useDocumentTemplates(options: UseDocumentTemplatesOptions = {}) 
           .from('document_templates')
           .select('id, title, description, content, created_at')
           .order('title')
+
+
+        
+          console.log( "fetchTemplates");
+        
+          console.log( "data: ", data );
+          console.log( "error: ", error );
         
         if (error) throw error
         setTemplates(data || [])
