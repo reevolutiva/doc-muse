@@ -84,7 +84,8 @@ export function useTemplateValidation(
       console.error("Error during template validation:", error);
       toast.error(`Template validation failed: ${error.message}`);
     }
-  }, [nodes, edges, customRules]);
+  }, [nodes, edges ]);
+  //}, [nodes, edges, customRules]);
 
   return {
     isValid,
