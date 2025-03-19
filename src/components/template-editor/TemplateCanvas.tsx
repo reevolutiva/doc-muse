@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
   Controls,
@@ -18,6 +18,7 @@ import { SideBar } from './SideBar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { toast } from 'react-hot-toast';
 import type { TemplateNodeData } from './TemplateNode';
+import { supabase } from '@/lib/supabase'
 
 // Define node types for our custom nodes
 const nodeTypes = {
@@ -40,6 +41,33 @@ export const TemplateCanvas = ({
   const [nodes, setNodes, onNodesChange] = useNodesState<TemplateNodeData[]>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
   const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null>(null);
+
+
+  useEffect(() => {
+
+    const fetchNodes = async () => { 
+
+      const tempalte_id = location.href.split("/").pop().split("id=")[1];
+
+      
+      let { data: document_templates, error } = await supabase
+      .from('document_templates')
+      .select('*')
+      .eq('id', tempalte_id)
+      .single();
+
+      const content = document_templates.content;
+      const blocks = content.blocks;
+        
+
+      setNodes(blocks);
+      
+     };
+
+     fetchNodes();
+    
+  }
+  , []);
 
   // Handle connections between nodes
   const onConnect = useCallback(
