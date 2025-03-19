@@ -12,6 +12,7 @@ export function useTemplateLoader(projectId?: string, type?: 'document' | 'proje
     async () => {
       try {
         let query = supabase.from('document_templates').select('*')
+
         
         // Apply filters
         if (projectId) {

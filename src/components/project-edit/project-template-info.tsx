@@ -1,7 +1,7 @@
 "use client"
 
 import { FileText, AlertCircle } from "lucide-react"
-import { useTemplateLoader } from "@/lib/hooks/templates"
+import { useTemplateLoader } from "@/lib/hooks/templates/useTemplateLoader.ts"
 import { createErrorHandler } from "@/lib/utils/error-handler"
 
 interface ProjectTemplateInfoProps {
@@ -10,7 +10,22 @@ interface ProjectTemplateInfoProps {
 
 export function ProjectTemplateInfo({ templateId }: ProjectTemplateInfoProps) {
   const errorHandler = createErrorHandler('Project Template Info');
-  const { templateData: template, loading, error } = useTemplateLoader(templateId || undefined);
+
+  console.log( "Entraste a ProjectTemplateInfo" );
+
+  // Function to extract the last part of the URL
+  const getLastPartOfUrl = (url: string | null): string | null => {
+    if (!url) return null;
+    const parts = url.split('/');
+    return parts.pop() || null;
+  };
+
+  const projectId = getLastPartOfUrl(location.href);
+
+  const { templateData: template, loading, error } = useTemplateLoader(projectId );
+
+  console.log(projectId);
+  console.log(template);
 
   if (loading) {
     return (
