@@ -35,3 +35,7 @@ Es importante revisar el código del hook `useProjectConfig.js` para asegurarse 
 * Debiera configurase selectedTempalte en el metodo handleCreate
 * handleCreate se activa al hacer click en uno de los DOCUMENT_TYPES
 * La lista de DOCUMENT_TYPES se hace filtrando availableDocTypes que actualmente es un array vacio
+* EhterpadEmbed esta importado correctamente.
+
+[ Mie 19 de Marzo 10:22  ]
+Recuperamos Etherpad
