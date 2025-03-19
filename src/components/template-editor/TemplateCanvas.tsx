@@ -58,6 +58,8 @@ export const TemplateCanvas = ({
 
       const content = document_templates.content;
       const blocks = content.blocks;
+
+      console.log(blocks);
         
 
       setNodes(blocks);
