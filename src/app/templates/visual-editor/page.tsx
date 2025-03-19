@@ -133,6 +133,7 @@ export default function VisualEditor({ searchParams }) {
   }, [id])
 
   const handleSave = async () => {
+
     if (!title.trim()) {
       toast.error('Please enter a title')
       return
@@ -153,6 +154,9 @@ export default function VisualEditor({ searchParams }) {
       updated_at: ''
     })
 
+    console.log("templateData", templateData)
+    console.log("validation", validation)
+
     if (!validation.isValid) {
       toast.error(`Validation failed: ${validation.errors.join(', ')}`)
       return
@@ -167,13 +171,22 @@ export default function VisualEditor({ searchParams }) {
 
     try {
       setIsLoading(true)
+
       const table = templateType === "project" ? 'project_templates' : 'document_templates'
+
+      // Extrae da la ultima parte de la url
+      const tempalte_id = location.href.split('/').pop().split("?id=")[1]
       
-      const response = await fetch(`/api/${table}`, {
-        method: id ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(templateData)
-      })
+      const body = {
+        "blocks" : templateData.visual_data.nodes,
+        "edges" : templateData.visual_data.edges
+      }
+      
+      const { data: response , error } = await supabase
+      .from( table )
+      .update({ "content": body })
+      .eq( "id" , tempalte_id )
+      .select()
       
       if (!response.ok) throw new Error('Failed to save template')
       
