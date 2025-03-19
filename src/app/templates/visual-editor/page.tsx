@@ -171,11 +171,53 @@ export default function VisualEditor({ searchParams }) {
       return
     }
 
+    const show_response  = async response =>{
+
+      const savedTemplate = await response.json()
+
+      if (!id) {
+        window.history.replaceState({}, '', `/templates/visual-editor?id=${savedTemplate.id}`)
+      }
+
+    }
+
     try {
       setIsLoading(true)
 
       const table = templateType === "project" ? 'project_templates' : 'document_templates'
 
+      // Estamos editando o creando una nueva plantilla?
+      const is_newTemplate = location.href.includes("id=") ? false : true
+
+      if (is_newTemplate) {
+
+        // Obtener el user_id del usuario actual
+        const { data: { session } } = await supabase.auth.getSession()
+        const user_id = session?.user?.id
+
+        const { data: response , error } = await supabase
+        .from('document_templates')
+        .insert([
+          { 
+            title: templateData.title,
+            description: templateData.description,
+            content: templateData.visual_data,
+            user_id: user_id , // TODO: Obtener el user_id del usuario actual
+            config: {}, // TODO: Configuración del template
+            visual_data: templateData.visual_data,
+            type: templateType,
+            is_required: false
+          },
+        ])
+        .select()
+
+        if (error) throw new Error('Failed to save template')
+
+          show_response(response)
+        
+      }
+
+      if(! is_newTemplate ){
       // Extrae da la ultima parte de la url
       const tempalte_id = location.href.split('/').pop().split("?id=")[1]
       
@@ -186,21 +228,22 @@ export default function VisualEditor({ searchParams }) {
 
       console.log("body", body)
 
-      
+    
       const { data: response , error } = await supabase
       .from( table )
       .update({ "content": body })
       .eq( "id" , tempalte_id )
       .select()
-      
-      
-      if (!response.ok) throw new Error('Failed to save template')
-      
-      const savedTemplate = await response.json()
-      if (!id) {
-        window.history.replaceState({}, '', `/templates/visual-editor?id=${savedTemplate.id}`)
-      }
 
+      if (error) throw new Error('Failed to save template')
+
+      show_response(response)
+
+    }
+
+    
+      
+      
       
       
       setHasUnsavedChanges(false)
