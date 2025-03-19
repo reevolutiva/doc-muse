@@ -134,7 +134,7 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
           Selecciona el tipo de contenido que deseas generar
         </p>
       
-        <p> Funciona </p>
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {DOCUMENT_TYPES.filter(type => 
