@@ -47,6 +47,11 @@ export const TemplateCanvas = ({
 
     const fetchNodes = async () => { 
 
+      // Si la url no tiene el id del template, no se hace nada
+      if (!location.href.includes("id=")) {
+        return;
+      }
+
       const tempalte_id = location.href.split("/").pop().split("id=")[1];
 
       
@@ -58,11 +63,11 @@ export const TemplateCanvas = ({
 
       const content = document_templates.content;
       const blocks = content.blocks;
-
-      console.log(blocks);
-        
+      const edges = content.edges;
+       
 
       setNodes(blocks);
+      setEdges(edges);
       
      };
 

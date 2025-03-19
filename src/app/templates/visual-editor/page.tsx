@@ -145,6 +145,8 @@ export default function VisualEditor({ searchParams }) {
       visual_data: { nodes, edges }
     }
 
+  
+
     // Validar datos antes de guardar
     const validation = validateTemplateData({
       id: id || '',
@@ -181,6 +183,9 @@ export default function VisualEditor({ searchParams }) {
         "blocks" : templateData.visual_data.nodes,
         "edges" : templateData.visual_data.edges
       }
+
+      console.log("body", body)
+
       
       const { data: response , error } = await supabase
       .from( table )
@@ -188,12 +193,15 @@ export default function VisualEditor({ searchParams }) {
       .eq( "id" , tempalte_id )
       .select()
       
+      
       if (!response.ok) throw new Error('Failed to save template')
       
       const savedTemplate = await response.json()
       if (!id) {
         window.history.replaceState({}, '', `/templates/visual-editor?id=${savedTemplate.id}`)
       }
+
+      
       
       setHasUnsavedChanges(false)
       toast.success('Template saved successfully')
