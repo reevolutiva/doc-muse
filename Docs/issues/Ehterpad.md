@@ -28,3 +28,10 @@ La integración con Etherpad se rompió debido a problemas con la base de datos 
 
 ## Notas adocionales
 Es importante revisar el código del hook `useProjectConfig.js` para asegurarse de que está utilizando el `project_id` correcto y que está manejando correctamente las respuestas de Supabase. También, se debe verificar la estructura de las tablas en Supabase para asegurar que las relaciones estén correctamente definidas.
+
+
+## Rastro de envidencias:
+* En src/components/project-edit/create-section.tsx selectedTemplate es null
+* Debiera configurase selectedTempalte en el metodo handleCreate
+* handleCreate se activa al hacer click en uno de los DOCUMENT_TYPES
+* La lista de DOCUMENT_TYPES se hace filtrando availableDocTypes que actualmente es un array vacio

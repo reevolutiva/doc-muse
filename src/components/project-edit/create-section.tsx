@@ -15,6 +15,7 @@ import { CustomStyles } from '../block-editor/extensions/custom-styles'
 import { DOCUMENT_TYPES } from "@/lib/constants/document-types"
 import { useDocumentTemplate } from "@/lib/hooks/useDocumentTemplate"
 import { DocumentService } from "@/lib/services/document-service"
+import EtherpadEmbed from "@/components/document-config/EtherpadEmbed.tsx"
 
 interface CreateSectionProps {
   projectId: string
@@ -52,13 +53,16 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   })
 
   useEffect(() => {
+    
     const p = DOCUMENT_TYPES.filter(type => 
       !templateId || availableDocTypes.includes(type.id)
     )
 
+    console.log( "DOCUMENT_TYPES: ", DOCUMENT_TYPES );
     console.log( "p: ", p );
     console.log( "availableDocTypes: ", availableDocTypes );
-  }, [])
+    console.log( "selectedTemplate", selectedTemplate );
+  }, [availableDocTypes])
 
   const handleCreate = async (template: DocumentTemplate) => {
 

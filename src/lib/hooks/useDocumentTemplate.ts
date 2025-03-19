@@ -24,21 +24,29 @@ export function useDocumentTemplate({ projectId, templateId }: UseDocumentTempla
       }
 
       try {
-        const { data, error } = await supabase
+               
+          // de project_template extraer el document_template_id
+          // Obtiene de project_template la fila con el id que sea igual a templateId
+          // y selecciona los campos document_template_id e is_required
+
+          const { data: project_template, error } = await supabase
           .from('project_template_doc_templates')
-          .select(`
-            document_template_id,
-            is_required
-          `)
+          .select(`*`)
           .eq('project_template_id', templateId)
           .order('sequence_order')
 
+
+    
+
         if (error) throw error
 
-        const docIds = data.map((d: { document_template_id: string }) => d.document_template_id)
+        const docIds = project_template.map((d: { name: string }) => d.name )
+
+  
+
         setAvailableDocTypes(docIds)
         
-        const required = data.reduce((acc: {[key: string]: boolean}, curr) => {
+        const required = project_template.reduce((acc: {[key: string]: boolean}, curr) => {
           acc[curr.document_template_id] = curr.is_required
           return acc
         }, {})
