@@ -11,14 +11,21 @@ interface TemplateLoaderResult {
   error: Error | null;
 }
 
-export function useTemplateLoader(projectId?: string): TemplateLoaderResult {
+export function useTemplateLoader(projectId?: string ): TemplateLoaderResult {
   const errorHandler = createErrorHandler('Template Loader');
+
+  console.log( "Entraste a useTemplateLoader" );
+  console.log(projectId)
+
   
   const { data: templateData, loading, error } = useSupabaseQuery<TemplateData[]>(
     async () => {
       if (!projectId) {
         return { data: [], error: new Error('No project ID') }
       }
+
+
+      console.log(projectId)
 
       try {
         type QueryResult = {
@@ -37,6 +44,19 @@ export function useTemplateLoader(projectId?: string): TemplateLoaderResult {
           .select('project_template_id')
           .eq('id', projectId)
           .single()
+       
+
+
+        
+        console.log(project)
+        console.log(projectError)
+
+
+        // Manejar el caso en que no se encuentra el proyecto
+        if (!project) {
+          console.warn(`No se encontró el proyecto con ID: ${projectId}`);
+          return { data: [], error: new Error(`No se encontró el proyecto con ID: ${projectId}`) };
+        }
 
         if (projectError) throw projectError
         if (!project?.project_template_id) {
@@ -58,6 +78,9 @@ export function useTemplateLoader(projectId?: string): TemplateLoaderResult {
           `)
           .eq('project_template_id', project.project_template_id)
           .order('sequence_order')
+
+        console.log(data)
+        console.log(templatesError)
 
         if (templatesError) throw templatesError
         return { 

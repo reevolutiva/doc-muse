@@ -15,7 +15,6 @@ import { CustomStyles } from '../block-editor/extensions/custom-styles'
 import { DOCUMENT_TYPES } from "@/lib/constants/document-types"
 import { useDocumentTemplate } from "@/lib/hooks/useDocumentTemplate"
 import { DocumentService } from "@/lib/services/document-service"
-import { console } from "inspector"
 
 interface CreateSectionProps {
   projectId: string
@@ -53,7 +52,12 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
   })
 
   useEffect(() => {
-    console.log( "DOCUMENT_TYPES: ", DOCUMENT_TYPES );
+    const p = DOCUMENT_TYPES.filter(type => 
+      !templateId || availableDocTypes.includes(type.id)
+    )
+
+    console.log( "p: ", p );
+    console.log( "availableDocTypes: ", availableDocTypes );
   }, [])
 
   const handleCreate = async (template: DocumentTemplate) => {
@@ -126,6 +130,7 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
           Selecciona el tipo de contenido que deseas generar
         </p>
       
+        <p> Funciona </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {DOCUMENT_TYPES.filter(type => 
