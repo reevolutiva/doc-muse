@@ -17,6 +17,7 @@ interface ValidationPanelProps {
 }
 
 export function ValidationPanel({ visualData }: ValidationPanelProps) {
+  
   const { isValid, errors, warnings } = useTemplateValidation(
     visualData.nodes,
     visualData.edges
@@ -42,6 +43,7 @@ export function ValidationPanel({ visualData }: ValidationPanelProps) {
     )
   }
 
+  
   return (
     <div className="absolute bottom-4 right-4 w-80 z-50">
       <Collapsible defaultOpen={!isValid}>
