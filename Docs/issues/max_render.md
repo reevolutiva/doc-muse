@@ -57,3 +57,7 @@ Para solucionar este problema, sigue estos pasos:
 ## Notas adocionales
 
 El problema parece estar relacionado con el hook [`useTemplateValidation`](src/lib/hooks/useTemplateValidation.ts) y cómo se utiliza en [`ValidationPanel`](src/components/template-manager/validation-panel.tsx). Asegúrate de que las dependencias de [`useTemplateValidation`](src/lib/hooks/useTemplateValidation.ts) estén correctamente gestionadas.
+
+
+## Solucion
+Eliminar customRule como dependencia de useTemplateValidation
