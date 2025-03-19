@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ReactFlowProvider } from '@xyflow/react'
 import type { Node, Edge } from '@xyflow/react'
@@ -226,6 +226,12 @@ export default function VisualEditor({ searchParams }) {
     canRedo
   })
 
+  const visualData = useMemo(() => ({
+    nodes: nodes as Node[],
+    edges: edges
+  }), [nodes, edges]);
+
+
   return (
     <TemplateErrorBoundary>
       <ReactFlowProvider>
@@ -325,10 +331,7 @@ export default function VisualEditor({ searchParams }) {
             </div>
             
             <ValidationPanel 
-              visualData={{ 
-                nodes: nodes as Node[], 
-                edges 
-              }}
+              visualData={visualData}
             />
             <KeyboardHelpDialog />
           </div>

@@ -70,21 +70,21 @@ export function useTemplateValidation(
 
   useEffect(() => {
     try {
-      const rules = [...defaultRules, ...customRules]
-      const results = rules.map(rule => ({
+      const rules = [...defaultRules, ...customRules];
+      const results = rules.map((rule) => ({
         id: rule.id,
         message: rule.message,
         type: rule.type,
-        isValid: rule.validate(nodes, edges)
-      }))
+        isValid: rule.validate(nodes, edges),
+      }));
 
-      setValidationResults(results)
-      setIsValid(results.every(r => r.type === 'warning' || r.isValid))
+      setValidationResults(results);
+      setIsValid(results.every((r) => r.type === 'warning' || r.isValid));
     } catch (error: any) {
-      console.error('Error during template validation:', error)
-      toast.error(`Template validation failed: ${error.message}`)
+      console.error("Error during template validation:", error);
+      toast.error(`Template validation failed: ${error.message}`);
     }
-  }, [nodes, edges, customRules])
+  }, [nodes, edges, customRules]);
 
   return {
     isValid,
