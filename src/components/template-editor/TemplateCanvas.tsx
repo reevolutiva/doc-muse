@@ -41,7 +41,7 @@ export const TemplateCanvas = ({
   const [nodes, setNodes, onNodesChange] = useNodesState<TemplateNodeData[]>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
   const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null>(null);
-
+  const [nodeToEdit, setNodeToEdit] = useState<Node<TemplateNodeData> | null>(null);
 
   useEffect(() => {
 
@@ -100,12 +100,46 @@ export const TemplateCanvas = ({
   const onNodeClick = useCallback((_, node: Node<TemplateNodeData>) => {
     if (!readOnly) {
       setSelectedNode(node);
+      setNodeToEdit(node); // Actualizar el estado con el nodo seleccionado
     }
   }, [readOnly]);
 
   // Add a new node to the canvas
   const onAddNode = (nodeData: TemplateNodeData) => {
     if (readOnly) return;
+
+    const action = nodeData.action;
+  
+
+    console.log("nodeData", nodeData);
+    console.log("nodes", nodes);
+    const title = nodeData.name;
+
+    if( action === "update" ){
+
+      let updatedNodes = nodes.map(node => {
+         
+         console.log( title , node.data.name);
+
+        if ( title ===  node.data.name ) {
+          return { ...node, data: { ...nodeData } };
+        } else {
+          return node;
+        }
+      });
+
+      console.log("updatedNodes", updatedNodes);
+
+      setNodes(updatedNodes);
+      
+      if (onSave) {
+        onSave(updatedNodes, edges);
+      }
+      
+      toast.success('Node updated successfully');
+      return;
+
+    }
     
     const newNode = {
       id: `node-${Date.now()}`,
@@ -146,7 +180,7 @@ export const TemplateCanvas = ({
     <div className="flex h-full">
       {!readOnly && (
         <div className="w-64 border-r border-gray-200 p-4">
-          <SideBar onAddNode={onAddNode} />
+          <SideBar onAddNode={onAddNode} nodeToEdit={nodeToEdit} setNodeToEdit={setNodeToEdit} />
         </div>
       )}
       
