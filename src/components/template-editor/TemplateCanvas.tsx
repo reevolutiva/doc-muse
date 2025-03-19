@@ -62,9 +62,23 @@ export const TemplateCanvas = ({
       .single();
 
       const content = document_templates.content;
-      const blocks = content.blocks;
-      const edges = content.edges;
-       
+
+      let blocks = undefined;
+
+      // content tiene la propiedad blocks?
+      if (content.hasOwnProperty("blocks")) {
+        blocks = content.blocks;
+      }else{
+        blocks = content.nodes;
+      }
+
+      
+      const edges = content.edges;    
+
+      console.log( "content" , content );
+      
+
+      console.log( "blocks" , blocks);
 
       setNodes(blocks);
       setEdges(edges);
