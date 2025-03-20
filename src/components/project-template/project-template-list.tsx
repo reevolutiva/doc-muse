@@ -18,9 +18,15 @@ export function ProjectTemplateList({
   typeFilter
 }: ExtendedProjectTemplateListProps) {
   // Filtrar las plantillas por tipo si se proporciona un filtro
-  const filteredTemplates = typeFilter
+
+  let filteredTemplates = templates
+
+  if( typeFilter === 'document' ) {
+    filteredTemplates = typeFilter
     ? templates.filter(template => template.type === typeFilter)
     : templates
+
+  }
 
   if (loading) {
     return (

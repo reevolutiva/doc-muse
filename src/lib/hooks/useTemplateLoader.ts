@@ -11,7 +11,10 @@ export function useTemplateLoader(projectId?: string, type?: 'document' | 'proje
   const { data: templateData, loading, error } = useSupabaseQuery<TemplateData[]>(
     async () => {
       try {
-        let query = supabase.from('document_templates').select('*')
+
+        const table = type === 'document' ? 'document_templates' : 'project_templates'
+
+        let query = supabase.from(table).select('*')
 
         
         // Apply filters
@@ -32,7 +35,7 @@ export function useTemplateLoader(projectId?: string, type?: 'document' | 'proje
             .order('sequence_order')
         }
 
-        if (type) {
+        if (type && type === 'document' ) {
           query = query.eq('type', type)
         }
 
