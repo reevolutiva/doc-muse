@@ -14,10 +14,12 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { TemplateNode } from './TemplateNode';
+import { UnHandleNode } from './UnHandleNode';
 import { SideBar } from './SideBar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { toast } from 'react-hot-toast';
 import type { TemplateNodeData } from './TemplateNode';
+import type { UnHandleNodeData } from './UnHandleNode';
 import { supabase } from '@/lib/supabase'
 
 
@@ -37,9 +39,9 @@ function getUrlParameter() {
 }
 
 interface TemplateCanvasProps {
-  initialNodes?: Node<TemplateNodeData>[];
+  initialNodes?: Node<TemplateNodeData | UnHandleNodeData>[];
   initialEdges?: Edge[];
-  onSave?: (nodes: Node<TemplateNodeData>[], edges: Edge[]) => void;
+  onSave?: (nodes: Node<TemplateNodeData | UnHandleNodeData>[], edges: Edge[]) => void;
   readOnly?: boolean;
 }
 
@@ -144,7 +146,7 @@ export const TemplateCanvas = ({
       const { tempalte_id, type, table } = getUrlParameter();
 
       if( type === "document" ){
-         nodeTypes.templateNode = TemplateNode;
+         nodeTypes.templateNode = UnHandleNode;
          hasDragableNodes = false;
       }
 
