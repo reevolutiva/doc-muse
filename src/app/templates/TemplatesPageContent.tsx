@@ -52,11 +52,11 @@ function TemplatesContent() {
   }
   
   const handleCreateTemplate = () => {
-    router.push(`/templates/visual-editor${activeTab === "projects" ? "?type=project" : ""}`)
+    router.push(`/templates/visual-editor${activeTab === "projects" ? "?type=project" : "?type=document"}`)
   }
   
   const handleEditTemplate = (id: string, type: string) => {
-    router.push(`/templates/visual-editor?id=${id}${type === "project" ? "&type=project" : ""}`)
+    router.push(`/templates/visual-editor?id=${id}${type === "project" ? "&type=project" : "&type=document"}`)
   }
 
   if (loading) {
