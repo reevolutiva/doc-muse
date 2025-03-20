@@ -20,10 +20,6 @@ import { toast } from 'react-hot-toast';
 import type { TemplateNodeData } from './TemplateNode';
 import { supabase } from '@/lib/supabase'
 
-// Define node types for our custom nodes
-const nodeTypes = {
-  templateNode: TemplateNode
-};
 
 function getUrlParameter() {
   // Si la url no tiene el id del template, no se hace nada
@@ -47,6 +43,11 @@ interface TemplateCanvasProps {
   readOnly?: boolean;
 }
 
+// Define node types for our custom nodes
+const nodeTypes = {
+  templateNode: ""
+};
+
 export const TemplateCanvas = ({
   initialNodes = [],
   initialEdges = [],
@@ -57,6 +58,8 @@ export const TemplateCanvas = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
   const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null>(null);
   const [nodeToEdit, setNodeToEdit] = useState<Node<TemplateNodeData> | null>(null);
+
+  let hasDragableNodes = true;
 
   useEffect(() => {
 
@@ -84,8 +87,17 @@ export const TemplateCanvas = ({
 
         // Añaddir a cada nodo en blocks el callback onDelete()
         blocks = blocks.map((node: any) => {
+
+          const position = { x: node.position.x, y: node.position.y };
+
+          if( ! hasDragableNodes ){
+            position.x = 0;
+          }
+
           return {
             ...node,
+            draggable: hasDragableNodes,
+            position: position,
             data: {
               ...node.data,
               onDelete: ( data ) => {
@@ -127,7 +139,18 @@ export const TemplateCanvas = ({
         return { blocks, edges };
       }
 
+      
+
       const { tempalte_id, type, table } = getUrlParameter();
+
+      if( type === "document" ){
+         nodeTypes.templateNode = TemplateNode;
+         hasDragableNodes = false;
+      }
+
+      if( type === "project" ){
+        nodeTypes.templateNode = TemplateNode;
+      }
 
 
       let { data: document_templates, error } = await supabase
@@ -263,7 +286,7 @@ export const TemplateCanvas = ({
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
             fitView
-            nodesDraggable={!readOnly}
+            nodesDraggable={hasDragableNodes}
             nodesConnectable={!readOnly}
             elementsSelectable={!readOnly}
           >
