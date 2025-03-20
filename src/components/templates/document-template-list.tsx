@@ -19,7 +19,7 @@ export function DocumentTemplateList({ type = 'document' }: DocumentTemplateList
   const router = useRouter()
   
   const handleEdit = (templateId: string) => {
-    router.push(`/templates/visual-editor?id=${templateId}`)
+    router.push(`/templates/visual-editor?id=${templateId}&type=document`)
   }
   
   const handleDelete = async (templateId: string) => {

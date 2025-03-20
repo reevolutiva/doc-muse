@@ -9,6 +9,7 @@ import { DocumentTemplateSelector } from "./document-template-selector"
 import { DocumentDependencyEditor } from "./document-dependency-editor"
 import * as Dialog from '@radix-ui/react-dialog'
 import { Template } from "@/lib/types/template"
+import { useRouter, useSearchParams } from "next/navigation"
 
 interface ProjectTemplateManagerProps {
   onSelect?: (template: Template) => void
@@ -21,12 +22,21 @@ export function ProjectTemplateManager({ onSelect, mode = "manage", type = "proj
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
   const [showDocumentSelector, setShowDocumentSelector] = useState(false)
   const [showDependencyEditor, setShowDependencyEditor] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     
     console.log("templates" , templates);
     
   }, [templates]);
+
+  const handleCreateTemplate = () => {
+    router.push(`/templates/visual-editor?type=project`)
+  }
+  
+  const handleEditTemplate = (id: string, type: string) => {
+    router.push(`/templates/visual-editor?id=${id}&type=project`)
+  }
   
   return (
     <div>
@@ -46,7 +56,10 @@ export function ProjectTemplateManager({ onSelect, mode = "manage", type = "proj
         templates={templates || []}
         loading={loading}
         error={error}
-        onEdit={(template) => setSelectedTemplate(template)}
+        onEdit={(template) => {
+          console.log("Edit Template", template)
+          handleEditTemplate(template.id, type)
+        }}
         onPreview={(template) => setSelectedTemplate(template)}
         typeFilter={type}
       />
