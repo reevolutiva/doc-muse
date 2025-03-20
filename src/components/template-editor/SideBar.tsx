@@ -13,12 +13,18 @@ interface SideBarProps {
 }
 
 export const SideBar = ({ onAddNode, nodeToEdit, setNodeToEdit, type }: SideBarProps) => {
+  
   const [nodeName, setNodeName] = useState('');
   const [nodeDescription, setNodeDescription] = useState('');
   const [isRequired, setIsRequired] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const isEditMode = !!nodeToEdit;
   const entity = type === 'document' ? 'section' : 'document'; 
+
+
+  const [sectionType, setSectionType] = useState("heading1");
+  const [content, setContent] = useState("");
+  const [url, setUrl] = useState("");
 
   // Use useEffect to update the form fields when nodeToEdit changes
   useEffect(() => {
@@ -84,8 +90,15 @@ export const SideBar = ({ onAddNode, nodeToEdit, setNodeToEdit, type }: SideBarP
       { type === 'document' && 
       
         <DocumentsFields 
-          nodeName={nodeName} 
-          entity={entity}
+          section_type={sectionType}
+          setSectionType={setSectionType}
+          content={content}
+          setContent={setContent}
+          aiPrompt={aiPrompt}
+          setAiPrompt={setAiPrompt}
+          url={url}
+          setUrl={setUrl}
+
         />
       }
       

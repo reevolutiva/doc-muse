@@ -1,10 +1,26 @@
 import React, { useState } from 'react';
 
-const DocumentsFields = () => {
-    const [sectionType, setSectionType] = useState("heading1");
-    const [content, setContent] = useState("");
-    const [ia, setIa] = useState("");
-    const [url, setUrl] = useState("");
+interface DocumentsFieldsProps {
+    sectionType: string;
+    setSectionType: React.Dispatch<React.SetStateAction<string>>;
+    content: string;
+    setContent: React.Dispatch<React.SetStateAction<string>>;
+    aiPrompt: string;
+    setaiPrompt: React.Dispatch<React.SetStateAction<string>>;
+    url: string;
+    setUrl: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const DocumentsFields = ({
+    sectionType,
+    setSectionType,
+    content,
+    setContent,
+    aiPrompt,
+    setaiPrompt,
+    url,
+    setUrl
+}) => {
 
     return ( 
         <div className="project-fields">
@@ -38,12 +54,12 @@ const DocumentsFields = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-            <label htmlFor="ia">IA:</label>
+            <label htmlFor="aiPrompt">AI Prompt:</label>
             <input 
                 type="text" 
-                id="ia" 
-                value={ia}
-                onChange={(e) => setIa(e.target.value)}
+                id="aiPrompt" 
+                value={aiPrompt}
+                onChange={(e) => setaiPrompt(e.target.value)}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
             />
             </div>
