@@ -78,7 +78,49 @@ export const TemplateCanvas = ({
       console.log( "content" , content );
       
 
-      console.log( "blocks" , blocks);
+      console.log( "blocks" , blocks );
+
+
+      // Añaddir a cada nodo en blocks el callback onDelete()
+      blocks = blocks.map((node: any) => {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            onDelete: ( data ) => {
+
+              const { id, name } = data;
+
+              
+
+              const filter_data = id === undefined ? name : id;
+              const filter_key = id === undefined ? "name" : "id";
+
+              const updatedNodes = blocks.filter((n: Node<TemplateNodeData> ) => {
+                
+                if( filter_key === "name" ){
+                  return n.data.name !== filter_data ;
+                }
+
+                if( filter_key === "id" ){
+                  return n.data.id !== filter_data ;
+                }
+
+                return n;
+
+              } );
+
+              console.log("updatedNodes", updatedNodes);
+              
+              setNodes(updatedNodes);
+              setEdges([]);
+
+
+
+            }
+          }
+        };
+      });
 
       setNodes(blocks);
       setEdges(edges);
@@ -106,9 +148,12 @@ export const TemplateCanvas = ({
 
   // Add a new node to the canvas
   const onAddNode = (nodeData: TemplateNodeData) => {
+    
     if (readOnly) return;
 
     const action = nodeData.action;
+
+  
   
 
     console.log("nodeData", nodeData);
@@ -133,7 +178,10 @@ export const TemplateCanvas = ({
       setNodes(updatedNodes);
       
       if (onSave) {
+        console.log("tiene onSave");
         onSave(updatedNodes, edges);
+      }else{
+        console.log("no tiene onSave");
       }
       
       toast.success('Node updated successfully');

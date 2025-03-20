@@ -12,7 +12,7 @@ export interface TemplateNodeData {
   aiPrompt?: string;
   onEdit?: (data: TemplateNodeData) => void;
   onDuplicate?: (data: TemplateNodeData) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: ( data: TemplateNodeData ) => void;
 }
 
 // Define the props for the TemplateNode component
@@ -42,7 +42,7 @@ export const TemplateNode = memo(({ data, isConnectable }: TemplateNodeProps) =>
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      data.onDelete && data.onDelete(data.id);
+      data.onDelete && data.onDelete(data);
     } catch (error: any) {
       toast.error(`Error deleting template: ${error.message}`);
     }
