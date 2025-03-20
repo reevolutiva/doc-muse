@@ -320,10 +320,13 @@ export default function VisualEditor({ searchParams }) {
   }, [])
 
   const handleDeleteNode = useCallback((nodeId: string) => {
+
+    console.log("handleDeleteNode", nodeId)
     setNodes(prev => prev.filter(n => n.id !== nodeId))
     setEdges(prev => prev.filter(e => e.source !== nodeId && e.target !== nodeId))
     setSelectedNode(null)
     setHasUnsavedChanges(true)
+     
   }, [])
 
   const handleTutorialComplete = useCallback(() => {

@@ -40,10 +40,24 @@ export const SideBar = ({ onAddNode, nodeToEdit, setNodeToEdit, type }: SideBarP
 
   // Use useEffect to update the form fields when nodeToEdit changes
   useEffect(() => {
+
     if (nodeToEdit) {
+
+      if( type === "document" ){
+        setSectionType(nodeToEdit.data.section_type || 'heading1');
+        setContent(nodeToEdit.data.content || '');
+        setUrl(nodeToEdit.data.url || '');
+
+      }
+
+      if( type === "project" ){
+
       setNodeName(nodeToEdit.data.name || '');
       setNodeDescription(nodeToEdit.data.description || '');
       setIsRequired(nodeToEdit.data.isRequired || false);
+
+      }
+      
       setAiPrompt(nodeToEdit.data.aiPrompt || '');
     } else {
       // Reset form if no node is selected

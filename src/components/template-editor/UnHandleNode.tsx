@@ -13,6 +13,8 @@ export interface UnHandleNodeData {
   onEdit?: (data: UnHandleNodeData) => void;
   onDuplicate?: (data: UnHandleNodeData) => void;
   onDelete?: ( data: UnHandleNodeData ) => void;
+  onMoveUp?: ( data: UnHandleNodeData ) => void;
+  onMoveDown?: ( data: UnHandleNodeData ) => void;
 }
 
 // Define the props for the UnHandleNode component
@@ -48,10 +50,21 @@ export const UnHandleNode = memo(({ data, isConnectable }: UnHandleNodeProps) =>
     }
   };
 
+
+  const onMoveUpHandler = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    data.onMoveUp(data);
+  };
+
+  const onMoveDownHandler = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    data.onMoveDown(data);
+  };
+
   return (
     <div className="rounded-md border border-gray-200 bg-white p-3 shadow-md">
 
-      <SquareChevronUp size={16} />
+      <SquareChevronUp size={16} onClick={ onMoveUpHandler }/>
 
       <Handle
         type="target"
@@ -108,7 +121,7 @@ export const UnHandleNode = memo(({ data, isConnectable }: UnHandleNodeProps) =>
 
 
       </div>
-        <SquareChevronDown size={16} />
+        <SquareChevronDown size={16}  onClick={ onMoveDownHandler }/>
       <Handle
         type="source"
         position={Position.Bottom}

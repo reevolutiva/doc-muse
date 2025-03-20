@@ -20,8 +20,11 @@ import { SideBar } from './SideBar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { toast } from 'react-hot-toast';
 import type { TemplateNodeData } from './TemplateNode';
-import type { UnHandleNodeData } from './UnHandleNode';
+import { UnHandleNodeData } from './UnHandleNode';
 import { supabase } from '@/lib/supabase'
+import getUrlParameter from './aux';
+import useNodeDelete from './hooks/useDelete';
+import useNodeMove from './hooks/useNodeMove';
 
 interface TemplateCanvasProps {
   initialNodes?: Node<TemplateNodeData | UnHandleNodeData>[];
@@ -43,26 +46,13 @@ export const TemplateCanvas = ({
 }: TemplateCanvasProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<TemplateNodeData[]>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
-  const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null>(null);
-  const [nodeToEdit, setNodeToEdit] = useState<Node<TemplateNodeData> | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null | UnHandleNodeData >(null);
+  const [nodeToEdit, setNodeToEdit] = useState<Node<TemplateNodeData> | null | UnHandleNodeData >(null);
 
   let hasDragableNodes = true;
+  const { nodeUp, nodeDown } = useNodeMove();
 
-  function getUrlParameter() {
-  
-    // Si la url no tiene el id del template, no se hace nada
-    if (!window.location.href.includes("id=")) {
-      return;
-    }
-  
-    const urlParams = new URLSearchParams(window.location.search);
-    const tempalte_id = urlParams.get('id');
-    const type = urlParams.get('type');
-  
-    const table = type === "document" ? "document_templates" : "project_templates";
-  
-    return { tempalte_id, type, table };
-  }
+ 
   
 
   useEffect(() => {
@@ -105,35 +95,15 @@ export const TemplateCanvas = ({
             data: {
               ...node.data,
               onDelete: ( data ) => {
-
-                const { id, name } = data;
-
-                
-
-                const filter_data = id === undefined ? name : id;
-                const filter_key = id === undefined ? "name" : "id";
-
-                const updatedNodes = blocks.filter((n: Node<TemplateNodeData> ) => {
-                  
-                  if( filter_key === "name" ){
-                    return n.data.name !== filter_data ;
-                  }
-
-                  if( filter_key === "id" ){
-                    return n.data.id !== filter_data ;
-                  }
-
-                  return n;
-
-                } );
-
-                console.log("updatedNodes", updatedNodes);
-                
-                setNodes(updatedNodes);
-                setEdges([]);
-
-
-
+                useNodeDelete( data, blocks, setNodes, setEdges );
+              },
+              onMoveUp: ( data ) => {
+                console.log("Move up");
+                nodeUp( data, blocks, setNodes );
+              },
+              onMoveDown: ( data ) => {
+                console.log("Move down"); 
+                nodeDown( data, blocks, setNodes );
               }
             }
           };
@@ -187,6 +157,8 @@ export const TemplateCanvas = ({
 
   // Handle node selection for properties panel
   const onNodeClick = useCallback((_, node: Node<TemplateNodeData>) => {
+    
+    console.log("Node clicked", node);
     if (!readOnly) {
       setSelectedNode(node);
       setNodeToEdit(node); // Actualizar el estado con el nodo seleccionado
@@ -306,7 +278,12 @@ export const TemplateCanvas = ({
     <div className="flex h-full">
       {!readOnly && (
         <div className="w-64 border-r border-gray-200 p-4">
-          <SideBar onAddNode={onAddNode} nodeToEdit={nodeToEdit} setNodeToEdit={setNodeToEdit} type={ getUrlParameter().type } />
+          <SideBar 
+            onAddNode={onAddNode} 
+            nodeToEdit={nodeToEdit} 
+            setNodeToEdit={setNodeToEdit} 
+            type={ getUrlParameter().type } 
+          />
         </div>
       )}
       
