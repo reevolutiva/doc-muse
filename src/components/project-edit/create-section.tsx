@@ -54,8 +54,12 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
 
   useEffect(() => {
     
+    // const p = DOCUMENT_TYPES.filter(type => 
+    //   !templateId || availableDocTypes.includes(type.id)
+    // )
+
     const p = DOCUMENT_TYPES.filter(type => 
-      !templateId || availableDocTypes.includes(type.id)
+      type
     )
 
     console.log( "DOCUMENT_TYPES: ", DOCUMENT_TYPES );
@@ -138,7 +142,8 @@ export function CreateSection({ projectId, projectTitle, templateId }: CreateSec
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {DOCUMENT_TYPES.filter(type => 
-          !templateId || availableDocTypes.includes(type.id)
+          //!templateId || availableDocTypes.includes(type.id)
+           type
         ).map((type) => {
           const Icon = type.icon
           return (

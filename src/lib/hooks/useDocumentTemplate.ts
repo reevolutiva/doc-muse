@@ -15,6 +15,7 @@ export function useDocumentTemplate({ projectId, templateId }: UseDocumentTempla
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+
     const fetchTemplateDocuments = async () => {
       if (!templateId) {
         setAvailableDocTypes([])
@@ -29,18 +30,30 @@ export function useDocumentTemplate({ projectId, templateId }: UseDocumentTempla
           // Obtiene de project_template la fila con el id que sea igual a templateId
           // y selecciona los campos document_template_id e is_required
 
-          const { data: project_template, error } = await supabase
+          const { data: project_template_doc_templates, project_template_doc_templates_error } = await supabase
           .from('project_template_doc_templates')
           .select(`*`)
           .eq('project_template_id', templateId)
-          .order('sequence_order')
+          .single()
 
+          console.log("project_template_doc_templates", project_template_doc_templates);
+
+          const { project_template_id } = project_template_doc_templates
+
+          // Obten de la tabala project_tempalte todos los campos a partir del id
+          const { data: project_template, project_template_error } = await supabase
+          .from('project_templates')
+          .select("*")
+          .eq('id', project_template_id )
+
+        
 
     
 
-        if (error) throw error
-
         const docIds = project_template.map((d: { name: string }) => d.name )
+
+        console.log("project_template", project_template);
+        console.log("docIds", docIds);
 
   
 

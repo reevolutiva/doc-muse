@@ -167,14 +167,14 @@ export default function VisualEditor({ searchParams }) {
     // Validar dependencias
     const depValidation = validateDependencies(templateData.visual_data)
     if (!depValidation.isValid) {
+      console.log("depValidation", depValidation)
       toast.error(`Dependency validation failed: ${depValidation.errors.join(', ')}`)
       return
     }
 
-    const show_response  = async response =>{
+    const show_response  = response =>{
 
-      const savedTemplate = await response.json()
-
+      const savedTemplate = response[0];
       if (!id) {
         window.history.replaceState({}, '', `/templates/visual-editor?id=${savedTemplate.id}`)
       }
