@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { TemplateNodeData } from './TemplateNode';
 import { Node } from '@xyflow/react';
 import { Action } from '@radix-ui/react-alert-dialog';
-import ProjectFields from './ProjectsFields.jsx';
+import ProjectFields from './ProjectsFields';
+import DocumentsFields from './DocumentsFields';
 
 interface SideBarProps {
   onAddNode: (nodeData: TemplateNodeData) => void;
@@ -76,6 +77,14 @@ export const SideBar = ({ onAddNode, nodeToEdit, setNodeToEdit, type }: SideBarP
           setIsRequired={setIsRequired}
           aiPrompt={aiPrompt}
           setAiPrompt={setAiPrompt}
+          entity={entity}
+        />
+      }
+
+      { type === 'document' && 
+      
+        <DocumentsFields 
+          nodeName={nodeName} 
           entity={entity}
         />
       }
