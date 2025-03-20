@@ -79,7 +79,7 @@ function TemplatesContent() {
         
         <Button onClick={handleCreateTemplate} className="flex items-center gap-2">
           <Plus size={16} />
-          Create New Template
+          Create New Template 
         </Button>
       </div>
       
