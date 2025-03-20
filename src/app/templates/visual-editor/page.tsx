@@ -94,8 +94,22 @@ export default function VisualEditor({ searchParams }) {
           if (error) throw error
           
           if (data) {
-            setTitle(data.title || 'Untitled Template')
-            setDescription(data.description || '')
+
+            let title = 'Untitled Template';
+            let description = '';
+
+            if (templateType === "document") {
+              title = data.title || 'Untitled Template';
+              description = data.description || '';
+            }
+
+            if (templateType === "project") {
+              title = data.name || 'Untitled Template';
+              description = data.description || '';
+            }
+
+            setTitle(title)
+            setDescription(description)
             
             if (data.visual_data) {
               setNodes(data.visual_data.nodes || [])

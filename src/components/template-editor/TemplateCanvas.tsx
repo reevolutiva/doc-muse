@@ -25,6 +25,21 @@ const nodeTypes = {
   templateNode: TemplateNode
 };
 
+function getUrlParameter() {
+  // Si la url no tiene el id del template, no se hace nada
+  if (!location.href.includes("id=")) {
+    return;
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const tempalte_id = urlParams.get('id');
+  const type = urlParams.get('type');
+
+  const table = type === "document" ? "document_templates" : "project_templates";
+
+  return { tempalte_id, type, table };
+}
+
 interface TemplateCanvasProps {
   initialNodes?: Node<TemplateNodeData>[];
   initialEdges?: Edge[];
@@ -46,22 +61,6 @@ export const TemplateCanvas = ({
   useEffect(() => {
 
     const fetchNodes = async () => { 
-
-
-      function getUrlParameter() {
-        // Si la url no tiene el id del template, no se hace nada
-        if (!location.href.includes("id=")) {
-          return;
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const tempalte_id = urlParams.get('id');
-        const type = urlParams.get('type');
-
-        const table = type === "document" ? "document_templates" : "project_templates";
-
-        return { tempalte_id, type, table };
-      }
 
       function getTemplateData( content ) {
 
@@ -249,7 +248,7 @@ export const TemplateCanvas = ({
     <div className="flex h-full">
       {!readOnly && (
         <div className="w-64 border-r border-gray-200 p-4">
-          <SideBar onAddNode={onAddNode} nodeToEdit={nodeToEdit} setNodeToEdit={setNodeToEdit} />
+          <SideBar onAddNode={onAddNode} nodeToEdit={nodeToEdit} setNodeToEdit={setNodeToEdit} type={ getUrlParameter().type } />
         </div>
       )}
       
