@@ -132,6 +132,10 @@ export default function VisualEditor({ searchParams }) {
     }
   }, [id])
 
+  useEffect(() => {
+    console.log( "type", templateType );
+  }, [])
+
   const handleSave = async () => {
 
     if (!title.trim()) {
@@ -189,11 +193,8 @@ export default function VisualEditor({ searchParams }) {
       // Estamos editando o creando una nueva plantilla?
       const is_newTemplate = location.href.includes("id=") ? false : true
 
-      if (is_newTemplate) {
 
-        // Obtener el user_id del usuario actual
-        const { data: { session } } = await supabase.auth.getSession()
-        const user_id = session?.user?.id
+      async function newDocumentTemplate( templateData, user_id ){
 
         const { data: response , error } = await supabase
         .from('document_templates')
@@ -211,7 +212,46 @@ export default function VisualEditor({ searchParams }) {
         ])
         .select()
 
-        if (error) throw new Error('Failed to save template')
+        return response
+      }
+
+
+      async function newProjectTemplate( templateData, user_id ){
+        
+        const { data: response , error } = await supabase
+        .from('project_templates')
+        .insert([
+          { 
+            
+            "name": templateData.title,
+            "description": templateData.description,
+            "created_at": new Date().toISOString(),
+            "updated_at": new Date().toISOString(),
+            "content": templateData.visual_data,
+            "user_id": user_id,
+          },
+        ])
+        .select()
+
+        return
+      }
+
+      if (is_newTemplate) {
+
+        // Obtener el user_id del usuario actual
+        const { data: { session } } = await supabase.auth.getSession()
+        const user_id = session?.user?.id
+
+        let response = null
+
+        if( templateType === "document" ){
+          response = await newDocumentTemplate( templateData, user_id )
+          
+        }
+
+        if( templateType === "project" ){
+          response = await newProjectTemplate( templateData, user_id )
+        }
 
           show_response(response)
         
