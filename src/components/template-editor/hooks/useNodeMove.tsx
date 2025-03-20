@@ -1,106 +1,94 @@
 import { Dispatch, SetStateAction } from 'react';
 
-interface NodeType {
-    id: string;
-    type: string;
-    position: number;
-    data: {
-        content: string;
-    };
-    [key: string]: any;
+
+function nodeGetPosition(node, nodes ){
+
+    let next_pos;
+    let before_pos;
+    let current_pos;
+
+    console.log("node", node.content);
+    console.log("section_type", node.section_type);
+    console.log("node", nodes);
+
+    nodes.forEach( ( n, i ) =>{
+        if( n.data.content ==  node.content){
+            current_pos = i;
+            next_pos = current_pos + 1;
+            before_pos = current_pos - 1;
+        }
+    }  );
+
+    return { 
+    "before": { 
+        "index": before_pos, 
+        "data": nodes[before_pos] 
+    }, 
+    "current":{
+        "index": current_pos,
+        "data": nodes[current_pos]
+    }, 
+    "next":{
+        "index": next_pos,
+        "data": nodes[next_pos]
+    } }
+
+}
+
+function alter_position( from , to, nodes ){
+
+    console.log("from", from);
+    console.log("to", to);
+
+    const clon = [ ...nodes ];
+
+    if( to.index > nodes.length - 1 ){
+        return clon;
+    }
+
+    // Cambia la posicion en canva.
+    const from_position = from.data.position;
+    const to_position = to.data.position;
+
+    const new_from = { ...from.data, position: to_position };
+    const new_to = { ...to.data, position: from_position };
+
+    // Cambiamos posicion en el array.
+    clon[from.index] = new_to;
+    clon[to.index] = new_from;
+
+    return clon;
 }
 
 const nodeUp = (
-    node: NodeType,
-    nodes: NodeType[],
-    setNodes: Dispatch<SetStateAction<NodeType[]>>
+    node ,
+    nodes ,
+    setNodes
 ) => {
 
-    if (!node) {
-        console.error("Error: El nodo es undefined en nodeUp");
-        return;
-    }
+    // Obtengo posiciones
+    const { current, before } = nodeGetPosition(node, nodes );
 
-    if (!node.content) {
-        console.error("Error: node.data es undefined en nodeUp", node);
-        return;
-    }
+    // Intercambio
+    const altered = alter_position( current, before, nodes );
+
+    // Retorno
+    //console.log( altered )
+    setNodes( altered );
 
     
-
-    const content = node.content;
-    let current_pos = 0;
-    let before_pos = 0;
-    let current_index = 0;
-    let before_index = 0;
-
-    nodes.forEach((n: NodeType, index: number) => {
-        const data = n.data;
-        if (data.content === content) {
-            if (index > 0) {
-                before_pos = nodes[index - 1].position;
-                before_index = index - 1;
-            }
-            current_pos = n.position;
-            current_index = index;
-        }
-    });
-
-    console.log("current_pos", current_pos);
-    console.log("before_pos", before_pos);
-
-    if (before_index < 0) {
-        setNodes([...nodes]);
-        return;
-    }
-
-    const altered_nodes = nodes.map((n: NodeType, index: number) => {
-        if (index === before_index) {
-            return { ...n, position: current_pos };
-        }
-        if (index === current_index) {
-            return { ...n, position: before_pos };
-        }
-        return n;
-    });
-
-    setNodes(altered_nodes);
 };
 
 const nodeDown = ( node, nodes, setNodes  ) => {
 
-    const content = node.content;
-    let newNode = {};
-    let current_index = 0;
-    nodes.forEach((n, index) => {
-        const data = n.data;
-        if( data.content === content ){
-            newNode = { ...n};
-            current_index = index - 1;
-        }
+     // Obtengo posiciones
+     const { current, next } = nodeGetPosition(node, nodes );
 
-    });
-
-    console.log( newNode );
-
-    let current_pos = newNode.position;
-    let after_pos = nodes[current_index + 1].position;
-
-    console.log("current_pos", current_pos);
-    console.log("after_pos", after_pos);
-
-    const altered_nodes = nodes.map((n, index) => {
-
-        if( index === current_index ){
-            return { ...n, position: after_pos };
-        }
-        if( index === current_index + 1 ){
-            return { ...n, position: current_pos };
-        }
-        return n;
-    });
-
-    setNodes(altered_nodes);
+     // Intercambio
+     const altered = alter_position( current, next, nodes );
+ 
+     // Retorno
+     setNodes( altered );
 }
 
 const useNodeMove = () => {

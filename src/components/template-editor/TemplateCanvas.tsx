@@ -48,6 +48,7 @@ export const TemplateCanvas = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
   const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null | UnHandleNodeData >(null);
   const [nodeToEdit, setNodeToEdit] = useState<Node<TemplateNodeData> | null | UnHandleNodeData >(null);
+  const [type , setType] = useState("");
 
   let hasDragableNodes = true;
   const { nodeUp, nodeDown } = useNodeMove();
@@ -56,6 +57,9 @@ export const TemplateCanvas = ({
   
 
   useEffect(() => {
+
+    const { type } = getUrlParameter();
+    setType( type );
 
     const fetchNodes = async () => { 
 
@@ -282,7 +286,7 @@ export const TemplateCanvas = ({
             onAddNode={onAddNode} 
             nodeToEdit={nodeToEdit} 
             setNodeToEdit={setNodeToEdit} 
-            type={ getUrlParameter().type } 
+            type={ type } 
           />
         </div>
       )}

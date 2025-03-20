@@ -1,9 +1,11 @@
+"use client";
+
 function getUrlParameter() {
   
     // Si la url no tiene el id del template, no se hace nada
-    if (!window.location.href.includes("id=")) {
+    if (typeof window === 'undefined' || !window.location || !window.location.href.includes("id=")) {
       return;
-    }
+  }
   
     const urlParams = new URLSearchParams(window.location.search);
     const tempalte_id = urlParams.get('id');
