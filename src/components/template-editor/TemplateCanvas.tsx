@@ -47,80 +47,101 @@ export const TemplateCanvas = ({
 
     const fetchNodes = async () => { 
 
-      // Si la url no tiene el id del template, no se hace nada
-      if (!location.href.includes("id=")) {
-        return;
+
+      function getUrlParameter() {
+        // Si la url no tiene el id del template, no se hace nada
+        if (!location.href.includes("id=")) {
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const tempalte_id = urlParams.get('id');
+        const type = urlParams.get('type');
+
+        const table = type === "document" ? "document_templates" : "project_templates";
+
+        return { tempalte_id, type, table };
       }
 
-      const tempalte_id = location.href.split("/").pop().split("id=")[1];
+      function getTemplateData( content ) {
 
-      
+        let blocks = [];
+        let edges = [];
+
+        if( content === null ){
+          return { blocks, edges };
+        }
+        
+  
+        // content tiene la propiedad blocks?
+        if (content.hasOwnProperty("blocks")) {
+          blocks = content.blocks;
+        }else{
+          blocks = content.nodes;
+        }
+
+        edges = content.edges;    
+
+
+        // Añaddir a cada nodo en blocks el callback onDelete()
+        blocks = blocks.map((node: any) => {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              onDelete: ( data ) => {
+
+                const { id, name } = data;
+
+                
+
+                const filter_data = id === undefined ? name : id;
+                const filter_key = id === undefined ? "name" : "id";
+
+                const updatedNodes = blocks.filter((n: Node<TemplateNodeData> ) => {
+                  
+                  if( filter_key === "name" ){
+                    return n.data.name !== filter_data ;
+                  }
+
+                  if( filter_key === "id" ){
+                    return n.data.id !== filter_data ;
+                  }
+
+                  return n;
+
+                } );
+
+                console.log("updatedNodes", updatedNodes);
+                
+                setNodes(updatedNodes);
+                setEdges([]);
+
+
+
+              }
+            }
+          };
+        });
+
+
+        return { blocks, edges };
+      }
+
+      const { tempalte_id, type, table } = getUrlParameter();
+
+
       let { data: document_templates, error } = await supabase
-      .from('document_templates')
+      .from(table)
       .select('*')
       .eq('id', tempalte_id)
       .single();
 
       const content = document_templates.content;
-
-      let blocks = undefined;
-
-      // content tiene la propiedad blocks?
-      if (content.hasOwnProperty("blocks")) {
-        blocks = content.blocks;
-      }else{
-        blocks = content.nodes;
-      }
-
-      
-      const edges = content.edges;    
+      const { blocks, edges } = getTemplateData( content );
 
       console.log( "content" , content );
-      
-
       console.log( "blocks" , blocks );
-
-
-      // Añaddir a cada nodo en blocks el callback onDelete()
-      blocks = blocks.map((node: any) => {
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            onDelete: ( data ) => {
-
-              const { id, name } = data;
-
-              
-
-              const filter_data = id === undefined ? name : id;
-              const filter_key = id === undefined ? "name" : "id";
-
-              const updatedNodes = blocks.filter((n: Node<TemplateNodeData> ) => {
-                
-                if( filter_key === "name" ){
-                  return n.data.name !== filter_data ;
-                }
-
-                if( filter_key === "id" ){
-                  return n.data.id !== filter_data ;
-                }
-
-                return n;
-
-              } );
-
-              console.log("updatedNodes", updatedNodes);
-              
-              setNodes(updatedNodes);
-              setEdges([]);
-
-
-
-            }
-          }
-        };
-      });
 
       setNodes(blocks);
       setEdges(edges);
