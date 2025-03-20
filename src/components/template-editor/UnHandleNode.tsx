@@ -60,7 +60,7 @@ export const UnHandleNode = memo(({ data, isConnectable }: UnHandleNodeProps) =>
       />
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">{data.name || 'Untitled'}</h3>
+          <h3 className="text-lg font-semibold">{data.section_type || 'Untitled'}</h3>
           <div className="flex gap-1">
             <button 
               className="rounded p-1 hover:bg-gray-100" 
@@ -86,7 +86,7 @@ export const UnHandleNode = memo(({ data, isConnectable }: UnHandleNodeProps) =>
           </div>
         </div>
         
-        <p className="text-sm text-gray-500">{data.description || 'No description'}</p>
+        <p className="text-sm text-gray-500">{data.content || 'No description'}</p>
         
         {data.isRequired && (
           <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
@@ -100,23 +100,13 @@ export const UnHandleNode = memo(({ data, isConnectable }: UnHandleNodeProps) =>
           </div>
         )}
 
-        {data.sectionType && (
-          <div className="mt-2 text-xs text-gray-500">
-            <span className="font-semibold">Section Type:</span> {data.sectionType}
-          </div>
-        )}
-
-        {data.content && (
-          <div className="mt-2 text-xs text-gray-500">
-            <span className="font-semibold">Content:</span> {data.content.substring(0, 50)}...
-          </div>
-        )}
-
         {data.url && (
           <div className="mt-2 text-xs text-gray-500">
             <span className="font-semibold">URL:</span> {data.url}
           </div>
         )}
+
+
       </div>
         <SquareChevronDown size={16} />
       <Handle

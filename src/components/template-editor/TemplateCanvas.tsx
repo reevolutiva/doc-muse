@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
@@ -21,22 +22,6 @@ import { toast } from 'react-hot-toast';
 import type { TemplateNodeData } from './TemplateNode';
 import type { UnHandleNodeData } from './UnHandleNode';
 import { supabase } from '@/lib/supabase'
-
-
-function getUrlParameter() {
-  // Si la url no tiene el id del template, no se hace nada
-  if (!location.href.includes("id=")) {
-    return;
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const tempalte_id = urlParams.get('id');
-  const type = urlParams.get('type');
-
-  const table = type === "document" ? "document_templates" : "project_templates";
-
-  return { tempalte_id, type, table };
-}
 
 interface TemplateCanvasProps {
   initialNodes?: Node<TemplateNodeData | UnHandleNodeData>[];
@@ -63,6 +48,23 @@ export const TemplateCanvas = ({
 
   let hasDragableNodes = true;
 
+  function getUrlParameter() {
+  
+    // Si la url no tiene el id del template, no se hace nada
+    if (!window.location.href.includes("id=")) {
+      return;
+    }
+  
+    const urlParams = new URLSearchParams(window.location.search);
+    const tempalte_id = urlParams.get('id');
+    const type = urlParams.get('type');
+  
+    const table = type === "document" ? "document_templates" : "project_templates";
+  
+    return { tempalte_id, type, table };
+  }
+  
+
   useEffect(() => {
 
     const fetchNodes = async () => { 
@@ -72,7 +74,7 @@ export const TemplateCanvas = ({
         let blocks = [];
         let edges = [];
 
-        if( content === null ){
+        if( content === null || Object.keys(content).length === 0 ){
           return { blocks, edges };
         }
         
@@ -192,18 +194,23 @@ export const TemplateCanvas = ({
   }, [readOnly]);
 
   // Add a new node to the canvas
-  const onAddNode = (nodeData: TemplateNodeData) => {
+  const onAddNode = (nodeData: TemplateNodeData | UnHandleNodeData ) => {
     
     if (readOnly) return;
 
     const action = nodeData.action;
 
-  
+    const { type } = getUrlParameter();
   
 
     console.log("nodeData", nodeData);
     console.log("nodes", nodes);
+  
     const title = nodeData.name;
+    const content = nodeData.content;
+
+    const last_node = nodes[nodes.length - 1];
+    const last_position = last_node.position;
 
     if( action === "update" ){
 
@@ -211,11 +218,24 @@ export const TemplateCanvas = ({
          
          console.log( title , node.data.name);
 
-        if ( title ===  node.data.name ) {
-          return { ...node, data: { ...nodeData } };
-        } else {
-          return node;
+        if( type === "document" ){
+            if(  content === node.data.content ){
+              return { ...node, data: { ...nodeData } };
+            }
         }
+
+        if ( type === "project" ) {
+          if ( title ===  node.data.id ) {
+            return { ...node, data: { ...nodeData } };
+          } else {
+            return node;
+
+          }
+        }
+
+        return node;  
+
+        
       });
 
       console.log("updatedNodes", updatedNodes);
@@ -233,13 +253,26 @@ export const TemplateCanvas = ({
       return;
 
     }
-    
+
+    const typeNode = type === "document" ? "templateNode" : "unHandleNode";
+    const position = { x: 100, y: 100 } ;
+
+    if( type === "document" ){
+      position.y = last_position.y + 150;
+      position.x = 0;
+    }
+
     const newNode = {
       id: `node-${Date.now()}`,
-      type: 'templateNode',
-      position: { x: 100, y: 100 },
+      type: typeNode ,
+      position: position,
+      draggable: hasDragableNodes,
       data: { ...nodeData }
     };
+
+    console.log("LLega");
+    console.log("newNode", newNode);
+
     setNodes((nds) => [...nds, newNode]);
     
     if (onSave) {

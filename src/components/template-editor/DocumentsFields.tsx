@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
 
-interface DocumentsFieldsProps {
-    sectionType: string;
-    setSectionType: React.Dispatch<React.SetStateAction<string>>;
-    content: string;
-    setContent: React.Dispatch<React.SetStateAction<string>>;
-    aiPrompt: string;
-    setaiPrompt: React.Dispatch<React.SetStateAction<string>>;
-    url: string;
-    setUrl: React.Dispatch<React.SetStateAction<string>>;
-}
 
 const DocumentsFields = ({
     sectionType,
@@ -17,7 +7,7 @@ const DocumentsFields = ({
     content,
     setContent,
     aiPrompt,
-    setaiPrompt,
+    setAiPrompt,
     url,
     setUrl
 }) => {
@@ -59,7 +49,7 @@ const DocumentsFields = ({
                 type="text" 
                 id="aiPrompt" 
                 value={aiPrompt}
-                onChange={(e) => setaiPrompt(e.target.value)}
+                onChange={(e) => setAiPrompt(e.target.value)}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
             />
             </div>

@@ -273,7 +273,10 @@ export default function VisualEditor({ searchParams }) {
 
       if(! is_newTemplate ){
       // Extrae da la ultima parte de la url
-      const tempalte_id = location.href.split('/').pop().split("?id=")[1]
+      const urlParams = new URLSearchParams(window.location.search);
+      const tempalte_id = urlParams.get('id');
+      const type = urlParams.get('type');
+
       
       const body = {
         "blocks" : templateData.visual_data.nodes,
