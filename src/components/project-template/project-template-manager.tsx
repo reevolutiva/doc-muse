@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Plus, Database, X } from "lucide-react"
 import { useTemplates } from "@/lib/hooks/useTemplates"
 import { Button } from "@/components/ui/button"
@@ -21,6 +21,12 @@ export function ProjectTemplateManager({ onSelect, mode = "manage", type = "proj
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
   const [showDocumentSelector, setShowDocumentSelector] = useState(false)
   const [showDependencyEditor, setShowDependencyEditor] = useState(false)
+
+  useEffect(() => {
+    
+    console.log("templates" , templates);
+    
+  }, [templates]);
   
   return (
     <div>
