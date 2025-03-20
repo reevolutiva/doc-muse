@@ -26,17 +26,24 @@ Su documento padre es: {{parentDoc}}
 Nivel de profundidad en la estructura: {{depth}}
 
 # Instrucciones
-1. Analiza la estructura de la carpeta y los archivos existentes: {{existingFiles}}
-2. Genera un documento Markdown que describa:
-    - El propósito general de la carpeta
-    - La estructura y organización de sus archivos
-    - Las responsabilidades principales de los componentes
-    - La relación con otros módulos
-    - La forma en la que funcionan sus archivos y principales conexiones relacionadas
-3. En lugar de repetir información de subcarpetas, usa enlaces a sus documentos
-4. Incluye una en la sección ## notas para añadir información adicional relevante
-5. Formatea el documento con encabezados claros, listas y código en bloques markdown
-6. Actualiza el archivo docs/Readme.md en la raíz de la carpeta con un enlace a este nuevo documento
+1. Verifica primero si ya existe un documento de documentación en la carpeta (normalmente README.md)
+  - Si existe, lee su contenido antes de continuar
+  - Conserva la estructura general y cualquier sección personalizada del documento existente
+2. Analiza la estructura de la carpeta y los archivos existentes: {{existingFiles}}
+3. Genera o actualiza un documento Markdown que describa:
+   - El propósito general de la carpeta
+   - La estructura y organización de sus archivos
+   - Las responsabilidades principales de los componentes
+   - La relación con otros módulos
+   - La forma en la que funcionan sus archivos y principales conexiones relacionadas
+4. Si estás actualizando un documento existente:
+  - Identifica información desactualizada y reemplázala
+  - Añade nuevos componentes o archivos que no estuvieran documentados
+  - Mantén secciones personalizadas que pudieran haberse añadido manualmente
+5. En lugar de repetir información de subcarpetas, usa enlaces a sus documentos
+6. Incluye una sección ## notas para añadir información adicional relevante
+7. Formatea el documento con encabezados claros, listas y código en bloques markdown
+8. Actualiza el archivo docs/Readme.md en la raíz de la carpeta con un enlace a este nuevo documento
 
 # Formato de salida
 Proporciona la documentación con el siguiente formato:

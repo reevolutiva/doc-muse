@@ -16,6 +16,10 @@ doc-muse/
 │   ├── styles/          # Estilos globales
 │   ├── tests/           # Pruebas unitarias e integración
 │   └── types/           # Tipos globales de TypeScript
+├── back/                # Infraestructura de backend para flujos de IA
+│   └── etc/             # Configuraciones y recursos externos
+│       ├── flows/       # Flujos de trabajo de PromptFlow 
+│       └── prompts/     # Plantillas de prompts para modelos de IA
 ├── Docs/                # Documentación del proyecto
 ├── scripts/             # Scripts de utilidad
 ├── supabase/            # Configuración de Supabase
@@ -116,6 +120,21 @@ Utilidades y configuraciones:
 Estilos globales:
 - `globals.css`: Estilos globales y configuración Tailwind
 
+### 📁 `back/`
+Documentación en `back/README.md`
+Infraestructura de backend para flujos de trabajo de IA y generación de documentación automática:
+
+#### 🔸 `etc/flows/`
+Flujos de trabajo de PromptFlow:
+- `flow_doc_codigo/`: Flujo para generación automática de documentación de código
+  - Utiliza el modelo Meta-Llama-3.1-8B-Instruct a través de Azure AI
+  - Genera documentación recursiva para estructuras de código
+
+#### 🔸 `etc/prompts/`
+Plantillas de prompts para modelos de IA:
+- `doc_generator.prompty`: Sistema de generación de documentación recursiva
+- `basic.prompty`: Prompt básico para uso general
+
 ### 📁 `Docs/`
 Documentación del proyecto:
 - `arquitectura.md`: Descripción de la arquitectura
@@ -175,6 +194,11 @@ Configuración y funciones de Supabase:
    - Organización jerárquica de documentos
    - Plantillas de proyecto configurables
 
+4. **Generación Automática de Documentación**
+   - Flujos de trabajo basados en PromptFlow para documentación de código
+   - Integración con modelos de lenguaje de Meta (Llama) a través de Azure AI
+   - Sistema de prompts para documentación recursiva y estructurada
+
 ## Archivos y Componentes Obsoletos o Duplicados
 
 Esta sección identifica componentes y archivos que están duplicados, obsoletos o en ubicaciones incorrectas:
@@ -208,3 +232,4 @@ Esta sección identifica componentes y archivos que están duplicados, obsoletos
 - Eliminación de los directorios legacy `/project-templates/` y `/templates/`.
 - Migración de componentes duplicados a `/src/components/shared/`.
 - Consolidación de la funcionalidad en el editor visual ubicado en `/src/app/templates/visual-editor/`.
+- Documentación del directorio `/back/` con flujos de trabajo para generación automática de documentación.
