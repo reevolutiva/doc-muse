@@ -2,44 +2,61 @@
 
 import { toast } from 'sonner'
 
-export class AppError extends Error {
+interface ErrorOptions {
+  silent?: boolean
+  customMessage?: string
+  context?: string
+}
+
+class AppError extends Error {
   constructor(
     message: string,
-    public code?: string,
-    public status?: number
+    public originalError?: unknown,
+    public context?: string
   ) {
     super(message)
     this.name = 'AppError'
   }
 }
 
-export function handleError(error: unknown) {
-  const message = error instanceof Error ? error.message : 'An unknown error occurred'
+export function handleError(error: unknown, options: ErrorOptions = {}) {
+  const { silent = false, customMessage, context } = options
   
-  if (error instanceof AppError) {
-    switch (error.status) {
-      case 401:
-        toast.error('Your session has expired. Please log in again.')
-        break
-      case 403:
-        toast.error('You do not have permission to perform this action.')
-        break
-      case 404:
-        toast.error('The requested resource was not found.')
-        break
-      default:
-        toast.error(message)
+  // Log error
+  console.error('Error:', {
+    error,
+    context,
+    customMessage
+  })
+
+  // Determine error message to show
+  let displayMessage = customMessage
+  
+  if (!displayMessage) {
+    if (error instanceof AppError) {
+      displayMessage = error.message
+    } else if (error instanceof Error) {
+      displayMessage = error.message
+    } else if (typeof error === 'string') {
+      displayMessage = error
+    } else {
+      displayMessage = 'Ha ocurrido un error inesperado'
     }
-  } else {
-    toast.error(message)
   }
-  
-  console.error('Error:', error)
+
+  // Show toast unless silent
+  if (!silent) {
+    toast.error(displayMessage)
+  }
+
+  // Return formatted error
+  return new AppError(displayMessage, error, context)
 }
 
-export function createErrorHandler(context: string) {
-  return (error: unknown) => {
-    console.error(`Error in ${context}:`, error)
-    handleError(error)
+export function createErrorHandler(defaultContext: string) {
+  return (error: unknown, options: Omit<ErrorOptions, 'context'> = {}) => {
+    return handleError(error, { ...options, context: defaultContext })
   }
 }
+
+export { AppError }

@@ -15,6 +15,7 @@ export function useDocumentTemplate({ projectId, templateId }: UseDocumentTempla
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+
     const fetchTemplateDocuments = async () => {
       if (!templateId) {
         setAvailableDocTypes([])
@@ -24,21 +25,41 @@ export function useDocumentTemplate({ projectId, templateId }: UseDocumentTempla
       }
 
       try {
-        const { data, error } = await supabase
+               
+          // de project_template extraer el document_template_id
+          // Obtiene de project_template la fila con el id que sea igual a templateId
+          // y selecciona los campos document_template_id e is_required
+
+          const { data: project_template_doc_templates, project_template_doc_templates_error } = await supabase
           .from('project_template_doc_templates')
-          .select(`
-            document_template_id,
-            is_required
-          `)
+          .select(`*`)
           .eq('project_template_id', templateId)
-          .order('sequence_order')
+          .single()
 
-        if (error) throw error
+          console.log("project_template_doc_templates", project_template_doc_templates);
 
-        const docIds = data.map((d: { document_template_id: string }) => d.document_template_id)
+          const { project_template_id } = project_template_doc_templates
+
+          // Obten de la tabala project_tempalte todos los campos a partir del id
+          const { data: project_template, project_template_error } = await supabase
+          .from('project_templates')
+          .select("*")
+          .eq('id', project_template_id )
+
+        
+
+    
+
+        const docIds = project_template.map((d: { name: string }) => d.name )
+
+        console.log("project_template", project_template);
+        console.log("docIds", docIds);
+
+  
+
         setAvailableDocTypes(docIds)
         
-        const required = data.reduce((acc: {[key: string]: boolean}, curr) => {
+        const required = project_template.reduce((acc: {[key: string]: boolean}, curr) => {
           acc[curr.document_template_id] = curr.is_required
           return acc
         }, {})

@@ -15,20 +15,14 @@ interface ProjectFormProps {
 export function ProjectForm({ onClose, onSuccess }: ProjectFormProps) {
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    const formData = new FormData(e.target as HTMLFormElement)
-    const title = formData.get('title') as string
-    const type = formData.get('type') as string
-    const templateId = formData.get('templateId') as string
-    const description = formData.get('description') as string
-    const objectives = formData.get('objectives') as string
+  const handleSubmit = async (data: { title: string; project_template_id: string }) => {
+    const { title, project_template_id: templateId } = data
+    const description = ""
+    const objectives = ""
 
     // Validate required fields
     const errors = []
     if (!title.trim()) errors.push("Title is required")
-    if (!type) errors.push("Type is required")
     if (!templateId) errors.push("Please select a template")
     
     if (errors.length > 0) {
@@ -43,7 +37,6 @@ export function ProjectForm({ onClose, onSuccess }: ProjectFormProps) {
 
       const projectData = {
         title,
-        type,
         description,
         objectives,
         user_id: session.user.id,

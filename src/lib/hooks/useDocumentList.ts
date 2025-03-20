@@ -6,9 +6,13 @@ import { toast } from 'sonner'
 import { Document, DocumentListOptions, DocumentFile } from '@/lib/types/document'
 import { extractDisplayName } from '@/lib/utils/document'
 import { useSupabaseQuery } from '@/lib/hooks/useSupabase'
+import { handleError, createErrorHandler } from '@/lib/utils/error-handler'
 
 export function useDocumentList({ projectId, onCountChange }: DocumentListOptions) {
-  const { data: files, loading, error } = useSupabaseQuery<DocumentFile[]>(
+  const errorHandler = createErrorHandler('Document List');
+  const [error, setError] = useState<Error | null>(null);
+  
+  const { data: files, loading, error: queryError } = useSupabaseQuery<DocumentFile[]>(
     async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
@@ -26,12 +30,19 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
         if (error) throw error
         return { data, error: null }
       } catch (err: any) {
-        console.error('Error fetching documents:', err)
+        errorHandler(err, { silent: true })
         throw new Error(err.message || 'Failed to fetch documents')
       }
     },
     [projectId]
   )
+
+  // Update the error state when query error changes
+  useEffect(() => {
+    if (queryError) {
+      setError(queryError);
+    }
+  }, [queryError]);
 
   const [documents, setDocuments] = useState<Document[]>([])
 
@@ -58,8 +69,7 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
-        toast.error("Please log in to delete documents")
-        return
+        throw new Error("Please log in to delete documents")
       }
 
       const { error } = await supabase.storage
@@ -76,9 +86,9 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
       
       toast.success('Document deleted successfully')
     } catch (error: any) {
-      toast.error(`Error deleting document: ${error.message || 'Unknown error'}`)
+      errorHandler(error);
     }
-  }, [projectId, onCountChange])
+  }, [projectId, onCountChange, errorHandler])
 
   useEffect(() => {
     const channel = supabase.channel('storage_db_changes')
@@ -113,6 +123,7 @@ export function useDocumentList({ projectId, onCountChange }: DocumentListOption
   return {
     documents,
     isLoading: loading,
+    error,
     deleteDocument,
     addDocument: (doc: Document) => {
       setDocuments(prev => {

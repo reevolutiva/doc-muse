@@ -1,10 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { LivePreview } from "./live-preview"
+import { appendPadText, setPadText } from "./config/etherpad"
+import { EtherpadIdStorage } from "@/lib/localStorage"
 
 interface Field {
   type: string
@@ -29,7 +31,7 @@ interface DocumentConfigPanelProps {
   onConfigSave: (config: Record<string, unknown>) => void
 }
 
-export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: DocumentConfigPanelProps) {
+const DocumentConfigPanel = ({ templateId, projectId, onConfigSave }: DocumentConfigPanelProps) => {
   const [loading, setLoading] = useState(true)
   const [template, setTemplate] = useState<{
     title: string
@@ -37,6 +39,7 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
     config: DocumentConfig
   } | null>(null)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
+  const [configState, setConfigState] = useState({})
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -44,7 +47,7 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
         const { data, error } = await supabase
           .from('document_templates')
           .select('title, description, config')
-          .eq('id', templateId)
+          .eq('title', templateId)
           .single()
 
         if (error) throw error
@@ -90,32 +93,26 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
   }
 
   const handleSubmit = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        toast.error('Please log in to save configuration')
-        return
-      }
 
-      const { error } = await supabase.functions.invoke('save-document-config', {
-        body: {
-          projectId,
-          templateId,
-          config: formValues
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      })
+    
+    const etherpadIdStorage = new EtherpadIdStorage();
+    const storedPadId = etherpadIdStorage.getPadId();
 
-      if (error) throw error
-
-      toast.success('Configuration saved successfully')
-      onConfigSave(formValues)
-    } catch (error: any) {
-      console.error('Error saving config:', error)
-      toast.error('Failed to save configuration')
+    const body = {
+      "template": {
+        "key": "title",
+        "value": "Blog"
+      },
+      "task": "doc-gen"
     }
+
+    const { data, error } = await supabase.functions.invoke('llm-contextion', {
+      body: body ,
+      method: 'POST'
+    })
+
+    await appendPadText(storedPadId, data );
+
   }
 
   if (loading) {
@@ -209,7 +206,7 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
       </div>
       </div>
       
-      {/* Live Preview Panel */}
+      {/* Live Preview Panel 
       <div className="flex flex-col w-1/2 bg-white">
         <div className="p-6 border-b">
           <h2 className="text-xl font-semibold mb-2">Live Preview</h2>
@@ -221,7 +218,12 @@ export function DocumentConfigPanel({ templateId, projectId, onConfigSave }: Doc
             config={formValues} 
           />
         </div>
+
       </div>
+      */}
     </div>
   )
 }
+
+export default DocumentConfigPanel;
+export { DocumentConfigPanel };

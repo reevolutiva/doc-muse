@@ -1,27 +1,23 @@
+/** @type {import('next').NextConfig} */
 
-      /** @type {import("next").NextConfig} */
-      const config = {
-        trailingSlash: true,
-        images: {
-          unoptimized: true,
-          remotePatterns: [
-            {
-              protocol: 'https',
-              hostname: '*',
-              pathname: '**',
-            },
-          ],
-        },
-        eslint: {
-          ignoreDuringBuilds: true,
-        },
-        typescript: {
-          ignoreBuildErrors: true,
-        },
-        webpack: (config, { isServer }) => {
-          config.stats = "verbose";
-          return config;
-        },
-        output: "export"
-      };
-      export default config;
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*',
+        pathname: '**',
+      },
+    ],
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = [...(config.externals || []), '@supabase/supabase-js']
+    }
+    return config
+  }
+}
+
+export default nextConfig;

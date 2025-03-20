@@ -1,0 +1,9 @@
+// ...existing code...
+interface TemplateValidationResult {
+  isValid: boolean;
+  // ...other properties...
+}
+
+const useTemplateValidation = (template: TemplateNodeData): TemplateValidationResult => {
+  // ...existing code...
+};

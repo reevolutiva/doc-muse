@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import EtherpadEmbed from "./EtherpadEmbed";
 
 interface LivePreviewProps {
   content: string
@@ -54,8 +55,8 @@ export function LivePreview({ content, config }: LivePreviewProps) {
   }
 
   return (
-    <div className="h-full prose max-w-none">
-      <EditorContent editor={editor} />
+    <div className="h-full">
+      <EtherpadEmbed/>
     </div>
   )
 }

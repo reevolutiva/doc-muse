@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { AIToolbar } from './editor/ai-toolbar'
 import { useEditor as useDocumentEditor } from '@/lib/hooks/useEditor'
+import EtherpadEmbed from './document-config/EtherpadEmbed'
 import type { EditorProps } from '@/lib/types/editor'
 
 export function DocumentEditor({ projectId, documentId, initialContent = '', onSave }: EditorProps) {
@@ -139,7 +140,9 @@ export function DocumentEditor({ projectId, documentId, initialContent = '', onS
         <Tooltip id="style-tooltip" />
       </div>
 
-      <EditorContent editor={editor} className="prose max-w-none min-h-[500px] border rounded-lg p-4" />
+      <p>aca</p>
+
+      <EtherpadEmbed />
     </div>
   )
 }

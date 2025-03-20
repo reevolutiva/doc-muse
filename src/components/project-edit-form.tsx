@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { ArrowLeft, Save, X } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
@@ -21,7 +21,6 @@ import { DocumentsSection } from "./project-edit/documents-section"
 export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: ProjectEditFormProps) {
   const [formState, setFormState] = useState({
     title: project.title,
-    type: project.type,
     status: project.status,
     progress: project.progress,
     loading: false,
@@ -29,6 +28,10 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
     activeTab: 'Project Data'
   })
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    // Add any necessary effect logic here
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,7 +51,6 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
 
       const updates = {
         title: formState.title,
-        type: formState.type,
         status: formState.status,
         progress: formState.progress,
         updated_at: new Date().toISOString()
@@ -171,13 +173,12 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
               <div className="max-w-2xl">
                 <ProjectFormSection
                   title={formState.title}
-                  type={formState.type}
                   status={formState.status}
                   progress={formState.progress}
                   loading={formState.loading}
+                  templateId={project.project_template_id}
                   onSubmit={handleSubmit}
                   onTitleChange={(value) => setFormState(prev => ({ ...prev, title: value }))}
-                  onTypeChange={(value) => setFormState(prev => ({ ...prev, type: value }))}
                   onStatusChange={(value) => setFormState(prev => ({ ...prev, status: value }))}
                   onProgressChange={(value) => setFormState(prev => ({ ...prev, progress: value }))}
                   onDelete={() => setFormState(prev => ({ ...prev, showDeleteDialog: true }))}
@@ -201,6 +202,7 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
               <CreateSection
                 projectId={project.id}
                 projectTitle={project.title}
+                templateId={project.project_template_id}
               />
             )}
           </div>
@@ -242,3 +244,5 @@ export function ProjectEditForm({ project, onClose, onUpdate, onDelete }: Projec
     </div>
   )
 }
+
+export default ProjectEditForm;

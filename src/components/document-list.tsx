@@ -1,6 +1,6 @@
 "use client"
 
-import { FileText, Trash2, Edit2 } from "lucide-react"
+import { FileText, Trash2, Edit2, AlertCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 import type { Document } from '@/lib/types/document'
@@ -8,15 +8,27 @@ import type { Document } from '@/lib/types/document'
 interface DocumentListProps {
   documents: Document[]
   isLoading: boolean
+  error?: Error | null
   onDelete: (id: string) => void
 }
 
-export function DocumentList({ documents, isLoading, onDelete }: DocumentListProps) {
+export function DocumentList({ documents, isLoading, error, onDelete }: DocumentListProps) {
   const router = useRouter()
+  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-4">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center p-4 text-center">
+        <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+        <p className="text-sm text-red-600 font-medium">Error loading documents</p>
+        <p className="text-xs text-gray-500">{error.message}</p>
       </div>
     )
   }

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectForm } from "@/components/project-form"
 import { ProjectEditForm } from "@/components/project-edit-form"
@@ -10,7 +9,7 @@ import { AuthForm } from "@/components/auth/auth-form"
 import { supabase } from "@/lib/supabase"
 import { Toaster, toast } from "sonner"
 import { useAuth } from "@/hooks/useAuth"
-import { Session } from '@supabase/supabase-js'
+import { SupabaseTokenManager } from "@/lib/utils/SupabaseTokenMannager.ts"
 
 interface Project {
   id: string
@@ -23,7 +22,7 @@ interface Project {
 }
 
 export default function HomePage() {
-  const router = useRouter()
+
   const [projectsList, setProjectsList] = useState<Project[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [showProjectForm, setShowProjectForm] = useState(false)
@@ -59,8 +58,10 @@ export default function HomePage() {
         const { data: projects, error } = await supabase
           .from('projects')
           .select('*')
-          .eq('user_id', session.user.id)
+          //.eq('user_id', session.user.id)
           .order('created_at', { ascending: false })
+
+        console.log('Projects:', projects)
 
         if (error) {
           toast.error('Error loading projects')
@@ -87,6 +88,12 @@ export default function HomePage() {
       fetchProjects()
     }
   }, [session?.user?.id])
+
+
+  useEffect(() => {
+    SupabaseTokenManager.setSession(session);
+  }, [session]);
+
 
 
   if (loading) {

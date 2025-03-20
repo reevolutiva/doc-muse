@@ -1,0 +1,16 @@
+import { cookies } from "next/headers"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { redirect } from "next/navigation"
+
+export default async function ProjectsLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+
+  return (
+    <div className="pt-16">
+      {children}
+    </div>
+  )
+}

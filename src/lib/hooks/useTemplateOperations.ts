@@ -3,75 +3,86 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
-import type { Template } from '@/components/template-manager/types'
+import type { TemplateNodeData, TemplateOperations } from '@/lib/types/templates'
+import { handleError, createErrorHandler } from '@/lib/utils/error-handler'
 
-export function useTemplateOperations() {
-  const [loading, setLoading] = useState(false)
+export function useTemplateOperations(): TemplateOperations {
+  const errorHandler = createErrorHandler('TemplateOperations')
 
-  const saveTemplate = async (formData: Template, templateId?: string) => {
-    if (!formData.title.trim()) {
-      throw new Error("Title is required")
-    }
-
-    setLoading(true)
+  const addNode = async (node: TemplateNodeData) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) throw new Error("No authenticated user")
+      const { error } = await supabase
+        .from('template_nodes')
+        .insert([node])
 
-      if (templateId) {
-        const { error } = await supabase
-          .from('document_templates')
-          .update({
-            title: formData.title,
-            description: formData.description,
-            content: formData.content,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', templateId)
-
-        if (error) throw error
-        toast.success("Template updated successfully")
-      } else {
-        const { error } = await supabase
-          .from('document_templates')
-          .insert([{
-            title: formData.title,
-            description: formData.description,
-            content: formData.content,
-            user_id: session.user.id
-          }])
-
-        if (error) throw error
-        toast.success("Template created successfully")
-      }
-    } catch (error: any) {
-      toast.error("Error saving template")
-      console.error("Error:", error.message)
-      throw error
-    } finally {
-      setLoading(false)
+      if (error) throw error
+      toast.success('Node added successfully')
+    } catch (err) {
+      errorHandler(err)
     }
   }
 
-  const deleteTemplate = async (id: string) => {
+  const removeNode = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('document_templates')
+        .from('template_nodes')
         .delete()
         .eq('id', id)
 
       if (error) throw error
-      toast.success("Template deleted successfully")
-    } catch (error: any) {
-      toast.error("Error deleting template")
-      console.error("Error:", error.message)
-      throw error
+      toast.success('Node removed successfully')
+    } catch (err) {
+      errorHandler(err)
+    }
+  }
+
+  const updateNode = async (id: string, data: Partial<TemplateNodeData>) => {
+    try {
+      const { error } = await supabase
+        .from('template_nodes')
+        .update(data)
+        .eq('id', id)
+
+      if (error) throw error
+      toast.success('Node updated successfully')
+    } catch (err) {
+      errorHandler(err)
+    }
+  }
+
+  const duplicateNode = async (id: string) => {
+    try {
+      const { data: originalNode, error: fetchError } = await supabase
+        .from('template_nodes')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+      if (fetchError) throw fetchError
+
+      if (originalNode) {
+        const newNode = {
+          ...originalNode,
+          id: undefined,
+          label: `${originalNode.label} (copy)`
+        }
+
+        const { error: insertError } = await supabase
+          .from('template_nodes')
+          .insert([newNode])
+
+        if (insertError) throw insertError
+        toast.success('Node duplicated successfully')
+      }
+    } catch (err) {
+      errorHandler(err)
     }
   }
 
   return {
-    loading,
-    saveTemplate,
-    deleteTemplate
+    addNode,
+    removeNode,
+    updateNode,
+    duplicateNode
   }
 }

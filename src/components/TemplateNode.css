@@ -1,0 +1,440 @@
+/* Estilos para los nodos de plantilla */
+.template-node {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  width: 280px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.template-node.selected {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+.template-node:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos específicos por tipo de nodo */
+.template-node.header {
+  border-left: 5px solid #4285f4;
+}
+
+.template-node.paragraph {
+  border-left: 5px solid #34a853;
+}
+
+.template-node.image {
+  border-left: 5px solid #ea4335;
+}
+
+.template-node.list {
+  border-left: 5px solid #fbbc05;
+}
+
+.template-node.table {
+  border-left: 5px solid #9c27b0;
+}
+
+.template-node.form-field {
+  border-left: 5px solid #ff6d01;
+}
+
+/* Cabecera del nodo */
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.node-title {
+  font-weight: 600;
+  margin-left: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Contenido del nodo */
+.node-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+
+.node-field {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.node-field:last-child {
+  margin-bottom: 0;
+}
+
+.node-field-label {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 2px;
+  text-transform: capitalize;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.node-field-value {
+  color: #333;
+  word-break: break-word;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Previsualización de imágenes */
+.node-image-preview {
+  max-width: 100%;
+  max-height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.node-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.node-image-placeholder {
+  width: 100%;
+  height: 60px;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  font-size: 12px;
+  border-radius: 4px;
+  height: 120px;
+  border: 2px dashed #e0e0e0;
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+/* Previsualización de listas */
+.node-list-preview {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #333;
+}
+
+.node-list-preview li {
+  margin-bottom: 2px;
+  margin-bottom: 4px;
+}
+
+/* Manejo de conexiones */
+.node-handle {
+  width: 8px;
+  height: 8px;
+  background: #0066cc;
+  border: 2px solid white;
+  background-color: #0066cc;
+}
+
+.node-handle-top {
+  top: -4px;
+}
+
+.node-handle-bottom {
+  bottom: -4px;
+}
+
+/* Acciones del nodo */
+.node-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.node-edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.node-edit-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Íconos de nodos */
+.node-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #666;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.header .node-icon {
+  background-color: #e3f2fd;
+  color: #4285f4;
+}
+
+.paragraph .node-icon {
+  background-color: #e8f5e9;
+  color: #34a853;
+}
+
+.image .node-icon {
+  background-color: #fce4ec;
+  color: #ea4335;
+}
+
+.list .node-icon {
+  background-color: #fff3e0;
+  color: #fbbc05;
+}
+
+.table .node-icon {
+  background-color: #f3e5f5;
+  color: #9c27b0;
+}
+
+.form-field .node-icon {
+  background-color: #fff3e8;
+  color: #ff6d01;
+}
+
+/* Vista previa de imagen */
+.node-image-preview {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.node-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.node-image-placeholder {
+  width: 100%;
+  height: 120px;
+  background-color: #f5f5f5;
+  border: 2px dashed #e0e0e0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+/* Vista previa de texto */
+.text-preview {
+  max-height: 100px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* Vista previa de lista */
+.node-list-preview {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  color: #333;
+}
+
+.node-list-preview li {
+  margin-bottom: 4px;
+}
+
+/* Vista previa de tabla */
+.node-table-preview {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.node-table-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.node-table-preview th,
+.node-table-preview td {
+  padding: 4px 8px;
+  border: 1px solid #eaeaea;
+  text-align: left;
+}
+
+.node-table-preview th {
+  background-color: #f5f5f5;
+  font-weight: 500;
+}
+
+/* Estado de hover */
+.template-node:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para campos de formulario */
+.form-field .node-field-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Indicador de campo requerido */
+.required-indicator {
+  color: #d32f2f;
+  margin-left: 2px;
+}
+
+.node-type {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.node-preview {
+  font-size: 13px;
+  color: #666;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.node-preview h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.node-preview h4 {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+  font-weight: normal;
+}
+
+.node-preview p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.node-preview ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.node-preview li {
+  margin: 2px 0;
+}
+
+.image-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #999;
+}
+
+.placeholder-icon {
+  font-size: 24px;
+}
+
+.table-preview {
+  overflow-x: auto;
+}
+
+.table-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table-preview th,
+.table-preview td {
+  padding: 4px 8px;
+  border: 1px solid #eaeaea;
+  text-align: left;
+}
+
+.table-preview th {
+  background-color: #f5f5f5;
+  font-weight: 500;
+}
+
+.form-field-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-field-preview label {
+  font-weight: 500;
+  color: #333;
+}
+
+.form-field-preview .required {
+  color: #d32f2f;
+  margin-left: 4px;
+}
+
+.field-type {
+  font-size: 12px;
+  color: #666;
+  background-color: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}

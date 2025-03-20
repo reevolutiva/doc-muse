@@ -5,14 +5,12 @@ import { ProjectTemplateInfo } from "./project-template-info"
 
 interface ProjectFormSectionProps {
   title: string
-  type: string
   status: string
   progress: number
   loading: boolean
   templateId?: string | null
   onSubmit: (e: React.FormEvent) => Promise<void>
   onTitleChange: (value: string) => void
-  onTypeChange: (value: string) => void
   onStatusChange: (value: string) => void
   onProgressChange: (value: number) => void
   onDelete: () => void
@@ -20,14 +18,12 @@ interface ProjectFormSectionProps {
 
 export function ProjectFormSection({
   title,
-  type,
   status,
   progress,
   loading,
   templateId,
   onSubmit,
   onTitleChange,
-  onTypeChange,
   onStatusChange,
   onProgressChange,
   onDelete
@@ -47,31 +43,14 @@ export function ProjectFormSection({
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type
-            </label>
-            <select
-              value={type}
-              onChange={(e) => onTypeChange(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="elearning">E-Learning</option>
-              <option value="workshop">Workshop</option>
-              <option value="content">Content</option>
-            </select>
+        
+        {templateId && (
+          <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+            <h4 className="text-sm font-medium text-blue-900">Project Type</h4>
+            <ProjectTemplateInfo templateId={templateId} />
           </div>
-
-          {templateId && (
-            <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
-              <h4 className="text-sm font-medium text-blue-900">Project Template</h4>
-              <ProjectTemplateInfo templateId={templateId} />
-            </div>
-          )}
-        </div>
-
+        )}
+        
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Status
@@ -85,7 +64,7 @@ export function ProjectFormSection({
             <option value="completado">Completado</option>
           </select>
         </div>
-
+        
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Progress
@@ -99,7 +78,7 @@ export function ProjectFormSection({
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
-
+        
         <div className="flex gap-3">
           <button
             type="button"
