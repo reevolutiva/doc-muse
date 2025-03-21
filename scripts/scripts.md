@@ -38,6 +38,16 @@ This document provides a list and usage instructions for the scripts located in 
     *   **Usage**: Run this script to generate a coverage report in markdown format for analysis.
     *   **How to Run**: `node scripts/coverage-to-md.js`
 
+7. ## [create_test_files.sh](scripts/create_test_files.sh)
+
+    * **Descripción**: Este script crea archivos de prueba correspondientes para cada archivo de código fuente en un    directorio especificado. Busca archivos con extensiones `.js`, `.ts`, `.jsx` y `.tsx` en el directorio fuente y crea   archivos de prueba vacíos en el directorio de pruebas correspondiente.
+    * **Uso**: Utiliza este script para generar archivos de prueba vacíos para todos los archivos de código fuente en un directorio.
+    * **Cómo Ejecutar**:
+    ```bash
+    bash scripts/create_test_files.sh <src> <dir>
+    ```
+    Donde `<src>` es el directorio de código fuente y `<dir>` es el directorio donde se crearán los archivos de prueba.
+
 ## Usage Details
 
 ### [pre-test.sh](scripts/pre-test.sh)
