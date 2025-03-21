@@ -16,6 +16,7 @@ RUN corepack enable && corepack prepare pnpm@9.6.0 --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 RUN pnpm add -D @testing-library/jest-dom
+RUN pnpm install jest-junit
 
 # Development image, copy all the files and run next dev
 FROM base AS dev
@@ -45,6 +46,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN pnpm add -D @testing-library/jest-dom
+RUN pnpm install jest-junit
 RUN pnpm build
 
 # Production image, copy all the files and run next
@@ -57,6 +59,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 RUN pnpm add -D @testing-library/jest-dom
+RUN RUN pnpm install jest-junit
 
 COPY --from=builder /app/public ./public
 

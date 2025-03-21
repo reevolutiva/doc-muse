@@ -80,6 +80,7 @@
     "eslint-import-resolver-typescript": "^3.7.0",
     "file-type": "^20.4.0",
     "framer-motion": "^11.16.6",
+    "jest-junit": "^16.0.0",
     "langchain": "^0.3.19",
     "lcov-parse": "^1.0.0",
     "lucide-react": "^0.468.0",
