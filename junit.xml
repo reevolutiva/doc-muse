@@ -1,3 +1,1162 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="0" failures="0" errors="0" time="5.446">
+<testsuites name="jest tests" tests="80" failures="26" errors="0" time="143.01">
+  <testsuite name="useAuth Hook" errors="0" failures="5" skipped="0" timestamp="2025-03-21T16:24:49" time="10.988" tests="5">
+    <testcase classname="useAuth Hook returns null user initially" name="useAuth Hook returns null user initially" time="1.599">
+      <failure>TypeError: (0 , _useAuth.default) is not a function
+    at /app/src/hooks/useAuth.test.tsx:9:48
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useAuth.test.tsx:9:34)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useAuth Hook logs in user successfully" name="useAuth Hook logs in user successfully" time="0.258">
+      <failure>TypeError: (0 , _useAuth.default) is not a function
+    at /app/src/hooks/useAuth.test.tsx:16:67
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useAuth.test.tsx:16:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useAuth Hook handles login error" name="useAuth Hook handles login error" time="0.101">
+      <failure>TypeError: (0 , _useAuth.default) is not a function
+    at /app/src/hooks/useAuth.test.tsx:28:67
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useAuth.test.tsx:28:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useAuth Hook logs out user successfully" name="useAuth Hook logs out user successfully" time="0.175">
+      <failure>TypeError: (0 , _useAuth.default) is not a function
+    at /app/src/hooks/useAuth.test.tsx:40:67
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useAuth.test.tsx:40:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useAuth Hook handles logout error" name="useAuth Hook handles logout error" time="0.115">
+      <failure>TypeError: (0 , _useAuth.default) is not a function
+    at /app/src/hooks/useAuth.test.tsx:52:67
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useAuth.test.tsx:52:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="TemplateNode Component" errors="0" failures="4" skipped="0" timestamp="2025-03-21T16:24:49" time="11.887" tests="4">
+    <testcase classname="TemplateNode Component renderiza correctamente con los datos proporcionados" name="TemplateNode Component renderiza correctamente con los datos proporcionados" time="0.957">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at reconcileSingleElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13986:23)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14044:35)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19193:28)
+    at updateHostRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19912:5)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21654:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/TemplateNode.test.tsx:31:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="TemplateNode Component renderiza con title directo como prop" name="TemplateNode Component renderiza con title directo como prop" time="0.029">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at reconcileSingleElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13986:23)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14044:35)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19193:28)
+    at updateHostRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19912:5)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21654:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/TemplateNode.test.tsx:39:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="TemplateNode Component renderiza con descripción cuando se proporciona" name="TemplateNode Component renderiza con descripción cuando se proporciona" time="0.029">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at reconcileSingleElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13986:23)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14044:35)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19193:28)
+    at updateHostRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19912:5)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21654:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/TemplateNode.test.tsx:44:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="TemplateNode Component aplica clase personalizada" name="TemplateNode Component aplica clase personalizada" time="0.011">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at reconcileSingleElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13986:23)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14044:35)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19193:28)
+    at updateHostRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19912:5)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21654:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/TemplateNode.test.tsx:50:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="DocumentList Component" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:24:49" time="12.205" tests="3">
+    <testcase classname="DocumentList Component renders DocumentList with documents" name="DocumentList Component renders DocumentList with documents" time="0.961">
+    </testcase>
+    <testcase classname="DocumentList Component filters documents" name="DocumentList Component filters documents" time="0.283">
+    </testcase>
+    <testcase classname="DocumentList Component sorts documents" name="DocumentList Component sorts documents" time="0.964">
+      <failure>TestingLibraryElementError: Unable to find an element by: [data-testid=&quot;document-item&quot;]
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;document-list&quot;
+    &gt;
+      &lt;div
+        class=&quot;document-list-header&quot;
+      &gt;
+        &lt;input
+          placeholder=&quot;Search...&quot;
+          type=&quot;text&quot;
+          value=&quot;&quot;
+        /&gt;
+        &lt;button&gt;
+          Sort 
+          ↑
+        &lt;/button&gt;
+      &lt;/div&gt;
+      &lt;ul
+        class=&quot;document-items&quot;
+      &gt;
+        &lt;li
+          class=&quot;document-item&quot;
+        &gt;
+          Doc 2
+        &lt;/li&gt;
+        &lt;li
+          class=&quot;document-item&quot;
+        &gt;
+          Doc 1
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+    at Object.getElementError (/app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/config.js:37:19)
+    at /app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+    at /app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+    at Object.getAllByTestId (/app/__tests__/components/DocumentList.test.tsx:22:31)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Select Component" errors="0" failures="3" skipped="0" timestamp="2025-03-21T16:24:49" time="14.492" tests="4">
+    <testcase classname="Select Component SelectTrigger renderiza correctamente con las clases por defecto" name="Select Component SelectTrigger renderiza correctamente con las clases por defecto" time="1.208">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+
+Check the render method of `ForwardRef`.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at createChild (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13345:28)
+    at reconcileChildrenArray (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13640:25)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14057:16)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19186:28)
+    at updateHostComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19953:3)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21657:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at recoverFromConcurrentError (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/ui/Select.test.tsx:46:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Select Component SelectContent renderiza con las clases correctas" name="Select Component SelectContent renderiza con las clases correctas" time="0.18">
+    </testcase>
+    <testcase classname="Select Component SelectItem renderiza con las clases correctas" name="Select Component SelectItem renderiza con las clases correctas" time="0.023">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+
+Check the render method of `ForwardRef`.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at reconcileSingleElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13986:23)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14044:35)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19186:28)
+    at updateHostComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19953:3)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21657:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at recoverFromConcurrentError (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/ui/Select.test.tsx:68:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Select Component muestra las opciones al hacer click y selecciona correctamente" name="Select Component muestra las opciones al hacer click y selecciona correctamente" time="0.073">
+      <failure>Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
+
+Check the render method of `ForwardRef`.
+    at createFiberFromTypeAndProps (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28478:17)
+    at createFiberFromElement (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:28504:15)
+    at createChild (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13345:28)
+    at reconcileChildrenArray (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:13640:25)
+    at reconcileChildFibers (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:14057:16)
+    at reconcileChildren (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19186:28)
+    at updateHostComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:19953:3)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21657:14)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at recoverFromConcurrentError (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+    at performConcurrentWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2582:11)
+    at /app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:180:26)
+    at render (/app/node_modules/.pnpm/@testing-library+react@14.3.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react/dist/pure.js:271:10)
+    at Object.&lt;anonymous&gt; (/app/__tests__/components/ui/Select.test.tsx:79:11)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="useTemplates Hook" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:24:49" time="15.219" tests="1">
+    <testcase classname="useTemplates Hook carga templates correctamente" name="useTemplates Hook carga templates correctamente" time="1.45">
+      <failure>ReferenceError: setError is not defined
+    at setError (/app/src/hooks/useTemplates.ts:53:7)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: undefined
+
+Ignored nodes: comments, script, style
+&lt;html&gt;
+  &lt;head /&gt;
+  &lt;body&gt;
+    &lt;div /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;...
+    at toBe (/app/__tests__/hooks/useTemplates.test.tsx:32:40)
+    at runWithExpensiveErrorDiagnosticsDisabled (/app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/config.js:47:12)
+    at checkCallback (/app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/wait-for.js:124:77)
+    at checkRealTimersCallback (/app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/wait-for.js:118:16)
+    at Timeout.task [as _onTimeout] (/app/node_modules/.pnpm/jsdom@20.0.3_canvas@3.1.0/node_modules/jsdom/lib/jsdom/browser/Window.js:520:19)
+    at listOnTimeout (node:internal/timers:569:17)
+    at processTimers (node:internal/timers:512:7)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="useAuth Hook" errors="0" failures="3" skipped="0" timestamp="2025-03-21T16:25:01" time="30.452" tests="3">
+    <testcase classname="useAuth Hook obtiene usuario actual correctamente" name="useAuth Hook obtiene usuario actual correctamente" time="19.27">
+      <failure>TypeError: _supabase.supabase.auth.onAuthStateChange is not a function
+    at onAuthStateChange (/app/src/hooks/useAuth.ts:19:23)
+    at commitHookEffectListMount (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitPassiveMountOnFiber (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+    at commitPassiveMountEffects_complete (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+    at commitPassiveMountEffects_begin (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+    at commitPassiveMountEffects (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+    at flushPassiveEffectsImpl (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+    at flushPassiveEffects (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+    at /app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2521:11)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/__tests__/hooks/useAuth.test.tsx:32:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useAuth Hook signIn funciona correctamente" name="useAuth Hook signIn funciona correctamente" time="0.498">
+      <failure>TypeError: _supabase.supabase.auth.onAuthStateChange is not a function
+    at onAuthStateChange (/app/src/hooks/useAuth.ts:19:23)
+    at commitHookEffectListMount (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitPassiveMountOnFiber (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+    at commitPassiveMountEffects_complete (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+    at commitPassiveMountEffects_begin (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+    at commitPassiveMountEffects (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+    at flushPassiveEffectsImpl (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+    at flushPassiveEffects (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+    at /app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2521:11)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/__tests__/hooks/useAuth.test.tsx:52:34)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useAuth Hook signOut funciona correctamente" name="useAuth Hook signOut funciona correctamente" time="0.968">
+      <failure>TypeError: _supabase.supabase.auth.onAuthStateChange is not a function
+    at onAuthStateChange (/app/src/hooks/useAuth.ts:19:23)
+    at commitHookEffectListMount (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitPassiveMountOnFiber (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+    at commitPassiveMountEffects_complete (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+    at commitPassiveMountEffects_begin (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+    at commitPassiveMountEffects (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+    at flushPassiveEffectsImpl (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+    at flushPassiveEffects (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+    at /app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+    at flushActQueue (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2667:24)
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2521:11)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/__tests__/hooks/useAuth.test.tsx:70:34)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="useTemplates Hook" errors="0" failures="4" skipped="0" timestamp="2025-03-21T16:24:49" time="41.949" tests="4">
+    <testcase classname="useTemplates Hook fetches templates successfully" name="useTemplates Hook fetches templates successfully" time="1.926">
+      <failure>Error: Timed out in waitForNextUpdate after 1000ms.
+    at waitForNextUpdate (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/asyncUtils.js:96:13)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useTemplates.test.tsx:14:5)</failure>
+    </testcase>
+    <testcase classname="useTemplates Hook handles fetch error" name="useTemplates Hook handles fetch error" time="1.649">
+      <failure>Error: Timed out in waitForNextUpdate after 1000ms.
+    at waitForNextUpdate (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/asyncUtils.js:96:13)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useTemplates.test.tsx:26:5)</failure>
+    </testcase>
+    <testcase classname="useTemplates Hook creates a new template" name="useTemplates Hook creates a new template" time="1.724">
+      <failure>TypeError: (0 , _useTemplates.default) is not a function
+    at /app/src/hooks/useTemplates.test.tsx:37:72
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useTemplates.test.tsx:37:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="useTemplates Hook handles create template error" name="useTemplates Hook handles create template error" time="9.525">
+      <failure>TypeError: (0 , _useTemplates.default) is not a function
+    at /app/src/hooks/useTemplates.test.tsx:51:72
+    at TestComponent (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/helpers/createTestHarness.js:25:14)
+    at renderWithHooks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+    at beginWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+    at beginWork$1 (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+    at performUnitOfWork (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+    at workLoopSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+    at renderRootSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+    at performSyncWorkOnRoot (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26124:20)
+    at flushSyncCallbacks (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:12042:22)
+    at flushSync (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26240:7)
+    at legacyCreateRootFromDOMContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29614:5)
+    at legacyRenderSubtreeIntoContainer (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29640:12)
+    at Object.render (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:29731:10)
+    at /app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:80:18
+    at act (/app/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js:2512:16)
+    at actWithWarning (/app/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1740:10)
+    at render (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/dom/pure.js:79:26)
+    at renderHook (/app/node_modules/.pnpm/@testing-library+react-hooks@8.0.1_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@testing-library/react-hooks/lib/core/index.js:114:5)
+    at Object.&lt;anonymous&gt; (/app/src/hooks/useTemplates.test.tsx:51:53)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Form Component" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:25:02" time="37.062" tests="3">
+    <testcase classname="Form Component renders Form with inputs" name="Form Component renders Form with inputs" time="0.148">
+    </testcase>
+    <testcase classname="Form Component validates input fields" name="Form Component validates input fields" time="0.117">
+    </testcase>
+    <testcase classname="Form Component submits form data" name="Form Component submits form data" time="0.092">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+- Object {
+-   &quot;test-input&quot;: &quot;Test Value&quot;,
++ SyntheticBaseEvent {
++   &quot;_reactName&quot;: &quot;onSubmit&quot;,
++   &quot;_targetInst&quot;: null,
++   &quot;bubbles&quot;: true,
++   &quot;cancelable&quot;: true,
++   &quot;currentTarget&quot;: null,
++   &quot;defaultPrevented&quot;: false,
++   &quot;eventPhase&quot;: 3,
++   &quot;isDefaultPrevented&quot;: [Function functionThatReturnsFalse],
++   &quot;isPropagationStopped&quot;: [Function functionThatReturnsFalse],
++   &quot;isTrusted&quot;: false,
++   &quot;nativeEvent&quot;: Event {
++     &quot;isTrusted&quot;: false,
++   },
++   &quot;target&quot;: &lt;form
++     class=&quot;space-y-4&quot;
++     role=&quot;form&quot;
++   &gt;
++     &lt;input
++       name=&quot;test-input&quot;
++       placeholder=&quot;Test Input&quot;
++     /&gt;
++   &lt;/form&gt;,
++   &quot;timeStamp&quot;: 1742574339585,
++   &quot;type&quot;: &quot;submit&quot;,
+  },
+
+Number of calls: 1
+    at Object.toHaveBeenCalledWith (/app/__tests__/components/ui/form.test.tsx:35:26)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Breadcrumbs Component" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:25:01" time="38.941" tests="2">
+    <testcase classname="Breadcrumbs Component renders Breadcrumbs with links" name="Breadcrumbs Component renders Breadcrumbs with links" time="0.533">
+    </testcase>
+    <testcase classname="Breadcrumbs Component applies custom className" name="Breadcrumbs Component applies custom className" time="0.04">
+      <failure>Error: expect(element).toHaveClass(&quot;custom-class&quot;)
+
+Expected the element to have class:
+  custom-class
+Received:
+  transition-colors hover:text-foreground font-medium text-foreground pointer-events-none
+    at Object.toHaveClass (/app/__tests__/components/ui/breadcrumbs.test.tsx:15:38)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Canvas Component" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:24:49" time="52.146" tests="3">
+    <testcase classname="Canvas Component renderiza correctamente con controles" name="Canvas Component renderiza correctamente con controles" time="1.048">
+      <failure>TestingLibraryElementError: Unable to find an element by: [data-testid=&quot;reactflow&quot;]
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;react-flow light&quot;
+      data-testid=&quot;rf__wrapper&quot;
+      style=&quot;width: 100%; height: 100%; overflow: hidden; position: relative; z-index: 0;&quot;
+    &gt;
+      &lt;div
+        class=&quot;react-flow__renderer&quot;
+        style=&quot;position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;&quot;
+      &gt;
+        &lt;div
+          class=&quot;react-flow__pane draggable&quot;
+          style=&quot;position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;&quot;
+        &gt;
+          &lt;div
+            class=&quot;react-flow__viewport xyflow__viewport react-flow__container&quot;
+            style=&quot;transform: translate(0px,0px) scale(1);&quot;
+          &gt;
+            &lt;div
+              class=&quot;react-flow__edges&quot;
+            /&gt;
+            &lt;div
+              class=&quot;react-flow__edgelabel-renderer&quot;
+            /&gt;
+            &lt;div
+              class=&quot;react-flow__nodes&quot;
+              style=&quot;position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;&quot;
+            /&gt;
+            &lt;div
+              class=&quot;react-flow__viewport-portal&quot;
+            /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;svg
+        class=&quot;react-flow__background&quot;
+        data-testid=&quot;rf__background&quot;
+        style=&quot;position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;&quot;
+      &gt;
+        &lt;pattern
+          height=&quot;20&quot;
+          id=&quot;pattern-1&quot;
+          patternTransform=&quot;translate(-11,-11)&quot;
+          patternUnits=&quot;userSpaceOnUse&quot;
+          width=&quot;20&quot;
+          x=&quot;0&quot;
+          y=&quot;0&quot;
+        &gt;
+          &lt;circle
+            class=&quot;react-flow__background-pattern dots&quot;
+            cx=&quot;0.5&quot;
+            cy=&quot;0.5&quot;
+            r=&quot;0.5&quot;
+          /&gt;
+        &lt;/pattern&gt;
+        &lt;rect
+          fill=&quot;url(#pattern-1)&quot;
+          height=&quot;100%&quot;
+          width=&quot;100%&quot;
+          x=&quot;0&quot;
+          y=&quot;0&quot;
+        /&gt;
+      &lt;/svg&gt;
+      &lt;div
+        aria-label=&quot;React Flow controls&quot;
+        class=&quot;react-flow__panel react-flow__controls vertical bottom left&quot;
+        data-testid=&quot;rf__controls&quot;
+        style=&quot;pointer-events: all;&quot;
+      &gt;
+        &lt;button
+          aria-label=&quot;zoom in&quot;
+          class=&quot;react-flow__controls-button react-flow__controls-zoomin&quot;
+          title=&quot;zoom in&quot;
+          type=&quot;button&quot;
+        &gt;
+          &lt;svg
+            viewBox=&quot;0 0 32 32&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+        &lt;button
+          aria-label=&quot;zoom out&quot;
+          class=&quot;react-flow__controls-button react-flow__controls-zoomout&quot;
+          title=&quot;zoom out&quot;
+          type=&quot;button&quot;
+        &gt;
+          &lt;svg
+            viewBox=&quot;0 0 32 5&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;M0 0h32v4.2H0z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+        &lt;button
+          aria-label=&quot;fit view&quot;
+          class=&quot;react-flow__controls-button react-flow__controls-fitview&quot;
+          title=&quot;fit view&quot;
+          type=&quot;button&quot;
+        &gt;
+          &lt;svg
+            viewBox=&quot;0 0 32 30&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;M3.692 4.63c0-.53.4-.938.939-.938h5.215V0H4.708C2.13 0 0 2.054 0 4.63v5.216h3.692V4.631zM27.354 0h-5.2v3.692h5.17c.53 0 .984.4.984.939v5.215H32V4.631A4.624 4.624 0 0027.354 0zm.954 24.83c0 .532-.4.94-.939.94h-5.215v3.768h5.215c2.577 0 4.631-2.13 4.631-4.707v-5.139h-3.692v5.139zm-23.677.94c-.531 0-.939-.4-.939-.94v-5.138H0v5.139c0 2.577 2.13 4.707 4.708 4.707h5.138V25.77H4.631z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+        &lt;button
+          aria-label=&quot;toggle interactivity&quot;
+          class=&quot;react-flow__controls-button react-flow__controls-interactive&quot;
+          title=&quot;toggle interactivity&quot;
+          type=&quot;button&quot;
+        &gt;
+          &lt;svg
+            viewBox=&quot;0 0 25 32&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;M21.333 10.667H19.81V7.619C19.81 3.429 16.38 0 12.19 0c-4.114 1.828-1.37 2.133.305 2.438 1.676.305 4.42 2.59 4.42 5.181v3.048H3.047A3.056 3.056 0 000 13.714v15.238A3.056 3.056 0 003.048 32h18.285a3.056 3.056 0 003.048-3.048V13.714a3.056 3.056 0 00-3.048-3.047zM12.19 24.533a3.056 3.056 0 01-3.047-3.047 3.056 3.056 0 013.047-3.048 3.056 3.056 0 013.048 3.048 3.056 3.056 0 01-3.048 3.047z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div
+        class=&quot;react-flow__panel react-flow__attribution bottom right&quot;
+        data-message=&quot;Please only hide this attribution when you are subscribed to React Flow Pro: https://pro.reactflow.dev&quot;
+        style=&quot;pointer-events: all;&quot;
+      &gt;
+        &lt;a
+          aria-label=&quot;React Flow attribution&quot;
+          href=&quot;https://reactflow.dev&quot;
+          rel=&quot;noopener noreferrer&quot;
+          target=&quot;_blank&quot;
+        &gt;
+          React Flow
+        &lt;/a&gt;
+      &lt;/div&gt;
+      &lt;div
+        id=&quot;react-flow__node-desc-1&quot;
+        style=&quot;display: none;&quot;
+      &gt;
+        Press enter or space to select a node.
+        You can then use the arrow keys to move the node around.
+         Press delete to remove it and escape to cancel.
+         
+      &lt;/div&gt;
+      &lt;div
+        id=&quot;react-flow__edge-desc-1&quot;
+        style=&quot;display: none;&quot;
+      &gt;
+        Press enter or space to select an edge. You can then press delete to remove it or escape to cancel.
+      &lt;/div&gt;
+      &lt;div
+        aria-atomic=&quot;true&quot;
+        aria-live=&quot;assertive&quot;
+        id=&quot;react-flow__aria-live-1&quot;
+        style=&quot;position: absolute; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(100%);&quot;
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+    at Object.getElementError (/app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/config.js:37:19)
+    at /app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+    at /app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+    at /app/node_modules/.pnpm/@testing-library+dom@9.3.4/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+    at Object.getByTestId (/app/__tests__/components/Canvas.test.tsx:27:19)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Canvas Component maneja eventos de nodo correctamente" name="Canvas Component maneja eventos de nodo correctamente" time="0.002">
+    </testcase>
+    <testcase classname="Canvas Component maneja eventos de conexión entre nodos" name="Canvas Component maneja eventos de conexión entre nodos" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="Sidebar Component" errors="0" failures="0" skipped="0" timestamp="2025-03-21T16:25:06" time="36.101" tests="2">
+    <testcase classname="Sidebar Component renders Sidebar with items" name="Sidebar Component renders Sidebar with items" time="0.234">
+    </testcase>
+    <testcase classname="Sidebar Component toggles collapse state" name="Sidebar Component toggles collapse state" time="0.108">
+    </testcase>
+  </testsuite>
+  <testsuite name="Avatar Component" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:25:04" time="38.936" tests="2">
+    <testcase classname="Avatar Component renders Avatar with image" name="Avatar Component renders Avatar with image" time="0.286">
+    </testcase>
+    <testcase classname="Avatar Component applies custom className" name="Avatar Component applies custom className" time="0.057">
+      <failure>Error: expect(element).toHaveClass(&quot;custom-class&quot;)
+
+Expected the element to have class:
+  custom-class
+Received:
+  h-full w-full object-cover
+    at Object.toHaveClass (/app/__tests__/components/ui/avatar.test.tsx:13:48)
+    at Promise.then.completed (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:121:9)
+    at run (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Template Types" errors="0" failures="0" skipped="0" timestamp="2025-03-21T16:25:43" time="5.294" tests="6">
+    <testcase classname="Template Types should properly validate a Template" name="Template Types should properly validate a Template" time="0.041">
+    </testcase>
+    <testcase classname="Template Types should properly validate a TemplateNodeData with Record&lt;string, unknown&gt;" name="Template Types should properly validate a TemplateNodeData with Record&lt;string, unknown&gt;" time="0.049">
+    </testcase>
+    <testcase classname="Template Types should properly validate a TemplateBlock" name="Template Types should properly validate a TemplateBlock" time="0.002">
+    </testcase>
+    <testcase classname="Template Types should properly validate TemplateVisualData with nodes and edges" name="Template Types should properly validate TemplateVisualData with nodes and edges" time="0.295">
+    </testcase>
+    <testcase classname="Template Types should properly validate TemplateValidationResult" name="Template Types should properly validate TemplateValidationResult" time="0.091">
+    </testcase>
+    <testcase classname="Template Types should properly validate TemplateServiceResult" name="Template Types should properly validate TemplateServiceResult" time="0.318">
+    </testcase>
+  </testsuite>
+  <testsuite name="Badge Component" errors="0" failures="0" skipped="0" timestamp="2025-03-21T16:25:41" time="9.921" tests="6">
+    <testcase classname="Badge Component renderiza correctamente con el contenido proporcionado" name="Badge Component renderiza correctamente con el contenido proporcionado" time="0.316">
+    </testcase>
+    <testcase classname="Badge Component aplica la clase por defecto" name="Badge Component aplica la clase por defecto" time="0.17">
+    </testcase>
+    <testcase classname="Badge Component aplica la variante secondary cuando se especifica" name="Badge Component aplica la variante secondary cuando se especifica" time="0.027">
+    </testcase>
+    <testcase classname="Badge Component aplica la variante destructive cuando se especifica" name="Badge Component aplica la variante destructive cuando se especifica" time="0.011">
+    </testcase>
+    <testcase classname="Badge Component aplica la variante outline cuando se especifica" name="Badge Component aplica la variante outline cuando se especifica" time="0.006">
+    </testcase>
+    <testcase classname="Badge Component acepta y aplica clases personalizadas" name="Badge Component acepta y aplica clases personalizadas" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="Input Component" errors="0" failures="0" skipped="0" timestamp="2025-03-21T16:25:40" time="12.912" tests="6">
+    <testcase classname="Input Component renderiza correctamente con atributos básicos" name="Input Component renderiza correctamente con atributos básicos" time="0.039">
+    </testcase>
+    <testcase classname="Input Component permite escribir texto" name="Input Component permite escribir texto" time="0.425">
+    </testcase>
+    <testcase classname="Input Component maneja eventos onChange" name="Input Component maneja eventos onChange" time="0.661">
+    </testcase>
+    <testcase classname="Input Component aplica clases personalizadas" name="Input Component aplica clases personalizadas" time="0.158">
+    </testcase>
+    <testcase classname="Input Component permite deshabilitar el input" name="Input Component permite deshabilitar el input" time="0.02">
+    </testcase>
+    <testcase classname="Input Component acepta diferentes tipos de input" name="Input Component acepta diferentes tipos de input" time="0.012">
+    </testcase>
+  </testsuite>
+  <testsuite name="Card Component" errors="0" failures="0" skipped="0" timestamp="2025-03-21T16:25:43" time="10.337" tests="11">
+    <testcase classname="Card Component Card renderiza correctamente con clases por defecto" name="Card Component Card renderiza correctamente con clases por defecto" time="0.217">
+    </testcase>
+    <testcase classname="Card Component Card acepta clases personalizadas" name="Card Component Card acepta clases personalizadas" time="0.012">
+    </testcase>
+    <testcase classname="Card Component CardHeader renderiza correctamente" name="Card Component CardHeader renderiza correctamente" time="0.012">
+    </testcase>
+    <testcase classname="Card Component CardTitle renderiza correctamente" name="Card Component CardTitle renderiza correctamente" time="0.009">
+    </testcase>
+    <testcase classname="Card Component CardDescription renderiza correctamente" name="Card Component CardDescription renderiza correctamente" time="0.026">
+    </testcase>
+    <testcase classname="Card Component CardContent renderiza correctamente" name="Card Component CardContent renderiza correctamente" time="0.016">
+    </testcase>
+    <testcase classname="Card Component CardFooter renderiza correctamente" name="Card Component CardFooter renderiza correctamente" time="0.013">
+    </testcase>
+    <testcase classname="Card Component Card compuesto renderiza todos sus subcomponentes correctamente" name="Card Component Card compuesto renderiza todos sus subcomponentes correctamente" time="0.024">
+    </testcase>
+    <testcase classname="Card Component renderiza Card básico correctamente" name="Card Component renderiza Card básico correctamente" time="0.012">
+    </testcase>
+    <testcase classname="Card Component renderiza Card con subcomponentes" name="Card Component renderiza Card con subcomponentes" time="0.043">
+    </testcase>
+    <testcase classname="Card Component aplica clases personalizadas" name="Card Component aplica clases personalizadas" time="0.046">
+    </testcase>
+  </testsuite>
+  <testsuite name="Button Component" errors="0" failures="0" skipped="0" timestamp="2025-03-21T16:25:33" time="20.64" tests="6">
+    <testcase classname="Button Component renderiza correctamente con children" name="Button Component renderiza correctamente con children" time="1.409">
+    </testcase>
+    <testcase classname="Button Component maneja eventos onClick" name="Button Component maneja eventos onClick" time="0.268">
+    </testcase>
+    <testcase classname="Button Component aplica clases de variante correctamente" name="Button Component aplica clases de variante correctamente" time="0.059">
+    </testcase>
+    <testcase classname="Button Component aplica clases de tamaño correctamente" name="Button Component aplica clases de tamaño correctamente" time="0.145">
+    </testcase>
+    <testcase classname="Button Component permite deshabilitar el botón" name="Button Component permite deshabilitar el botón" time="0.153">
+    </testcase>
+    <testcase classname="Button Component utiliza un elemento Slot cuando asChild es true" name="Button Component utiliza un elemento Slot cuando asChild es true" time="0.14">
+    </testcase>
+  </testsuite>
+  <testsuite name="Dialog Component" errors="0" failures="1" skipped="0" timestamp="2025-03-21T16:25:34" time="91.576" tests="9">
+    <testcase classname="Dialog Component Dialog se abre cuando se hace click en el trigger" name="Dialog Component Dialog se abre cuando se hace click en el trigger" time="69.951">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a test.
+Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.&quot;
+    at test (/app/__tests__/components/ui/Dialog.test.tsx:35:3)
+    at _dispatchDescribe (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/index.js:91:26)
+    at describe (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/index.js:55:5)
+    at Object.describe (/app/__tests__/components/ui/Dialog.test.tsx:34:1)
+    at Runtime._execModule (/app/node_modules/.pnpm/jest-runtime@29.7.0/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/app/node_modules/.pnpm/jest-runtime@29.7.0/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/app/node_modules/.pnpm/jest-runtime@29.7.0/node_modules/jest-runtime/build/index.js:882:12)
+    at jestAdapter (/app/node_modules/.pnpm/jest-circus@29.7.0/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:77:13)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runTestInternal (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/app/node_modules/.pnpm/jest-runner@29.7.0/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Dialog Component DialogContent renderiza correctamente sus children" name="Dialog Component DialogContent renderiza correctamente sus children" time="0.424">
+    </testcase>
+    <testcase classname="Dialog Component DialogHeader aplica las clases correctas" name="Dialog Component DialogHeader aplica las clases correctas" time="0.048">
+    </testcase>
+    <testcase classname="Dialog Component DialogHeader acepta className personalizada" name="Dialog Component DialogHeader acepta className personalizada" time="0.025">
+    </testcase>
+    <testcase classname="Dialog Component DialogFooter aplica las clases correctas" name="Dialog Component DialogFooter aplica las clases correctas" time="0.044">
+    </testcase>
+    <testcase classname="Dialog Component DialogTitle aplica las clases correctas" name="Dialog Component DialogTitle aplica las clases correctas" time="0.489">
+    </testcase>
+    <testcase classname="Dialog Component DialogDescription aplica las clases correctas" name="Dialog Component DialogDescription aplica las clases correctas" time="0.137">
+    </testcase>
+    <testcase classname="Dialog Component Dialog compuesto renderiza correctamente todos sus subcomponentes" name="Dialog Component Dialog compuesto renderiza correctamente todos sus subcomponentes" time="0.176">
+    </testcase>
+    <testcase classname="Dialog Component abre el diálogo al hacer click en el trigger" name="Dialog Component abre el diálogo al hacer click en el trigger" time="0.19">
+    </testcase>
+  </testsuite>
 </testsuites>
