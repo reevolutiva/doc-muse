@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
@@ -25,6 +24,7 @@ import { supabase } from '@/lib/supabase'
 import getUrlParameter from './aux';
 import useNodeDelete from './hooks/useDelete';
 import useNodeMove from './hooks/useNodeMove';
+import { save_document_template_content_in_db } from './hooks/useNodeMove.jsx';
 
 interface TemplateCanvasProps {
   initialNodes?: Node<TemplateNodeData | UnHandleNodeData>[];
@@ -49,46 +49,38 @@ export const TemplateCanvas = ({
   const [selectedNode, setSelectedNode] = useState<Node<TemplateNodeData> | null | UnHandleNodeData >(null);
   const [nodeToEdit, setNodeToEdit] = useState<Node<TemplateNodeData> | null | UnHandleNodeData >(null);
   const [type , setType] = useState("");
+  const [ nodeChanged, setNodeChanged ] = useState(0)
 
   let hasDragableNodes = true;
-  const { nodeUp, nodeDown } = useNodeMove();
-
- 
-  
+  const { nodeUp, nodeDown } = useNodeMove( );
 
   useEffect(() => {
-
     const { type } = getUrlParameter();
-    setType( type );
+    setType(type);
 
-    const fetchNodes = async () => { 
-
-      function getTemplateData( content ) {
-
+    const fetchNodes = async () => {
+      function getTemplateData(content) {
         let blocks = [];
         let edges = [];
 
-        if( content === null || Object.keys(content).length === 0 ){
+        if (content === null || Object.keys(content).length === 0) {
           return { blocks, edges };
         }
-        
-  
+
         // content tiene la propiedad blocks?
         if (content.hasOwnProperty("blocks")) {
           blocks = content.blocks;
-        }else{
+        } else {
           blocks = content.nodes;
         }
 
-        edges = content.edges;    
+        edges = content.edges;
 
-
-        // Añaddir a cada nodo en blocks el callback onDelete()
+        // Añadir a cada nodo en blocks el callback onDelete()
         blocks = blocks.map((node: any) => {
-
           const position = { x: node.position.x, y: node.position.y };
 
-          if( ! hasDragableNodes ){
+          if (!hasDragableNodes) {
             position.x = 0;
           }
 
@@ -98,60 +90,73 @@ export const TemplateCanvas = ({
             position: position,
             data: {
               ...node.data,
-              onDelete: ( data ) => {
-                useNodeDelete( data, blocks, setNodes, setEdges );
+              onDelete: (data) => {
+                useNodeDelete(data, blocks, setNodes, setEdges);
               },
-              onMoveUp: ( data ) => {
+              onMoveUp: (data) => {
                 console.log("Move up");
-                nodeUp( data, blocks, setNodes );
+                nodeUp(data, blocks, edges, tempalte_id,  ( d ) => {
+                  const n = d.content.blocks;
+                  console.log( "nuevos blocks", n );
+                  setNodes(prevNodes => [...n]);
+                  setNodeChanged( prev => prev + 1  );
+                } );
+                
               },
-              onMoveDown: ( data ) => {
-                console.log("Move down"); 
-                nodeDown( data, blocks, setNodes );
+              onMoveDown: (data) => {
+
+                console.log("Move down");
+                
+                nodeDown(data, blocks, edges, tempalte_id, ( d ) => {
+                  const n = d.content.blocks;
+                  console.log( "nuevos blocks", n );
+                  setNodes(prevNodes => [...n]);
+                  setNodeChanged( prev => prev + 1  );
+                });
+                
               }
             }
           };
         });
 
-
         return { blocks, edges };
       }
 
-      
-
       const { tempalte_id, type, table } = getUrlParameter();
 
-      if( type === "document" ){
-         nodeTypes.templateNode = UnHandleNode;
-         hasDragableNodes = false;
+      if (type === "document") {
+        nodeTypes.templateNode = UnHandleNode;
+        hasDragableNodes = false;
       }
 
-      if( type === "project" ){
+      if (type === "project") {
         nodeTypes.templateNode = TemplateNode;
       }
 
-
       let { data: document_templates, error } = await supabase
-      .from(table)
-      .select('*')
-      .eq('id', tempalte_id)
-      .single();
+        .from(table)
+        .select('*')
+        .eq('id', tempalte_id)
+        .single();
 
       const content = document_templates.content;
-      const { blocks, edges } = getTemplateData( content );
+      const { blocks, edges } = getTemplateData(content);
 
-      console.log( "content" , content );
-      console.log( "blocks" , blocks );
+      console.log("content", content);
+      console.log("blocks", blocks);
 
       setNodes(blocks);
       setEdges(edges);
-      
-     };
+    };
 
-     fetchNodes();
-    
-  }
-  , []);
+    fetchNodes();
+  }, []);
+
+  useEffect(() => {
+    console.log("Nodes", nodes);
+    console.log( "changed onces", nodeChanged );
+    setNodeChanged( prev => prev + 1 )
+  }, [nodes]);
 
   // Handle connections between nodes
   const onConnect = useCallback(
@@ -161,7 +166,6 @@ export const TemplateCanvas = ({
 
   // Handle node selection for properties panel
   const onNodeClick = useCallback((_, node: Node<TemplateNodeData>) => {
-    
     console.log("Node clicked", node);
     if (!readOnly) {
       setSelectedNode(node);
@@ -170,77 +174,69 @@ export const TemplateCanvas = ({
   }, [readOnly]);
 
   // Add a new node to the canvas
-  const onAddNode = (nodeData: TemplateNodeData | UnHandleNodeData ) => {
-    
+  const onAddNode = (nodeData: TemplateNodeData | UnHandleNodeData) => {
     if (readOnly) return;
 
     const action = nodeData.action;
 
     const { type } = getUrlParameter();
-  
 
     console.log("nodeData", nodeData);
     console.log("nodes", nodes);
-  
+
     const title = nodeData.name;
     const content = nodeData.content;
 
     const last_node = nodes[nodes.length - 1];
     const last_position = last_node.position;
 
-    if( action === "update" ){
-
+    if (action === "update") {
       let updatedNodes = nodes.map(node => {
-         
-         console.log( title , node.data.name);
+        console.log(title, node.data.name);
 
-        if( type === "document" ){
-            if(  content === node.data.content ){
-              return { ...node, data: { ...nodeData } };
-            }
-        }
-
-        if ( type === "project" ) {
-          if ( title ===  node.data.id ) {
+        if (type === "document") {
+          if (content === node.data.content) {
             return { ...node, data: { ...nodeData } };
-          } else {
-            return node;
-
           }
         }
 
-        return node;  
+        if (type === "project") {
+          if (title === node.data.id) {
+            return { ...node, data: { ...nodeData } };
+          } else {
+            return node;
+          }
+        }
 
-        
+        return node;
       });
 
       console.log("updatedNodes", updatedNodes);
 
       setNodes(updatedNodes);
-      
+
       if (onSave) {
         console.log("tiene onSave");
         onSave(updatedNodes, edges);
-      }else{
+      } else {
         console.log("no tiene onSave");
       }
-      
+
       toast.success('Node updated successfully');
       return;
-
     }
 
     const typeNode = type === "document" ? "templateNode" : "unHandleNode";
-    const position = { x: 100, y: 100 } ;
+    const position = { x: 100, y: 100 };
 
-    if( type === "document" ){
+    if (type === "document") {
       position.y = last_position.y + 150;
       position.x = 0;
     }
 
     const newNode = {
       id: `node-${Date.now()}`,
-      type: typeNode ,
+      type: typeNode,
       position: position,
       draggable: hasDragableNodes,
       data: { ...nodeData }
@@ -250,7 +246,7 @@ export const TemplateCanvas = ({
     console.log("newNode", newNode);
 
     setNodes((nds) => [...nds, newNode]);
-    
+
     if (onSave) {
       onSave([...nodes, newNode], edges);
     }
@@ -261,17 +257,17 @@ export const TemplateCanvas = ({
     if (readOnly) return;
 
     try {
-      const updatedNodes = nodes.map(node => 
-        node.id === nodeId 
+      const updatedNodes = nodes.map(node =>
+        node.id === nodeId
           ? { ...node, data: { ...node.data, ...data } }
           : node
       );
       setNodes(updatedNodes);
-      
+
       if (onSave) {
         onSave(updatedNodes, edges);
       }
-      
+
       toast.success('Node updated successfully');
     } catch (error: any) {
       toast.error(`Error updating node: ${error.message}`);
@@ -282,18 +278,19 @@ export const TemplateCanvas = ({
     <div className="flex h-full">
       {!readOnly && (
         <div className="w-64 border-r border-gray-200 p-4">
-          <SideBar 
-            onAddNode={onAddNode} 
-            nodeToEdit={nodeToEdit} 
-            setNodeToEdit={setNodeToEdit} 
-            type={ type } 
+          <SideBar
+            onAddNode={onAddNode}
+            nodeToEdit={nodeToEdit}
+            setNodeToEdit={setNodeToEdit}
+            type={type}
           />
         </div>
       )}
-      
+
       <div className="flex-1">
         <ReactFlowProvider>
           <ReactFlow
+            key={nodeChanged}
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
@@ -321,10 +318,10 @@ export const TemplateCanvas = ({
           </ReactFlow>
         </ReactFlowProvider>
       </div>
-      
+
       {selectedNode && !readOnly && (
         <div className="w-80 border-l border-gray-200 p-4">
-          <PropertiesPanel 
+          <PropertiesPanel
             node={selectedNode}
             updateNode={(updatedData) => handleNodeUpdate(selectedNode.id, updatedData)}
             onClose={() => setSelectedNode(null)}
