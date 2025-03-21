@@ -8,7 +8,7 @@ jest.mock('next/router', () => require('./__mocks__/next/router'));
 jest.mock('next/navigation', () => require('./__mocks__/next/navigation'));
 jest.mock('next-themes', () => require('./__mocks__/next/themes'));
 jest.mock('@/lib/supabase', () => require('./__mocks__/lib/supabase'));
-jest.mock('reactflow', () => require('./__mocks__/reactflow'));
+jest.mock('reactflow', () => require('./__mocks__/components/reactflow.js'));
 
 // Configuración global de Jest para evitar errores con matchMedia (necesario para algunos componentes)
 Object.defineProperty(window, 'matchMedia', {
