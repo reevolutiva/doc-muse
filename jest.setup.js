@@ -1,7 +1,7 @@
 // Optional: configure or set up a testing framework before each test
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
+//import '@testing-library/jest-dom/extend-expect';
 
 // Importar mocks modularizados
 jest.mock('next/router', () => require('./__mocks__/next/router'));

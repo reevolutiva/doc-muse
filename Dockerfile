@@ -17,6 +17,11 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 RUN pnpm add -D @testing-library/jest-dom
 RUN pnpm install jest-junit
+RUN pnpm install eslint@8
+RUN apk add --no-cache cairo cairo-dev
+RUN apk add --no-cache pango pango-dev
+RUN apk add --no-cache libjpeg-turbo libjpeg-turbo-dev
+RUN apk add --no-cache giflib giflib-dev
 
 # Development image, copy all the files and run next dev
 FROM base AS dev
@@ -60,6 +65,11 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 RUN pnpm add -D @testing-library/jest-dom
 RUN RUN pnpm install jest-junit
+RUN pnpm install eslint@8
+RUN apk add --no-cache cairo cairo-dev
+RUN apk add --no-cache pango pango-dev
+RUN apk add --no-cache libjpeg-turbo libjpeg-turbo-dev
+RUN apk add --no-cache giflib giflib-dev
 
 COPY --from=builder /app/public ./public
 
