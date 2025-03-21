@@ -1,6 +1,11 @@
 import { saveTemplate, getTemplate } from '@/api/templateApi'; // Importación nombrada
 import { supabase } from '@/lib/supabase';
 
+const mockResponse = {
+  data: [{ id: '123', ...mockTemplate }],
+  error: null,
+};
+
 jest.mock('@/lib/supabase', () => ({
   supabase: {
     from: jest.fn().mockReturnValue({
@@ -33,10 +38,7 @@ describe('templateApi', () => {
         edges: []
       };
 
-      const mockResponse = {
-        data: [{ id: '123', ...mockTemplate }],
-        error: null,
-      };
+      
 
       (supabase.from().insert as jest.Mock).mockResolvedValue(mockResponse);
 
