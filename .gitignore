@@ -62,3 +62,4 @@ tmp
 
 # Supabase specific files
 .branches
+/.pnpm-store
