@@ -63,3 +63,4 @@ tmp
 # Supabase specific files
 .branches
 /.pnpm-store
+/__tests__1
