@@ -53,11 +53,13 @@ export const UnHandleNode = memo(({ data, isConnectable }: UnHandleNodeProps) =>
 
   const onMoveUpHandler = (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log("data", data);
     data.onMoveUp(data);
   };
 
   const onMoveDownHandler = (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log("data", data);
     data.onMoveDown(data);
   };
 

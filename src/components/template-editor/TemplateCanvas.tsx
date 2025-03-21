@@ -84,6 +84,20 @@ export const TemplateCanvas = ({
             position.x = 0;
           }
 
+          function moveUpLogic( data, blocks, edges, tempalte_id ){
+
+            nodeUp(data, blocks, edges, tempalte_id,  ( d ) => {
+              const n = d.content.blocks;
+              n.map( b ) =>{
+                // TODO: Locgica recursiva 
+              }
+              console.log( "nuevos blocks", n );
+              setNodes(prevNodes => [...n]);
+              setNodeChanged( prev => prev + 1  );
+            } );
+
+          }
+
           return {
             ...node,
             draggable: hasDragableNodes,
@@ -103,6 +117,7 @@ export const TemplateCanvas = ({
                 } );
                 
               },
+
               onMoveDown: (data) => {
 
                 console.log("Move down");
@@ -188,7 +203,7 @@ export const TemplateCanvas = ({
     const content = nodeData.content;
 
     const last_node = nodes[nodes.length - 1];
-    const last_position = last_node.position;
+    const last_position =  nodes.length == 0 ? { x:0, y: 0 } : last_node.position;
 
     if (action === "update") {
       let updatedNodes = nodes.map(node => {

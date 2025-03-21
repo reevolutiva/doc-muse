@@ -15,11 +15,13 @@ function nodeGetPosition(node, nodes ){
         }
     }  );
 
-    if( before_pos < 0 ){
+
+
+    if( current_pos > 0 && before_pos < 0 ){
         throw Error("before post no puede ser menor que 0");
     }
 
-    if( nex_pos > nodes.length ){
+    if( current_pos !== nodes.length && next_pos > nodes.length ){
         throw Error("nex pos no puede ser mayor que el array de nodos");
     }
 
@@ -62,8 +64,6 @@ function alter_position( from , to , nodes ){
         if( to.index > nodes.length - 1 ){
             return clon;
         }
-
-
         
         // Cambiamos posicion en el array.
         clon[from.index] = to.data;
