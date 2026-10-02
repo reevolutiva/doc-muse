@@ -133,6 +133,8 @@ Configuración y funciones de Supabase:
 - `config.toml`: Configuración del proyecto
 
 ## Archivos de Configuración (Actualizados)
+- `.github/workflows/secrets.yml`: Escaneo redactado de secretos en árbol e historial disponible con Gitleaks; independiente del workflow de tests.
+- `.githooks/pre-commit`: Escaneo del índice previo al commit y ejecución de `lint-staged`; activación local documentada en `README.md`.
 - `next.config.js`: Configuración de Next.js
 - `package.json`: Dependencias y scripts
 - `docker-compose.yml`: Configuración para desarrollo con Docker

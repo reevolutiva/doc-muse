@@ -144,6 +144,22 @@ Este script guía a través del proceso completo de configuración, incluyendo:
 
 ## 🚀 Ejecución del Proyecto
 
+### Política de secretos y respuesta a incidentes
+
+- Guarda credenciales únicamente en `.env.local` (Supabase CLI/Docker local) o en el gestor de secretos del proveedor. Los archivos `.env*` se ignoran, salvo `.env.example`, que debe contener solo placeholders.
+- Nunca incluyas claves privadas, contraseñas, tokens de acceso ni `service_role` en código, documentación, imágenes, logs o artefactos. Solo URL y claves públicas `anon`/publishable pueden usar `NEXT_PUBLIC_*`; revisa RLS antes de exponerlas.
+- Instala [Gitleaks](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1) desde su distribución oficial y verifica el checksum de tu plataforma. Activa el hook con `git config core.hooksPath .githooks` después de `pnpm install`. Si ya tienes hooks locales, integra el escaneo sin eliminarlos. El hook bloquea commits si falta el escáner, escanea el índice y conserva `lint-staged`.
+- CI ejecuta **Secret scan / secrets** en pushes, PRs, manualmente y diariamente, con redacción completa y sin publicar informes. Un administrador debe exigir este check en la protección de ramas y habilitar secret scanning/push protection en GitHub. No se omiten hallazgos históricos con una baseline.
+- Antes de compartir cambios, ejecuta `gitleaks dir . --redact=100 --ignore-gitleaks-allow` y `gitleaks git . --log-opts="--all" --redact=100 --ignore-gitleaks-allow`. Un escaneo sin hallazgos no demuestra ausencia de secretos; revisa también credenciales no reconocidas, releases, artefactos y logs.
+
+**Si se detecta exposición:** trátala como comprometida, pausa despliegues y notifica al responsable por un canal privado. Inventaría solo proveedor, ruta, commit, identificador no sensible y alcance; nunca copies el valor a un issue público.
+
+1. Revoca primero en el proveedor, crea credenciales nuevas de mínimo privilegio, actualiza gestores de secretos y `.env.local`, redespliega y confirma que las anteriores ya no autentican. Para Supabase distingue el entorno Docker local del proyecto remoto: rota contraseñas de base de datos, secretos JWT y claves privilegiadas afectados; coordina la invalidación de sesiones y las claves dependientes. Revisa también proveedores de IA, correo y tokens de GitHub identificados en la auditoría.
+2. Conserva evidencia privada: UTC, responsable, ID del evento de revocación/rotación y resultado de la verificación (sin valores). Revisa actividad, facturación y accesos durante la ventana de exposición. No declares una rotación ejecutada sin esa evidencia.
+3. Tras rotar, un administrador debe coordinar la limpieza con `git-filter-repo` en una copia aislada con todas las ramas y tags afectados, respaldo privado y publicación congelada. Elimina rutas sensibles o reemplaza valores también en archivos renombrados y mensajes de commit; vuelve a escanear antes de actualizar refs con autorización. Esta limpieza no se resuelve con un commit que borre archivos y requiere una operación administrativa separada de esta rama.
+4. Solicita a GitHub la eliminación de referencias/cachés de PR y contenido sensible; elimina artefactos, logs e imágenes afectados y coordina forks y clones (reclonado, sin fusionar historial antiguo). No asumas que reescribir Git elimina copias externas.
+5. Registra el timeline, impacto confirmado/desconocido, causa, acciones ejecutadas y pendientes en `Docs/bug_vitacora.md`. Cierra el P0 solo con inventario completo, evidencia de revocación, escaneo del historial saneado y controles exigidos en ramas.
+
 ### Desarrollo Local
 
 1. **Iniciar el servidor de desarrollo**
