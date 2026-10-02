@@ -81,6 +81,8 @@ No se clasifican como secretos de producción las claves Supabase con rol `anon`
 
 **Validación adicional:** escaneo histórico predeterminado sobre 179 commits: 186 avisos (duplicados y falsos positivos, no 186 secretos). En archivos versionados del árbol actual, 86 avisos eran UUID del seed y uno un ejemplo truncado de clave pública; se revisan por formato y contexto, no se convierten en credenciales comprometidas. CodeQL para Actions/JavaScript: cero alertas. El motor automatizado de revisión no estaba disponible; revisión especializada del diff sin bugs de alta confianza. Los controles siguen sin acreditar una ejecución CI exitosa ni obligatoriedad de protección de ramas.
 
+**Escaneo final con `.gitleaks.toml`:** cero avisos en archivos versionados del árbol actual; 19 avisos históricos, incluidos duplicados de credenciales y claves públicas/ejemplos. Etherpad, Azure en Python y Azure en el notebook siguen detectados; ninguna excepción oculta esas credenciales. Las excepciones de `generic-api-key` combinan ruta exacta y match exacto para UUID del método `password` en el seed y cabecera JWT truncada en la guía. El escaneo local de directorio también señala 15 avisos en `.next`, fuera de lo versionado: revisar/reconstruir los artefactos antes de desplegar y no confundirlos con nuevos secretos confirmados.
+
 ### Problema Nº21: Error de tipo en configuración de ESLint
 - **Resuelto:** No
 - **Descripción:** Type error: Type 'string' has no properties in common with type 'Plugin'. El mensaje indica que ESLint espera que `plugins` sea un objeto en lugar de un arreglo de cadenas.
