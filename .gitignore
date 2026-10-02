@@ -63,6 +63,7 @@ tmp
 
 # Supabase specific files
 .branches
+supabase/.temp/
 
 # Private incident evidence and secret scanner reports
 gitleaks-report.*

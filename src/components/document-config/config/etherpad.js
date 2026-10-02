@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { ehterpad_middleware } from './urls';
-import { EHTEPAD_API_KEY } from './keys';
 
 const etherpadAPI = axios.create({
   baseURL: ehterpad_middleware ,
   headers: {
     'Content-Type': 'application/json',
-    'apiKey': EHTEPAD_API_KEY,
   }
 });
 
@@ -65,5 +63,4 @@ export const appendPadText = async (padID, text, blankSpace = 'enter') => {
     throw error;
   }
 }
-
 
