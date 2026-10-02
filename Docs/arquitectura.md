@@ -133,8 +133,8 @@ Configuración y funciones de Supabase:
 - `config.toml`: Configuración del proyecto
 
 ## Archivos de Configuración (Actualizados)
-- `.github/workflows/secrets.yml`: Escaneo redactado de secretos en árbol e historial disponible con Gitleaks; independiente del workflow de tests.
-- `.githooks/pre-commit`: Escaneo del índice previo al commit y ejecución de `lint-staged`; activación local documentada en `README.md`.
+- `.github/workflows/secrets.yml`: Escaneo redactado con Gitleaks, independiente del workflow de tests. Job `secrets` (árbol versionado, bloqueante y exigible en la protección de ramas) y job `history` (historial completo, informativo con `continue-on-error` y rojo hasta el saneamiento).
+- `.githooks/pre-commit`: Escaneo del índice previo al commit y ejecución de `lint-staged`; activación automática vía `scripts/setup-hooks.sh` desde el `prepare` de pnpm, documentada en `README.md`.
 - `.gitleaks.toml`: Reglas predeterminadas y excepciones acotadas para datos de prueba, sin ocultar credenciales históricas.
 - `next.config.js`: Configuración de Next.js
 - `package.json`: Dependencias y scripts

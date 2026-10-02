@@ -17,14 +17,14 @@ Este documento sirve como bitácora de problemas en Doc-Muse y guía para agente
 
 ## Problemas Activos
 
-# Problema o Feature Incidente P0 de exposición de credenciales
+### Problema Nº22: Incidente P0 de exposición de credenciales
 
 Assignees: Pendiente de designación por los administradores
 Labels: security, P0
 Milestone: Pendiente
 Projects: Kimfe
 
-## Descripción del problema o feature
+#### Descripción del problema o feature
 
 **Abierto; contención parcial.** Auditoría local del 2026-10-02: cuatro credenciales potencialmente comprometidas (Etherpad, dos OpenAI y una Azure OpenAI), sin verificar vigencia ni uso indebido. No se publican valores ni hashes de credenciales. Se recuperaron todas las ramas y tags anunciados por el remoto: 16 ramas, ningún tag, 177 commits anteriores a esta intervención; revisión del especialista sobre 178 commits incluidos los controles y 1.147 blobs. No cubre refs borradas/ocultas de PR, forks, clones, logs, artefactos o releases.
 
@@ -39,20 +39,20 @@ Inventario mínimo, con referencias relativas a la raíz:
 
 No se clasifican como secretos de producción las claves Supabase con rol `anon` (públicas), el JWT `service_role` del entorno `supabase-demo` local ni placeholders de conexiones. Su seguridad depende de aislamiento local/RLS; deben reevaluarse si se usaron fuera de desarrollo. Se retiró de Docker la variable pública destinada a `service_role`, sin consumidores encontrados.
 
-## Plan de Acción
+#### Plan de Acción
 
-[]- [x] Revisar instrucciones, recuperar historial anunciado y registrar inventario sin valores.
-[]- [x] Retirar clave Etherpad del cliente; ignorar variantes `.env*`, informes privados y caché `supabase/.temp`.
-[]- [x] Añadir escaneo CI y hook local, con salida redactada y sin baseline histórica.
-[]- [x] Extender detección a asignaciones escapadas en notebooks y limitar excepciones a datos de prueba verificados.
-[]- [x] Recuperar `.env.example` vacío; parametrizar URLs Etherpad y configuración de inferencia externa; unificar `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-[]- [x] Alinear Compose con `--env-file .env.local`, build Docker con argumentos exclusivamente públicos y salida Next.js `standalone`; retirar metadatos locales versionados.
-[]- [ ] Designar responsables, pausar despliegues afectados y revocar SEC-01 a SEC-04; actualizar consumidores y comprobar que las claves anteriores no autentican.
-[]- [ ] Completar inventario de secret scanning, refs de PR, releases, logs y artefactos con acceso administrativo; revisar actividad y facturación.
-[]- [ ] Saneamiento histórico coordinado mediante `git-filter-repo`, todas las rutas/copias y refs afectadas; limpieza de cachés GitHub y reclonado de colaboradores.
-[]- [ ] Exigir `Secret scan / secrets` en ramas protegidas y activar push protection; confirmar hooks en cada clon.
+- [x] Revisar instrucciones, recuperar historial anunciado y registrar inventario sin valores.
+- [x] Retirar clave Etherpad del cliente; ignorar variantes `.env*`, informes privados y caché `supabase/.temp`.
+- [x] Añadir escaneo CI y hook local, con salida redactada y sin baseline histórica.
+- [x] Extender detección a asignaciones escapadas en notebooks y limitar excepciones a datos de prueba verificados.
+- [x] Recuperar `.env.example` vacío; parametrizar URLs Etherpad y configuración de inferencia externa; unificar `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- [x] Alinear Compose con `--env-file .env.local`, build Docker con argumentos exclusivamente públicos y salida Next.js `standalone`; retirar metadatos locales versionados.
+- [ ] Designar responsables, pausar despliegues afectados y revocar SEC-01 a SEC-04; actualizar consumidores y comprobar que las claves anteriores no autentican.
+- [ ] Completar inventario de secret scanning, refs de PR, releases, logs y artefactos con acceso administrativo; revisar actividad y facturación.
+- [ ] Saneamiento histórico coordinado mediante `git-filter-repo`, todas las rutas/copias y refs afectadas; limpieza de cachés GitHub y reclonado de colaboradores.
+- [ ] Exigir el check `Secret scan / secrets` (árbol versionado) en ramas protegidas, activar secret scanning y push protection de GitHub, y confirmar el hook en cada clon (`pnpm run setup:hooks`).
 
-## Rutas involucradas
+#### Rutas involucradas
 
 1.- [Cliente Etherpad](../src/components/document-config/config/etherpad.js)
 2.- [Escaneo CI](../.github/workflows/secrets.yml)
@@ -60,18 +60,18 @@ No se clasifican como secretos de producción las claves Supabase con rol `anon`
 4.- [Política y procedimiento administrativo](../README.md#política-de-secretos-y-respuesta-a-incidentes)
 5.- [Configuración Docker](../docker-compose.yml)
 
-## Pruebas y definición de listos
+#### Pruebas y definición de listos
 
-[]- [x] Hook con sintaxis shell válida y modo ejecutable; workflow YAML, eventos, permisos mínimos y fetch completo verificados.
-[]- [x] Exclusiones `.env`, `.env.local`, `.env.production` y variantes anidadas; `.env.example` sigue versionable.
-[]- [x] Gitleaks descargado con checksum verificado; credencial sintética de alta entropía bloqueada. No detectó una muestra artificial de entropía nula: no reemplaza la revisión manual.
-[]- [x] Regla de notebooks validada con JSON sintético escapado y salida completamente redactada; las reglas predeterminadas no detectaban la copia Azure en el notebook histórico.
-[]- [x] Sintaxis JavaScript del cliente Etherpad y `git diff --check` correctos.
-[]- [ ] Lint: bloqueado por `.eslint.js` inexistente; tests: configuración Jest CommonJS incompatible con el paquete ESM; build: descarga de Inter bloqueada por DNS de `fonts.googleapis.com`. Fallos ajenos a la remediación, sin modificar sus configuraciones.
-[]- [ ] Evidencia privada de revocación por ID: responsable, UTC, evento del proveedor, verificación de clave anterior y despliegue con sustituta.
-[]- [ ] Historial saneado y escaneado, revisión de accesos e integración Supabase/Etherpad tras rotación.
+- [x] Hook con sintaxis shell válida y modo ejecutable; workflow YAML, eventos, permisos mínimos y fetch completo verificados.
+- [x] Exclusiones `.env`, `.env.local`, `.env.production` y variantes anidadas; `.env.example` sigue versionable.
+- [x] Gitleaks descargado con checksum verificado; credencial sintética de alta entropía bloqueada. No detectó una muestra artificial de entropía nula: no reemplaza la revisión manual.
+- [x] Regla de notebooks validada con JSON sintético escapado y salida completamente redactada; las reglas predeterminadas no detectaban la copia Azure en el notebook histórico.
+- [x] Sintaxis JavaScript del cliente Etherpad y `git diff --check` correctos.
+- [ ] Lint: bloqueado por `.eslint.js` inexistente; tests: configuración Jest CommonJS incompatible con el paquete ESM; build: descarga de Inter bloqueada por DNS de `fonts.googleapis.com`. Fallos ajenos a la remediación, sin modificar sus configuraciones.
+- [ ] Evidencia privada de revocación por ID: responsable, UTC, evento del proveedor, verificación de clave anterior y despliegue con sustituta.
+- [ ] Historial saneado y escaneado, revisión de accesos e integración Supabase/Etherpad tras rotación.
 
-## Notas adocionales
+#### Notas adocionales
 
 **Postmortem preliminar (UTC):**
 - 2026-10-02 17:47: recepción del incidente; exposición y fecha de publicación aún desconocidas.
@@ -90,6 +90,8 @@ No se clasifican como secretos de producción las claves Supabase con rol `anon`
 **Verificaciones del ajuste:** sintaxis JS/shell y `git diff --check` correctos; Compose validado con URL/clave públicas sintéticas, sin variables privadas declaradas; plantilla con valores vacíos, versionable y `.env.local` ignorado; esquema de entorno acepta Supabase configurado y Etherpad vacío opcional, y las URLs respetan variables de prueba sin fallback local. Instalación pnpm con lockfile congelado correcta. Lint y Jest siguen bloqueados por los errores de configuración ya indicados; typecheck falla por sintaxis JSX en `project-templates/ProjectList.ts:19–35`; build sigue bloqueado por descarga de fuentes. No se alteraron esas configuraciones ajenas ni se validó un despliegue real con credenciales del propietario. Revisión de seguridad especializada: sin vulnerabilidades nuevas encontradas.
 
 **Limpieza histórica solicitada, aún no ejecutada:** los commits publicados siguen siendo incrementales. Esta rama no puede purgar el historial remoto ni actualizar forzosamente todas las ramas/tags. Un administrador debe elegir entre sanear secretos conservando historia o reinicializarla por completo, congelar escrituras, guardar un respaldo privado y operar sobre una copia aislada con todas las refs. Para saneamiento, usar `git-filter-repo` con eliminación de las rutas históricas del inventario y `src/components/document-config/config/keys.js`, incluyendo sus renombrados y `supabase/.temp/`; usar archivos privados de reemplazos para valores copiados en otras rutas y mensajes. No incluir esos archivos en el repositorio ni en comandos/logs públicos. Revisar todas las refs resultantes con Gitleaks antes de publicarlas mediante el canal administrativo autorizado. La actualización de refs, cachés de GitHub/PR, artefactos, forks y reclonado de colaboradores es imprescindible; borrar `.git` aquí o crear un commit huérfano no sanea el repositorio público. Hasta esa operación el historial sigue expuesto; normalizar variables no invalida las claves antiguas.
+
+**Ajuste de controles del 2026-10-02 (CI):** el workflow `Secret scan` se separó en dos jobs para eliminar la contradicción entre *exigir* el check y *no silenciar* los hallazgos históricos: `secrets` escanea el árbol versionado y puede exigirse ya en la protección de ramas; `history` escanea el historial completo con `continue-on-error` y **sigue fallando visiblemente** hasta que se ejecute el saneamiento (19 avisos en 11 commits sobre 17 refs, reproducido con Gitleaks 8.30.1 y el checksum del workflow). El check `Secret scan / secrets` no debe declararse exigido hasta confirmar su primera ejecución verde. Las ejecuciones anteriores del workflow quedaron en `action_required` por aprobación pendiente de un administrador, de modo que el control no contaba con evidencia de ejecución en CI.
 
 ### Problema Nº21: Error de tipo en configuración de ESLint
 - **Resuelto:** No
