@@ -142,7 +142,33 @@ Este script guía a través del proceso completo de configuración, incluyendo:
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    ```
 
+   Para Supabase CLI/Docker local, usa la URL y clave pública que muestra `supabase status` después de `supabase start` (sin publicar su salida). Para un proyecto remoto, usa su URL y clave `anon`/publishable. No uses una clave administrativa en el frontend.
+
+   Etherpad es opcional y externo a este Compose: configura `NEXT_PUBLIC_ETHERPAD_URL` y `NEXT_PUBLIC_ETHERPAD_MIDDLEWARE_URL` con URLs accesibles **desde el navegador**, no nombres DNS internos de contenedores. En local pueden apuntar a los puertos 9001/8081; en producción deben apuntar al despliegue HTTPS correspondiente. Sin URL, el iframe muestra un aviso y las llamadas al middleware fallan antes de enviar una petición.
+
+   `OPENAI_API_KEY` es privada y solo la consumen las Edge Functions. En local, usa `supabase functions serve --env-file .env.local`; en remoto configura el secreto del proyecto por el mecanismo privado del proveedor. `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` son inyectadas por Supabase en su runtime: no se incluyen como valores manuales en la plantilla, no deben sustituirse por la URL pública del navegador ni enviarse al frontend. No imprimas ni subas archivos de secretos.
+
+   Los ejemplos `.prompty` externos usan `AI_INFERENCE_ENDPOINT` y `AI_INFERENCE_MODEL`. El consumidor de Prompty debe cargar esas variables en su entorno; Next.js no ejecuta estos ejemplos ni carga `.env.local` para herramientas externas.
+
 ## 🚀 Ejecución del Proyecto
+
+### Política de secretos y respuesta a incidentes
+
+- Guarda credenciales únicamente en `.env.local` (Supabase CLI/Docker local) o en el gestor de secretos del proveedor. Los archivos `.env*` se ignoran, salvo `.env.example`, que debe contener solo placeholders.
+- Nunca incluyas claves privadas, contraseñas, tokens de acceso ni `service_role` en código, documentación, imágenes, logs o artefactos. Solo URL y claves públicas `anon`/publishable pueden usar `NEXT_PUBLIC_*`; revisa RLS antes de exponerlas.
+- El cliente Etherpad ya no envía una clave API. El operador del middleware debe almacenar la credencial rotada en servidor y autenticar/autorizar cada operación sobre pads; hasta provisionarlo, las operaciones pueden ser rechazadas. No restaures la clave en el navegador ni expongas un proxy sin control de acceso.
+- Instala [Gitleaks](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1) desde su distribución oficial y verifica el checksum de tu plataforma. `pnpm install` activa el hook automáticamente (`prepare` → `scripts/setup-hooks.sh`) sin pisar un `core.hooksPath` ya configurado; para forzarlo, `pnpm run setup:hooks`. Si ya tienes hooks locales, integra el escaneo sin eliminarlos (la configuración heredada de `husky` en `package.json` era inerte y fue retirada). El hook bloquea commits si falta el escáner, escanea el índice y conserva `lint-staged`.
+- CI ejecuta **Secret scan** en pushes, PRs, manualmente y diariamente, con redacción completa y sin publicar informes. El job **`secrets`** escanea el árbol versionado, es bloqueante y es el que un administrador debe exigir como check `Secret scan / secrets` en la protección de ramas. El job **`history`** escanea el historial completo con `continue-on-error`: **sigue fallando de forma visible** (19 avisos en el historial) hasta que se ejecute el saneamiento, no debe marcarse como exigido y no se silencia con una baseline.
+- `.gitleaks.toml` extiende las reglas oficiales e incluye claves serializadas en notebooks. Las excepciones deben limitarse a formatos y rutas de datos de prueba comprobados; nunca añadas una excepción para una credencial comprometida.
+- Antes de compartir cambios, ejecuta `gitleaks dir . --redact=100 --ignore-gitleaks-allow` y `gitleaks git . --log-opts="--all" --redact=100 --ignore-gitleaks-allow`. Un escaneo sin hallazgos no demuestra ausencia de secretos; revisa también credenciales no reconocidas, releases, artefactos y logs.
+
+**Si se detecta exposición:** trátala como comprometida, pausa despliegues y notifica al responsable por un canal privado. Inventaría solo proveedor, ruta, commit, identificador no sensible y alcance; nunca copies el valor a un issue público.
+
+1. Revoca primero en el proveedor, crea credenciales nuevas de mínimo privilegio, actualiza gestores de secretos y `.env.local`, redespliega y confirma que las anteriores ya no autentican. Para Supabase distingue el entorno Docker local del proyecto remoto: rota contraseñas de base de datos, secretos JWT y claves privilegiadas afectados; coordina la invalidación de sesiones y las claves dependientes. Revisa también proveedores de IA, correo y tokens de GitHub identificados en la auditoría.
+2. Conserva evidencia privada: UTC, responsable, ID del evento de revocación/rotación y resultado de la verificación (sin valores). Revisa actividad, facturación y accesos durante la ventana de exposición. No declares una rotación ejecutada sin esa evidencia.
+3. Tras rotar, un administrador debe coordinar la limpieza con `git-filter-repo` en una copia aislada con todas las ramas y tags afectados, respaldo privado y publicación congelada. Elimina rutas sensibles o reemplaza valores también en archivos renombrados y mensajes de commit; vuelve a escanear antes de actualizar refs con autorización. Esta limpieza no se resuelve con un commit que borre archivos y requiere una operación administrativa separada de esta rama.
+4. Solicita a GitHub la eliminación de referencias/cachés de PR y contenido sensible; elimina artefactos, logs e imágenes afectados y coordina forks y clones (reclonado, sin fusionar historial antiguo). No asumas que reescribir Git elimina copias externas.
+5. Registra el timeline, impacto confirmado/desconocido, causa, acciones ejecutadas y pendientes en `Docs/bug_vitacora.md`. Cierra el P0 solo con inventario completo, evidencia de revocación, escaneo del historial saneado y controles exigidos en ramas.
 
 ### Desarrollo Local
 
@@ -168,16 +194,24 @@ Este script guía a través del proceso completo de configuración, incluyendo:
 
 ### Despliegue con Docker
 
+Para desarrollo, usa `docker compose --env-file .env.local up --build -d frontend`. Compose no lee `.env.local` automáticamente para interpolar variables y solo transmite las cuatro variables públicas al frontend; no hace falta copiarlas a `.env`. Supabase CLI y Etherpad se levantan por separado.
+
+Para producción, las variables `NEXT_PUBLIC_*` quedan fijadas **durante el build**, no al arrancar el contenedor. La imagen usa la salida `standalone`; `.env.local` nunca se copia al contexto de Docker. Construye una imagen por configuración pública de despliegue, pasando únicamente los argumentos públicos siguientes:
+
 1. **Construir la imagen de Docker**
 
    ```bash
-   docker build -t doc-muse .
+   docker build -t doc-muse \
+     --build-arg NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co \
+     --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=your-public-anon-key \
+     --build-arg NEXT_PUBLIC_ETHERPAD_URL=https://pad.example.org \
+     --build-arg NEXT_PUBLIC_ETHERPAD_MIDDLEWARE_URL=https://pad-api.example.org .
    ```
 
 2. **Ejecutar el contenedor Docker**
 
    ```bash
-   docker run -p 3000:3000 -e NEXT_PUBLIC_SUPABASE_URL=your-url -e NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key doc-muse
+   docker run -p 3000:3000 doc-muse
    ```
 
    O utilizando docker-compose:

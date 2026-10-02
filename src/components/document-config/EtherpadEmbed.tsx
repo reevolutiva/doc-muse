@@ -23,6 +23,10 @@ const EtherpadEmbed = () => {
     console.log( padId );
   }, [padId]);
   
+  if (!etherpadRootUrl) {
+    return <p>Configura NEXT_PUBLIC_ETHERPAD_URL para habilitar Etherpad.</p>;
+  }
+
   return (
     <iframe
       src={`${etherpadRootUrl}/p/${padId}`}

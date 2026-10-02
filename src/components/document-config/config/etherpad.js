@@ -1,13 +1,18 @@
 import axios from 'axios';
-import { ehterpad_middleware } from './urls';
-import { EHTEPAD_API_KEY } from './keys';
+import { etherpadMiddlewareUrl } from './urls';
 
 const etherpadAPI = axios.create({
-  baseURL: ehterpad_middleware ,
+  baseURL: etherpadMiddlewareUrl,
   headers: {
     'Content-Type': 'application/json',
-    'apiKey': EHTEPAD_API_KEY,
   }
+});
+
+etherpadAPI.interceptors.request.use((config) => {
+  if (!etherpadMiddlewareUrl) {
+    throw new Error('NEXT_PUBLIC_ETHERPAD_MIDDLEWARE_URL is required');
+  }
+  return config;
 });
 
 export const createPad = async (padID) => {
@@ -65,5 +70,3 @@ export const appendPadText = async (padID, text, blankSpace = 'enter') => {
     throw error;
   }
 }
-
-

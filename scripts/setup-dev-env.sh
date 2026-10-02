@@ -288,11 +288,8 @@ echo -e "\n${YELLOW}Step 5: Docker Setup${NC}"
 if command -v docker >/dev/null 2>&1; then
   read -p "Do you want to build and run with Docker? (y/n): " use_docker
   if [ "$use_docker" = "y" ]; then
-    echo -e "Building Docker image..."
-    docker build -t doc-muse .
-    
-    echo -e "Starting Docker container..."
-    docker run -p 3000:3000 --env-file .env.local -d --name doc-muse-container doc-muse
+    echo -e "Building and starting the development frontend..."
+    docker compose --env-file .env.local up --build -d frontend
     
     echo -e "✓ Docker container started on http://localhost:3000"
   else

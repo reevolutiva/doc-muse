@@ -133,6 +133,9 @@ Configuración y funciones de Supabase:
 - `config.toml`: Configuración del proyecto
 
 ## Archivos de Configuración (Actualizados)
+- `.github/workflows/secrets.yml`: Escaneo redactado con Gitleaks, independiente del workflow de tests. Job `secrets` (árbol versionado, bloqueante y exigible en la protección de ramas) y job `history` (historial completo, informativo con `continue-on-error` y rojo hasta el saneamiento).
+- `.githooks/pre-commit`: Escaneo del índice previo al commit y ejecución de `lint-staged`; activación automática vía `scripts/setup-hooks.sh` desde el `prepare` de pnpm, documentada en `README.md`.
+- `.gitleaks.toml`: Reglas predeterminadas y excepciones acotadas para datos de prueba, sin ocultar credenciales históricas.
 - `next.config.js`: Configuración de Next.js
 - `package.json`: Dependencias y scripts
 - `docker-compose.yml`: Configuración para desarrollo con Docker
@@ -142,6 +145,8 @@ Configuración y funciones de Supabase:
 - `tailwind.config.ts`: Configuración de Tailwind CSS
 - `components.json`: Configuración de componentes UI
 - `.env.local`: Variables de entorno locales
+- `.env.example`: Plantilla sin valores; variables públicas de Supabase/Etherpad, clave privada OpenAI para Edge Functions y configuración opcional de inferencia externa.
+- `supabase/.temp/`: Metadatos regenerados por el CLI, ignorados y no distribuidos.
 
 ## Tecnologías Principales
 - **Frontend**: Next.js 13+ con App Router y React

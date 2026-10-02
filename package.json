@@ -14,6 +14,8 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "setup:hooks": "sh scripts/setup-hooks.sh",
+    "prepare": "sh scripts/setup-hooks.sh",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -140,11 +142,6 @@
     "lint-staged": "^12.1.2",
     "style-loader": "^4.0.0",
     "typescript": "^5.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
