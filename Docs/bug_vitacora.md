@@ -44,6 +44,7 @@ No se clasifican como secretos de producción las claves Supabase con rol `anon`
 []- [x] Revisar instrucciones, recuperar historial anunciado y registrar inventario sin valores.
 []- [x] Retirar clave Etherpad del cliente; ignorar variantes `.env*`, informes privados y caché `supabase/.temp`.
 []- [x] Añadir escaneo CI y hook local, con salida redactada y sin baseline histórica.
+[]- [x] Extender detección a asignaciones escapadas en notebooks y limitar excepciones a datos de prueba verificados.
 []- [ ] Designar responsables, pausar despliegues afectados y revocar SEC-01 a SEC-04; actualizar consumidores y comprobar que las claves anteriores no autentican.
 []- [ ] Completar inventario de secret scanning, refs de PR, releases, logs y artefactos con acceso administrativo; revisar actividad y facturación.
 []- [ ] Saneamiento histórico coordinado mediante `git-filter-repo`, todas las rutas/copias y refs afectadas; limpieza de cachés GitHub y reclonado de colaboradores.
@@ -62,6 +63,7 @@ No se clasifican como secretos de producción las claves Supabase con rol `anon`
 []- [x] Hook con sintaxis shell válida y modo ejecutable; workflow YAML, eventos, permisos mínimos y fetch completo verificados.
 []- [x] Exclusiones `.env`, `.env.local`, `.env.production` y variantes anidadas; `.env.example` sigue versionable.
 []- [x] Gitleaks descargado con checksum verificado; credencial sintética de alta entropía bloqueada. No detectó una muestra artificial de entropía nula: no reemplaza la revisión manual.
+[]- [x] Regla de notebooks validada con JSON sintético escapado y salida completamente redactada; las reglas predeterminadas no detectaban la copia Azure en el notebook histórico.
 []- [x] Sintaxis JavaScript del cliente Etherpad y `git diff --check` correctos.
 []- [ ] Lint: bloqueado por `.eslint.js` inexistente; tests: configuración Jest CommonJS incompatible con el paquete ESM; build: descarga de Inter bloqueada por DNS de `fonts.googleapis.com`. Fallos ajenos a la remediación, sin modificar sus configuraciones.
 []- [ ] Evidencia privada de revocación por ID: responsable, UTC, evento del proveedor, verificación de clave anterior y despliegue con sustituta.
@@ -76,6 +78,8 @@ No se clasifican como secretos de producción las claves Supabase con rol `anon`
 - En esta intervención: retirada de la clave cliente y del nombre público de `service_role`; la integración Etherpad requiere credencial rotada y autorización en el middleware.
 
 **Causa observada:** credenciales literales en código cliente, configuración Python y ejemplos/notebooks históricos, sin controles preventivos efectivos observados antes de la intervención. **Impacto:** exposición de valores confirmada localmente; vigencia, ventana de exposición y abuso desconocidos. **Contención externa:** no se ejecutaron rotaciones, congelación de despliegues ni cambios de visibilidad/protecciones. No se reescribió el historial remoto: un commit de saneamiento no purga valores previos. El CI histórico debe seguir fallando mientras existan credenciales detectables, no silenciarse para cerrar el incidente. La meta de 24 horas sigue pendiente y requiere responsables con acceso a proveedores y administración GitHub.
+
+**Validación adicional:** escaneo histórico predeterminado sobre 179 commits: 186 avisos (duplicados y falsos positivos, no 186 secretos). En archivos versionados del árbol actual, 86 avisos eran UUID del seed y uno un ejemplo truncado de clave pública; se revisan por formato y contexto, no se convierten en credenciales comprometidas. CodeQL para Actions/JavaScript: cero alertas. El motor automatizado de revisión no estaba disponible; revisión especializada del diff sin bugs de alta confianza. Los controles siguen sin acreditar una ejecución CI exitosa ni obligatoriedad de protección de ramas.
 
 ### Problema Nº21: Error de tipo en configuración de ESLint
 - **Resuelto:** No

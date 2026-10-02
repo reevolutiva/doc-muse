@@ -1,0 +1,30 @@
+title = "Doc-Muse secret scanning"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "UUID de registros en el seed SQL, no credenciales"
+condition = "AND"
+paths = ['''^supabase/seed\.sql$''']
+regexTarget = "match"
+regexes = ['''^password', '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'$''']
+
+[[rules.allowlists]]
+description = "Cabecera JWT truncada de ejemplo, no una clave válida"
+condition = "AND"
+paths = ['''^Docs/Prompts/github_actions_setup\.md$''']
+regexTarget = "match"
+regexes = ['''^NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ[A-Za-z0-9_-]+\.\.\."$''']
+
+[[rules]]
+id = "notebook-api-key"
+description = "Claves API en código serializado de notebooks"
+path = '''\.ipynb$'''
+regex = '''(?i)\b(?:azure_openai_api_key|azure_api_key|api_key)\s*[:=]\s*\\?["']([A-Za-z0-9+/=_-]{32,200})\\?["']'''
+secretGroup = 1
+entropy = 3.5
+keywords = ["api_key"]
