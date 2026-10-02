@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase'
 import type { Template } from '@/lib/types/template'
 
 export async function POST(request: Request) {
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseKey) {
     console.error('supabaseKey is required');

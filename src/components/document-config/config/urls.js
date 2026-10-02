@@ -1,4 +1,4 @@
-const etherpadRootUrl = 'http://localhost:9001';
-const ehterpad_middleware = 'http://localhost:8081';
+const etherpadRootUrl = process.env.NEXT_PUBLIC_ETHERPAD_URL;
+const etherpadMiddlewareUrl = process.env.NEXT_PUBLIC_ETHERPAD_MIDDLEWARE_URL;
 
-export { etherpadRootUrl, ehterpad_middleware };
+export { etherpadRootUrl, etherpadMiddlewareUrl };

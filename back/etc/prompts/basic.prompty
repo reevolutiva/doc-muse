@@ -7,8 +7,8 @@ model:
   api: chat
   configuration:
     type: serverless
-    endpoint: https://models.inference.ai.azure.com
-    model: Meta-Llama-3.1-8B-Instruct
+    endpoint: ${env:AI_INFERENCE_ENDPOINT}
+    model: ${env:AI_INFERENCE_MODEL}
 sample:
   firstName: Seth
   context: >

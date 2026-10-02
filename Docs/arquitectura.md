@@ -145,6 +145,8 @@ Configuración y funciones de Supabase:
 - `tailwind.config.ts`: Configuración de Tailwind CSS
 - `components.json`: Configuración de componentes UI
 - `.env.local`: Variables de entorno locales
+- `.env.example`: Plantilla sin valores; variables públicas de Supabase/Etherpad, clave privada OpenAI para Edge Functions y configuración opcional de inferencia externa.
+- `supabase/.temp/`: Metadatos regenerados por el CLI, ignorados y no distribuidos.
 
 ## Tecnologías Principales
 - **Frontend**: Next.js 13+ con App Router y React

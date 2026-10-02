@@ -142,6 +142,14 @@ Este script guía a través del proceso completo de configuración, incluyendo:
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    ```
 
+   Para Supabase CLI/Docker local, usa la URL y clave pública que muestra `supabase status` después de `supabase start` (sin publicar su salida). Para un proyecto remoto, usa su URL y clave `anon`/publishable. No uses una clave administrativa en el frontend.
+
+   Etherpad es opcional y externo a este Compose: configura `NEXT_PUBLIC_ETHERPAD_URL` y `NEXT_PUBLIC_ETHERPAD_MIDDLEWARE_URL` con URLs accesibles **desde el navegador**, no nombres DNS internos de contenedores. En local pueden apuntar a los puertos 9001/8081; en producción deben apuntar al despliegue HTTPS correspondiente. Sin URL, el iframe muestra un aviso y las llamadas al middleware fallan antes de enviar una petición.
+
+   `OPENAI_API_KEY` es privada y solo la consumen las Edge Functions. En local, usa `supabase functions serve --env-file .env.local`; en remoto configura el secreto del proyecto por el mecanismo privado del proveedor. `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` son inyectadas por Supabase en su runtime: no se incluyen como valores manuales en la plantilla, no deben sustituirse por la URL pública del navegador ni enviarse al frontend. No imprimas ni subas archivos de secretos.
+
+   Los ejemplos `.prompty` externos usan `AI_INFERENCE_ENDPOINT` y `AI_INFERENCE_MODEL`. El consumidor de Prompty debe cargar esas variables en su entorno; Next.js no ejecuta estos ejemplos ni carga `.env.local` para herramientas externas.
+
 ## 🚀 Ejecución del Proyecto
 
 ### Política de secretos y respuesta a incidentes
@@ -186,16 +194,24 @@ Este script guía a través del proceso completo de configuración, incluyendo:
 
 ### Despliegue con Docker
 
+Para desarrollo, usa `docker compose --env-file .env.local up --build -d frontend`. Compose no lee `.env.local` automáticamente para interpolar variables y solo transmite las cuatro variables públicas al frontend; no hace falta copiarlas a `.env`. Supabase CLI y Etherpad se levantan por separado.
+
+Para producción, las variables `NEXT_PUBLIC_*` quedan fijadas **durante el build**, no al arrancar el contenedor. La imagen usa la salida `standalone`; `.env.local` nunca se copia al contexto de Docker. Construye una imagen por configuración pública de despliegue, pasando únicamente los argumentos públicos siguientes:
+
 1. **Construir la imagen de Docker**
 
    ```bash
-   docker build -t doc-muse .
+   docker build -t doc-muse \
+     --build-arg NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co \
+     --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=your-public-anon-key \
+     --build-arg NEXT_PUBLIC_ETHERPAD_URL=https://pad.example.org \
+     --build-arg NEXT_PUBLIC_ETHERPAD_MIDDLEWARE_URL=https://pad-api.example.org .
    ```
 
 2. **Ejecutar el contenedor Docker**
 
    ```bash
-   docker run -p 3000:3000 -e NEXT_PUBLIC_SUPABASE_URL=your-url -e NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key doc-muse
+   docker run -p 3000:3000 doc-muse
    ```
 
    O utilizando docker-compose:
